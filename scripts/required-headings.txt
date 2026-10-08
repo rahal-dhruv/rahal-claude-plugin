@@ -28,3 +28,8 @@ plugins/rahal/skills/start-work/references/phase-2-execute.md|## 10. Review
 plugins/rahal/skills/start-work/references/phase-3-ship.md|## 1. Push
 plugins/rahal/skills/review-pr/references/review-steps.md|## 3. Read the code at the PR head
 plugins/rahal/skills/review-pr/references/review-steps.md|## 7. Draft and post comments
+plugins/rahal/skills/pr-followup/SKILL.md|## Which phase
+plugins/rahal/skills/pr-followup/references/phase-1-analyse.md|## 4. Check the branch
+plugins/rahal/skills/pr-followup/references/phase-2-fix.md|## 2. Branch update
+plugins/rahal/skills/pr-followup/references/phase-2-fix.md|## 5. Internal review
+plugins/rahal/skills/pr-followup/references/phase-2-fix.md|## 8. Remote steps

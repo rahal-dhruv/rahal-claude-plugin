@@ -27,3 +27,6 @@ plugins/rahal/skills/start-work/references/phase-2-execute.md
 plugins/rahal/skills/start-work/references/phase-3-ship.md
 plugins/rahal/skills/review-pr/SKILL.md
 plugins/rahal/skills/review-pr/references/review-steps.md
+plugins/rahal/skills/pr-followup/SKILL.md
+plugins/rahal/skills/pr-followup/references/phase-1-analyse.md
+plugins/rahal/skills/pr-followup/references/phase-2-fix.md
