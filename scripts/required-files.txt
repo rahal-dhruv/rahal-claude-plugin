@@ -3,3 +3,9 @@ plugins/rahal/.claude-plugin/plugin.json
 .gitignore
 scripts/check-output.sh
 scripts/test-check-output.sh
+plugins/rahal/shared/step-0-checks.md
+plugins/rahal/shared/explanation-style.md
+plugins/rahal/shared/approval-gates.md
+plugins/rahal/shared/evidence.md
+plugins/rahal/shared/review-model.md
+plugins/rahal/shared/profiles/orbit.md

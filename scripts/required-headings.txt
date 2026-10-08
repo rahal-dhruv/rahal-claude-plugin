@@ -1,0 +1,14 @@
+plugins/rahal/shared/step-0-checks.md|## Check 1 — Config
+plugins/rahal/shared/step-0-checks.md|## Check 2 — GitHub
+plugins/rahal/shared/step-0-checks.md|## Check 3 — Linear
+plugins/rahal/shared/step-0-checks.md|## Check 4 — Git
+plugins/rahal/shared/step-0-checks.md|## Check 5 — Toolchain
+plugins/rahal/shared/step-0-checks.md|## When a check fails
+plugins/rahal/shared/explanation-style.md|## Every finding, decision or step
+plugins/rahal/shared/approval-gates.md|## Follows your choices
+plugins/rahal/shared/approval-gates.md|## Fixed for everyone
+plugins/rahal/shared/evidence.md|## Rules
+plugins/rahal/shared/review-model.md|## How to ask
+plugins/rahal/shared/review-model.md|## How to run the review
+plugins/rahal/shared/profiles/orbit.md|## Branch practice
+plugins/rahal/shared/profiles/orbit.md|## Rules that bind every ticket
