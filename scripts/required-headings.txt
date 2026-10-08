@@ -61,3 +61,5 @@ plugins/rahal/skills/review-pr/references/review-steps.md|[ "$(git -C <repo> rev
 plugins/rahal/skills/pr-followup/references/phase-1-analyse.md|[ "$(git -C <repo> rev-parse origin/pr-<n>)" = "<headRefOid>" ] || echo "STALE: origin/pr-<n> is not the PR head <headRefOid>"   # stop and say so
 plugins/rahal/skills/start-work/references/phase-3-ship.md|## 0. Step 0
 plugins/rahal/shared/step-0-checks.md|- Start every `gh` command with `GH_CONFIG_DIR="<github.gh_config_dir>"` when that value is set, and give every `gh pr` and `gh repo` command `--repo DigitalZoneApp/<repo name>`: the workspace root is not a repo, and inside another repo `gh` would act on that repo's PR.
+plugins/rahal/shared/approval-gates.md|- Any remote action without its own choice above, such as replacing a PR's description, asks every time.
+plugins/rahal/skills/pr-followup/references/phase-2-fix.md|- PR description: replace it with the updated `pr-body.md`. This always asks first, whatever the other choices (`approval-gates.md` → Fixed for everyone).

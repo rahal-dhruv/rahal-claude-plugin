@@ -78,7 +78,7 @@ GH_CONFIG_DIR="<gh_config_dir>" gh pr view <n> --repo DigitalZoneApp/<repo name>
 
 - A conversation comment (not inline) is answered with `GH_CONFIG_DIR="<gh_config_dir>" gh pr comment <n> --repo DigitalZoneApp/<repo name> --body-file "<reply file>"`.
 - Push: never with `--force`.
-- PR description: replace it with the updated `pr-body.md`.
+- PR description: replace it with the updated `pr-body.md`. This always asks first, whatever the other choices (`approval-gates.md` → Fixed for everyone).
 - Reply: post in the reviewer's thread.
 - Re-request review from the reviewer whose comments were handled.
 - CI: read it once and report it.

@@ -21,4 +21,5 @@ What needs the user's yes. Read `choices` from `.claude/rahal.local.md`.
 - Never edit the Linear ticket or a `scope/` folder.
 - Every comment or reply is written to `work/<slug>/` before it is posted.
 - After a push, read CI once and report it. Never poll.
+- Any remote action without its own choice above, such as replacing a PR's description, asks every time.
 - A session that cannot ask questions (a headless `claude -p` run): print the question and stop. Never assume an answer.
