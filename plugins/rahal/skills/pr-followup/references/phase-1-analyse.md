@@ -10,7 +10,8 @@ Checks 1–4. This phase changes nothing in any repo.
 GH_CONFIG_DIR="<gh_config_dir>" gh pr view <n> --repo DigitalZoneApp/<repo name> \
   --json number,title,author,state,baseRefName,headRefName,headRefOid,reviewDecision,statusCheckRollup,body,commits
 git -C <repo> fetch origin --quiet
-git -C <repo> fetch origin "pull/<n>/head:refs/remotes/origin/pr-<n>" --quiet
+git -C <repo> fetch origin "+pull/<n>/head:refs/remotes/origin/pr-<n>" --quiet
+[ "$(git -C <repo> rev-parse origin/pr-<n>)" = "<headRefOid>" ] || echo "STALE: origin/pr-<n> is not the PR head <headRefOid>"   # stop and say so
 BASE="$(git -C <repo> merge-base origin/<base> origin/pr-<n>)"
 MSYS_NO_PATHCONV=1 git -C <repo> diff "$BASE" origin/<base> -- AGENTS.md .github/pull_request_template.md
 ```

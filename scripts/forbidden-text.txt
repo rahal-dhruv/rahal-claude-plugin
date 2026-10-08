@@ -6,3 +6,4 @@ reply-<date>-<reviewer>.md|one reply file per comment: reply-<date>-<reviewer>-<
 One file per reviewer|one reply file per comment
 reply-2026-10-08-amr.md|one reply file per comment
 git -C <repo> merge origin/<base>|merge with --no-ff --no-commit, so regenerate, install, typecheck and lint run before the titled commit
+"pull/<n>/head:|fetch the PR head with a leading + so a force-pushed PR is followed

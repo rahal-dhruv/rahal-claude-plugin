@@ -21,7 +21,8 @@ Never switch the user's checkout.
 
 ```bash
 git -C <repo> fetch origin --quiet
-git -C <repo> fetch origin "pull/<n>/head:refs/remotes/origin/pr-<n>" --quiet
+git -C <repo> fetch origin "+pull/<n>/head:refs/remotes/origin/pr-<n>" --quiet
+[ "$(git -C <repo> rev-parse origin/pr-<n>)" = "<headRefOid>" ] || echo "STALE: origin/pr-<n> is not the PR head <headRefOid>"   # stop and say so
 BASE="$(git -C <repo> merge-base origin/<base> origin/pr-<n>)"
 git -C <repo> log --oneline "$BASE"..origin/pr-<n>
 git -C <repo> diff --stat "$BASE"..origin/pr-<n>

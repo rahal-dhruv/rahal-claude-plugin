@@ -57,3 +57,5 @@ plugins/rahal/skills/pr-followup/references/phase-2-fix.md|After the replies are
 plugins/rahal/shared/templates/reply.md|Write one file per comment: `work/<slug>/reply-<date>-<reviewer>-<comment id>.md`. Each is posted into that comment's thread. Never mention other PRs or issues by number.
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|git -C <repo> merge --no-ff --no-commit origin/<base>
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|- Then, in the repo: `pnpm install --frozen-lockfile`, `pnpm db:generate && pnpm openapi`, `git add` what they regenerated, then `pnpm typecheck && pnpm lint`.
+plugins/rahal/skills/review-pr/references/review-steps.md|[ "$(git -C <repo> rev-parse origin/pr-<n>)" = "<headRefOid>" ] || echo "STALE: origin/pr-<n> is not the PR head <headRefOid>"   # stop and say so
+plugins/rahal/skills/pr-followup/references/phase-1-analyse.md|[ "$(git -C <repo> rev-parse origin/pr-<n>)" = "<headRefOid>" ] || echo "STALE: origin/pr-<n> is not the PR head <headRefOid>"   # stop and say so
