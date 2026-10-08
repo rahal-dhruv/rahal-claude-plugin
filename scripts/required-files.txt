@@ -9,3 +9,9 @@ plugins/rahal/shared/approval-gates.md
 plugins/rahal/shared/evidence.md
 plugins/rahal/shared/review-model.md
 plugins/rahal/shared/profiles/orbit.md
+plugins/rahal/shared/templates/brief.md
+plugins/rahal/shared/templates/plan.md
+plugins/rahal/shared/templates/ledger.md
+plugins/rahal/shared/templates/review-report.md
+plugins/rahal/shared/templates/followup-plan.md
+plugins/rahal/shared/templates/reply.md
