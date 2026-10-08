@@ -12,3 +12,6 @@ plugins/rahal/shared/review-model.md|## How to ask
 plugins/rahal/shared/review-model.md|## How to run the review
 plugins/rahal/shared/profiles/orbit.md|## Branch practice
 plugins/rahal/shared/profiles/orbit.md|## Rules that bind every ticket
+plugins/rahal/agents/rahal-reviewer.md|## What you receive
+plugins/rahal/agents/rahal-reviewer.md|## What you check
+plugins/rahal/agents/rahal-reviewer.md|## What you return
