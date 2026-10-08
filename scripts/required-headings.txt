@@ -26,3 +26,5 @@ plugins/rahal/skills/start-work/references/phase-1-understand.md|## 7. Show the 
 plugins/rahal/skills/start-work/references/phase-2-execute.md|## 6. Guard checks
 plugins/rahal/skills/start-work/references/phase-2-execute.md|## 10. Review
 plugins/rahal/skills/start-work/references/phase-3-ship.md|## 1. Push
+plugins/rahal/skills/review-pr/references/review-steps.md|## 3. Read the code at the PR head
+plugins/rahal/skills/review-pr/references/review-steps.md|## 7. Draft and post comments

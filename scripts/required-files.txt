@@ -25,3 +25,5 @@ plugins/rahal/skills/start-work/SKILL.md
 plugins/rahal/skills/start-work/references/phase-1-understand.md
 plugins/rahal/skills/start-work/references/phase-2-execute.md
 plugins/rahal/skills/start-work/references/phase-3-ship.md
+plugins/rahal/skills/review-pr/SKILL.md
+plugins/rahal/skills/review-pr/references/review-steps.md
