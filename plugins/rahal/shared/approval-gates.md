@@ -11,7 +11,7 @@ What needs the user's yes. Read `choices` from `.claude/rahal.local.md`.
 | Attribution (`attribution`) | — | `none`: no co-author line, no "Generated with" line · `claude`: add both |
 | Push (`push`) | ask | `auto`: push once the gate has passed |
 | Open the PR (`open_pr`, `pr_state`) | ask | `auto`: open right after the push · `pr_state`: `ready` or `draft` |
-| Post a comment or reply (`post_comments`) | show the draft, post on yes | `auto`: post right after writing the draft |
+| Post a comment or reply (`post_comments`) | show the draft, post on yes | `auto`: post right after writing the draft. A reply that cites a commit is posted only once that commit is pushed |
 | Re-request review (`re_request_review`) | ask | `auto`: re-request after the replies are posted |
 
 ## Fixed for everyone
