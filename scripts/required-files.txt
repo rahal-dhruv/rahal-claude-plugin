@@ -16,3 +16,8 @@ plugins/rahal/shared/templates/review-report.md
 plugins/rahal/shared/templates/followup-plan.md
 plugins/rahal/shared/templates/reply.md
 plugins/rahal/agents/rahal-reviewer.md
+plugins/rahal/skills/init/SKILL.md
+plugins/rahal/skills/init/references/checks.md
+plugins/rahal/skills/init/references/choices.md
+plugins/rahal/skills/init/references/config-template.md
+plugins/rahal/skills/init/references/workspace-layout.md

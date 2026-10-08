@@ -15,3 +15,8 @@ plugins/rahal/shared/profiles/orbit.md|## Rules that bind every ticket
 plugins/rahal/agents/rahal-reviewer.md|## What you receive
 plugins/rahal/agents/rahal-reviewer.md|## What you check
 plugins/rahal/agents/rahal-reviewer.md|## What you return
+plugins/rahal/skills/init/SKILL.md|## Steps
+plugins/rahal/skills/init/SKILL.md|## Summary to print
+plugins/rahal/skills/init/references/checks.md|## Windows e2e shim
+plugins/rahal/skills/init/references/choices.md|## Group 1 — Commits
+plugins/rahal/skills/init/references/choices.md|## Group 2 — GitHub actions

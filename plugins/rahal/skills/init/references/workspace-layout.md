@@ -1,0 +1,20 @@
+# Suggested workspace layout
+
+```
+<workspace>/                        not a git repo
+  .claude/rahal.local.md            written by /rahal:init
+  .claude/rahal/                    helpers init generates (the Windows e2e shim)
+  rahal-orbit-backend/
+  rahal-orbit-dashboard/
+  rahal-orbit-docs/
+  work/
+    orb-183-visa-destinations/      one folder per ticket; personal, never shared
+      brief.md  plan.md  ledger.md  pr-body.md
+      review-2026-10-07.md
+      followup-2026-10-08.md
+      reply-2026-10-08-amr.md
+  docs/                             optional notes on what was built
+```
+
+- Ticket folder slug: `orb-<n>-<two to four words from the ticket title>`, lower case.
+- Nothing of yours goes inside a repo: no `.claude/`, no `work/`, no notes.
