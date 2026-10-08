@@ -20,3 +20,9 @@ plugins/rahal/skills/init/SKILL.md|## Summary to print
 plugins/rahal/skills/init/references/checks.md|## Windows e2e shim
 plugins/rahal/skills/init/references/choices.md|## Group 1 — Commits
 plugins/rahal/skills/init/references/choices.md|## Group 2 — GitHub actions
+plugins/rahal/skills/start-work/SKILL.md|## Which phase
+plugins/rahal/skills/start-work/references/phase-1-understand.md|## 3. Check the ticket against the code
+plugins/rahal/skills/start-work/references/phase-1-understand.md|## 7. Show the brief and stop
+plugins/rahal/skills/start-work/references/phase-2-execute.md|## 6. Guard checks
+plugins/rahal/skills/start-work/references/phase-2-execute.md|## 10. Review
+plugins/rahal/skills/start-work/references/phase-3-ship.md|## 1. Push

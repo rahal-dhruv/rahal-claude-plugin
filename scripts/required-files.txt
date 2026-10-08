@@ -21,3 +21,7 @@ plugins/rahal/skills/init/references/checks.md
 plugins/rahal/skills/init/references/choices.md
 plugins/rahal/skills/init/references/config-template.md
 plugins/rahal/skills/init/references/workspace-layout.md
+plugins/rahal/skills/start-work/SKILL.md
+plugins/rahal/skills/start-work/references/phase-1-understand.md
+plugins/rahal/skills/start-work/references/phase-2-execute.md
+plugins/rahal/skills/start-work/references/phase-3-ship.md

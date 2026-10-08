@@ -1,0 +1,77 @@
+# start-work — phase one: understand and plan
+
+## 1. Step 0
+
+Run checks 1–4 of `${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md`. This phase changes nothing in any repo.
+
+## 2. Read the ticket and its neighbours
+
+- `get_issue` with `id: "ORB-<n>"` and `includeRelations: true`; `list_comments` with `issueId: "ORB-<n>"`. When the description has images (designs), `extract_images` on it.
+- For each related ticket, `get_issue` with `fields: ["title","status","assignee","completedAt","description"]`, and note only what touches this ticket:
+  - **blocked by:** merged? If not, say so; the work may need to wait;
+  - **blocks:** which files and symbols that ticket reuses or will change from this one;
+  - **related or siblings:** which files both change (`openapi/admin.json` is the usual one).
+- Pick the target repo from the title (`[Backend]` → backend, `[Frontend]` → dashboard) or from the files the ticket names.
+
+## 3. Check the ticket against the code
+
+Everything on `origin/<default>`, never the local checkout:
+
+```bash
+git -C <repo> fetch origin --quiet
+git -C <repo> rev-list --left-right --count main...origin/main          # local lag, for the brief
+git -C <repo> log --oneline <ticket base sha>..origin/main -- <files the ticket names>   # drift since the ticket was written
+MSYS_NO_PATHCONV=1 git -C <repo> cat-file -e origin/main:<path> && echo ok || echo missing   # every cited path
+MSYS_NO_PATHCONV=1 git -C <repo> show origin/main:<path>               # each file the ticket says to copy
+```
+
+- The ticket's base commit is usually written as "On `main` (`<sha>`)". Paths are the backticked `src/…`, `test/…`, `prisma/…` names.
+- Read the standard on `origin/main`: `AGENTS.md`, `CODEOWNERS` (`.github/CODEOWNERS` or `CODEOWNERS`), `lefthook.yml`, `.github/pull_request_template.md`, `eslint.config.js` (`moduleMap`), and the `package.json` scripts.
+- When the build needs the design notes the ticket cites, read them from the docs repo on `origin/docs-main`.
+- Flag every drift: a file that moved or vanished, a symbol renamed, a new suite or rule the ticket does not know about.
+
+## 4. Measure library behaviour
+
+For each thing the ticket relies on a package doing (a validator, a parser, a driver, an SQL operator), run the real value through the installed package once in the scratchpad:
+- Load CommonJS through `createRequire('<repo>/package.json')`.
+- Load ESM-only packages by `file:///` URL to their `exports` entry.
+- Load SQL through `pg` against the dev database with bound parameters.
+
+Record the command and the result: they go in the brief and later in the PR body.
+
+## 5. Decisions
+
+Every gap between the ticket, `AGENTS.md` and the code becomes a decision, in the `shared/explanation-style.md` order:
+- verdict;
+- what's going on;
+- `file:line`;
+- an example;
+- the options;
+- a recommendation and why.
+
+Typical sources:
+- the ticket prescribes a second copy of something that already exists;
+- wording that goes stale once the change lands;
+- a value the ticket doesn't give;
+- a change to a `CODEOWNERS` file.
+
+## 6. Write the brief and the plan
+
+- `<workspace_root>/<work_folder>/<slug>/brief.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/brief.md`.
+- `<workspace_root>/<work_folder>/<slug>/plan.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/plan.md`:
+  - Every task carries real code, exact paths, an `Expected:` line for every command, and test-first steps.
+  - Commit points follow `choices.commit_size`.
+  - The Review Focus lists the five likeliest untested failures. Extra test cases beyond the ticket's list are marked keep-or-drop.
+  - The Self-check maps every Must Have to a task and every acceptance criterion to a test case.
+  - Check each `[Details →](#…)` link: lower-case the heading text, drop characters other than letters, digits, spaces, `_` and `-`, and replace spaces with `-`. The anchor must equal that.
+- If superpowers is installed, its `writing-plans` discipline applies. These templates and paths still win: never save under `docs/superpowers/` and never create `.superpowers/` inside a repo.
+
+## 7. Show the brief and stop
+
+- Print the brief in chat (the same text as `brief.md`).
+- Then ask decision 1 of N in full; list the rest in one line each.
+- Stop.
+- Each answer updates `plan.md`: move the decision to "Decided" with the date, delete the rejected alternatives from the steps, and update the Tasks at a glance lines.
+- Then ask the next decision.
+
+When all are decided, ask any execution choice still open, such as keep or drop of each extra test case, then "Ready to execute?". Stop.
