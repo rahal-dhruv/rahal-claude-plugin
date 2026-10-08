@@ -66,3 +66,6 @@ plugins/rahal/skills/pr-followup/references/phase-2-fix.md|- PR description: rep
 plugins/rahal/shared/approval-gates.md|| Post a comment or reply (`post_comments`) | show the draft, post on yes | `auto`: post right after writing the draft. A reply that cites a commit is posted only once that commit is pushed |
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|- Reply: post in the comment's thread, only after the push that contains the commit it cites. If the push was declined, keep the replies as drafts and say so.
 plugins/rahal/skills/init/references/checks.md|`corepack enable` writes pnpm shims into the global Node install, so it is a change, not a check: offer it only when `pnpm -v` fails, and run it only with a yes.
+plugins/rahal/shared/review-model.md|   - If it is not available (step 0 check 5), fails, or reports that it reviewed nothing, record it as **not run**, never as clean, and continue with the reviewer's findings only.
+plugins/rahal/skills/review-pr/references/review-steps.md|3. Run `code-review` at `high` on the full PR URL, as `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md` step 2 says.
+plugins/rahal/skills/start-work/references/phase-2-execute.md|2. The reviewer agent, then `code-review` at effort `high` on the range `$(git merge-base origin/main HEAD)..HEAD`, as `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md` step 2 says.

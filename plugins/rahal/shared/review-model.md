@@ -35,6 +35,10 @@ The user decides. "Always <model>" writes `choices.review_model: <model>` into `
    - the plan's Review Focus, if any;
    - the ledger's rulings, if any;
    - existing PR comments, if any.
-2. Then Claude Code's built-in `code-review` skill at effort `high`, on the same branch. If it is not available (step 0 check 5), say so and continue with the reviewer's findings only.
+2. Then Claude Code's `code-review` skill at effort `high`, on the same change:
+   - First `cd <repo>`, so its git commands see the repo; the workspace root is not one.
+   - Give it the full PR URL (`https://github.com/DigitalZoneApp/<repo name>/pull/<n>`) when there is a PR; otherwise the range `<base SHA>..<head SHA>`.
+   - Run every `gh` command it needs with step 0's `GH_CONFIG_DIR` prefix and `--repo`.
+   - If it is not available (step 0 check 5), fails, or reports that it reviewed nothing, record it as **not run**, never as clean, and continue with the reviewer's findings only.
 3. Merge the two lists and remove duplicates. Re-open every citation (`shared/evidence.md`), and probe, mutate or dry-run where a claim needs it.
 4. Write the result with `${CLAUDE_PLUGIN_ROOT}/shared/templates/review-report.md`.
