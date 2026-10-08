@@ -33,3 +33,11 @@ plugins/rahal/skills/pr-followup/references/phase-1-analyse.md|## 4. Check the b
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|## 2. Branch update
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|## 5. Internal review
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|## 8. Remote steps
+README.md|## Install
+README.md|## How /rahal:init works
+README.md|## Suggested workspace layout
+README.md|## /rahal:start-work
+README.md|## /rahal:review-pr
+README.md|## /rahal:pr-followup
+README.md|## Troubleshooting
+README.md|## Adding a profile
