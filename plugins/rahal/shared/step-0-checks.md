@@ -47,9 +47,10 @@ A ticket's outputs live in `<workspace_root>/<work_folder>/<slug>/`. The slug is
 ## Check 3 — Linear
 
 1. Load the Linear tools with ToolSearch: `select:<linear.tools>get_issue,<linear.tools>list_comments` (and `<linear.tools>extract_images`, `<linear.tools>list_issues` for `start-work`).
-2. Not available: `✗ Linear  tools not available`. Say: "Connect Linear in claude.ai → Settings → Connectors, or authorise the Linear plugin with `/mcp`. Claude can't sign in for you." If tools with a different prefix but the same names are available, offer to record that prefix in `.claude/rahal.local.md`.
-3. Call `get_issue` on the ticket: from the link (`start-work`), or the `ORB-<n>` in the PR title (`review-pr`, `pr-followup`).
-4. A ticket whose identifier does not start with `ORB-`: "This plugin supports Orbit (ORB-) tickets only for now." Stop.
+2. Not loaded, or `linear.tools` is empty: search with ToolSearch, query `linear get_issue`, max 10 results. A tool set whose names end in `get_issue`, `list_comments`, `list_issues` and `extract_images` is Linear; its prefix is everything before `get_issue`. Found under another prefix: say so, offer to record the new prefix in `.claude/rahal.local.md`, and continue with it.
+3. None found: `✗ Linear  tools not available`. Say: "Connect Linear in claude.ai → Settings → Connectors, or authorise the Linear plugin with `/mcp`. Claude can't sign in for you."
+4. Call `get_issue` on the ticket: from the link (`start-work`), or the `ORB-<n>` in the PR title (`review-pr`, `pr-followup`).
+5. A ticket whose identifier does not start with `ORB-`: "This plugin supports Orbit (ORB-) tickets only for now." Stop.
 
 ## Check 4 — Git
 
