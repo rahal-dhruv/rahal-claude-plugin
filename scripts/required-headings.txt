@@ -50,3 +50,7 @@ plugins/rahal/skills/init/references/config-template.md|  tools: <tool name pref
 plugins/rahal/shared/step-0-checks.md|## The ticket folder
 plugins/rahal/shared/templates/plan.md|**Ticket:** <link> · **Brief:** `work/<slug>/brief.md` · **Branch:** `feat/<slug>`
 plugins/rahal/skills/start-work/SKILL.md|Run step 0 check 1, read the ticket id, and find the ticket folder (`${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` → The ticket folder). Then:
+plugins/rahal/shared/templates/followup-plan.md|### 1. <Reviewer> · <file:line> · comment <id>
+plugins/rahal/skills/pr-followup/SKILL.md|- **It has `Accepted:` but no `Handled:` line:** phase two is unfinished. Read `${CLAUDE_PLUGIN_ROOT}/skills/pr-followup/references/phase-2-fix.md` and resume at the first step the ledger does not record as done.
+plugins/rahal/skills/pr-followup/references/phase-1-analyse.md|- Skip comment ids listed on a `Handled:` line of an earlier `followup-*.md` in the ticket folder.
+plugins/rahal/skills/pr-followup/references/phase-2-fix.md|After the replies are posted, append `Handled: <comment ids>` to the follow-up file (`Handled: none` when nothing was accepted). Record each step in the ledger.

@@ -1,6 +1,6 @@
 # pr-followup — phase two: fix, review, reply
 
-Record the user's answer at the end of the follow-up file (`Accepted: …`). Track progress in `<work>/<slug>/ledger.md` (create it from the template if absent).
+Record the user's answer at the end of the follow-up file (`Accepted: …`). Track progress in the ticket folder's `ledger.md` (create it from the template if absent): one line per finished step below (`Follow-up <date> step <n>: done …`), so a later run resumes at the first unfinished step.
 
 ## 1. Step 0
 
@@ -81,4 +81,4 @@ GH_CONFIG_DIR="<gh_config_dir>" gh pr view <n> --repo DigitalZoneApp/<repo name>
 - Re-request review from the reviewer whose comments were handled.
 - CI: read it once and report it.
 
-Record each step in the ledger.
+After the replies are posted, append `Handled: <comment ids>` to the follow-up file (`Handled: none` when nothing was accepted). Record each step in the ledger.

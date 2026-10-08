@@ -6,6 +6,6 @@
 
 ## Detailed fixes
 
-### 1. Someone · file.ts:1
+### 1. Someone · file.ts:1 · comment 101
 
 Which do you accept? e.g. "1" · "skip 1"

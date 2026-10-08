@@ -34,7 +34,7 @@ case "$kind" in
     for h in '## 1. What the ticket is trying to solve' '## 2. What the PR does' '## 3. Issues at a glance' \
              '## 4. Issues in detail' '## 5. Already raised by other reviewers' '## 6. Considered and set aside' 'Verdict:'; do need "$h"; done ;;
   followup)
-    for h in '## Comments at a glance' '## Detailed fixes' 'Which do you accept?'; do need "$h"; done ;;
+    for h in '## Comments at a glance' '## Detailed fixes' 'Which do you accept?' ' · comment '; do need "$h"; done ;;
   reply)
     if grep -nE '/pull/[0-9]+|(^|[^A-Za-z0-9`])#[0-9]+' "$file" >/dev/null; then fail "reply refers to another PR or issue"; fi
     grep -qE '[0-9a-f]{7,40}|Evidence' "$file" || fail "reply names neither a fix commit nor the evidence for a push-back" ;;

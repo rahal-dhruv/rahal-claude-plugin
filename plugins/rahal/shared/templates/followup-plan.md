@@ -10,7 +10,7 @@
 
 ## Detailed fixes
 
-### 1. <Reviewer> · <file:line>
+### 1. <Reviewer> · <file:line> · comment <id>
 
 - **What they ask:** <plain words>
 - **How I verified it:** <command → result>

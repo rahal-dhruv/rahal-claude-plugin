@@ -22,7 +22,7 @@ No local file is assumed. The ticket folder (`${CLAUDE_PLUGIN_ROOT}/shared/step-
 
 ## Which phase
 
-- **No `followup-<date>.md` awaiting an answer for this PR:** phase one. Read `${CLAUDE_PLUGIN_ROOT}/skills/pr-followup/references/phase-1-analyse.md`.
-- **The user has just answered the fix plan's question** (for example "0, 1, 2", or "1 only, push back on 2"): phase two. Read `${CLAUDE_PLUGIN_ROOT}/skills/pr-followup/references/phase-2-fix.md`.
-
-A latest `followup-*.md` without a recorded answer means its question is still open: show it again.
+Look at the latest `followup-*.md` in the ticket folder:
+- **None, or it ends with a `Handled:` line:** phase one. Read `${CLAUDE_PLUGIN_ROOT}/skills/pr-followup/references/phase-1-analyse.md`.
+- **It has no `Accepted:` line:** its question is still open. When the user has just answered it (for example "0, 1, 2", or "1 only, push back on 2"), go to phase two: read `${CLAUDE_PLUGIN_ROOT}/skills/pr-followup/references/phase-2-fix.md`. Otherwise show it again and stop.
+- **It has `Accepted:` but no `Handled:` line:** phase two is unfinished. Read `${CLAUDE_PLUGIN_ROOT}/skills/pr-followup/references/phase-2-fix.md` and resume at the first step the ledger does not record as done.

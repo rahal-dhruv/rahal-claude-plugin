@@ -31,7 +31,7 @@ MSYS_NO_PATHCONV=1 GH_CONFIG_DIR="<gh_config_dir>" gh api repos/DigitalZoneApp/<
 
 - Skip bots.
 - Skip a thread whose latest comment is by the PR author (already answered).
-- Skip comment ids recorded as handled in an earlier `followup-*.md`.
+- Skip comment ids listed on a `Handled:` line of an earlier `followup-*.md` in the ticket folder.
 
 ## 4. Check the branch
 
