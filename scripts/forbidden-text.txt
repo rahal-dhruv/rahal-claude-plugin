@@ -11,3 +11,4 @@ git -C <repo> merge origin/<base>|merge with --no-ff --no-commit, so regenerate,
 `gh pr comment <n> --body-file|give gh GH_CONFIG_DIR and --repo DigitalZoneApp/<repo name>, and quote the file
 corepack enable 2>/dev/null|corepack enable changes the global Node install; offer it with a yes, never as a check
 on the PR number|code-review needs the full PR URL from inside the repo (review-model.md step 2)
+then `git -C <repo> rev-list --left-right --count <default>...origin/<default>`|guard the behind-count with a check that the local default branch exists
