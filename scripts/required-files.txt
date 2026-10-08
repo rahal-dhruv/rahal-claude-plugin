@@ -1,0 +1,5 @@
+.claude-plugin/marketplace.json
+plugins/rahal/.claude-plugin/plugin.json
+.gitignore
+scripts/check-output.sh
+scripts/test-check-output.sh
