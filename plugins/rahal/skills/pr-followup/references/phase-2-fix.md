@@ -19,13 +19,15 @@ Commits follow `choices.commit_when` (for `standing_yes_per_ticket`, ask once fo
 Only if item 0 was accepted:
 
 ```bash
-git -C <repo> merge origin/<base>
+git -C <repo> merge --no-ff --no-commit origin/<base>
 git -C <repo> diff --name-only --diff-filter=U
 ```
 
-- For a generated file only: `git -C <repo> checkout --ours <file>`, then `pnpm db:generate && pnpm openapi`, and `git -C <repo> add openapi/`.
-- Any other conflicting file: stop and ask.
-- Then `pnpm typecheck && pnpm lint`, and commit `chore(ORB-<n>): merge main into the <branch words> branch`.
+`--no-commit` leaves the merge open even when nothing conflicts, so the checks below run before the commit, and the commit gets the team's title instead of Git's default message.
+- A conflict in a generated file only (`openapi/*.json`, `src/generated/`): take either side with `git -C <repo> checkout --ours <file>`; it is regenerated below, never hand-merged.
+- Any other conflicting file: stop and ask. `git -C <repo> merge --abort` undoes the merge.
+- Then, in the repo: `pnpm install --frozen-lockfile`, `pnpm db:generate && pnpm openapi`, `git add` what they regenerated, then `pnpm typecheck && pnpm lint`.
+- Commit: `git -C <repo> commit -m "chore(ORB-<n>): merge main into the <branch words> branch"`.
 - Then `pnpm db:migrate` with the dev database URL.
 - Never rebase, never force push, and never rename the PR's migration folders.
 
