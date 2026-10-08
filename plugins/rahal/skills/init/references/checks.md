@@ -61,7 +61,7 @@ childProcess.execFileSync = function execFileSync(file, args, options) {
 syncBuiltinESMExports();
 ```
 
-Record `e2e_node_options: --require <Windows-form path to that file, forward slashes>`. On macOS and Linux leave it empty.
+Record `e2e_node_options: --require "<Windows-form path to that file, forward slashes>"`, double quotes included: Node reads them, and they keep a path with a space in one piece. On macOS and Linux leave it empty.
 
 ## Extras
 

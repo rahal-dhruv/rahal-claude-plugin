@@ -58,7 +58,7 @@ Only for phases that run code.
 1. `node -v` must match `<repo>/.nvmrc` (major and minor); `pnpm -v` must work.
 2. `docker info --format '{{.ServerVersion}}'` must work.
 3. `docker ps --format '{{.Names}} {{.Ports}}'`: a container outside Orbit's compose project holding `toolchain.docker_ports.postgres` or `.redis` is a clash. Name the container. Suggest `/rahal:init` to move Orbit's ports, or stopping the other container, which is the user's call.
-4. Windows: the folder in `toolchain.bash_node_path` must contain `node`, and the shim file named in `toolchain.e2e_node_options` must exist.
+4. Windows: the folder in `toolchain.bash_node_path` must contain `node`; the shim file named in `toolchain.e2e_node_options` (the path between its double quotes) must exist; and `NODE_OPTIONS='<e2e_node_options>' node -e 1` must exit 0.
 5. Review phases: the `code-review` skill must be in this session's skill list. Missing: say so; the review then runs the reviewer agent only.
 
 ## When a check fails

@@ -15,7 +15,7 @@
 
 ## 3. Each task
 
-1. Write the test. Run it: `NODE_OPTIONS="<e2e_node_options>" pnpm test:e2e <file>` or `pnpm test <file>`. Confirm it fails for the reason the plan states. A test that passes before the code exists is a finding about the test.
+1. Write the test. Run it: `NODE_OPTIONS='<e2e_node_options>' pnpm test:e2e <file>` or `pnpm test <file>`. Confirm it fails for the reason the plan states. A test that passes before the code exists is a finding about the test.
 2. Write the code. Run the test again and confirm it passes. Then `pnpm typecheck` and `pnpm lint`.
 3. Commit per `commit_size` and `attribution` with the profile's title format.
    - Every commit must pass typecheck and lint on its own.
@@ -31,7 +31,7 @@ When `workspace_extras.docs_folder` is true, update `docs/<repo>/<feature>.md` a
 
 ## 5. The gate
 
-Run `NODE_OPTIONS="<e2e_node_options>" pnpm check` in the background, and watch it with a monitor if the session has one. Read the result. Label environmental failures as environmental, with no re-run loops. Record lint, format, typecheck, knip, unit, e2e and contract counts, and `openapi:check`.
+Run `NODE_OPTIONS='<e2e_node_options>' pnpm check` in the background, and watch it with a monitor if the session has one. Read the result. Label environmental failures as environmental, with no re-run loops. Record lint, format, typecheck, knip, unit, e2e and contract counts, and `openapi:check`.
 
 ## 6. Guard checks
 
@@ -51,7 +51,7 @@ run() {
   diff="$(diff -U0 "$SP/orig-$name" "$file" | grep -E '^[-+][^-+]')"
   { echo "## $name"; echo '```diff'; echo "$diff"; echo '```'; } >> "$OUT"
   if [ -z "$diff" ]; then echo "MUTATION NOT APPLIED" >> "$OUT"; else
-    NODE_OPTIONS="<e2e_node_options>" pnpm test:e2e <e2e file> > "$SP/mut-$name.log" 2>&1
+    NODE_OPTIONS='<e2e_node_options>' pnpm test:e2e <e2e file> > "$SP/mut-$name.log" 2>&1
     echo "exit=$?" >> "$OUT"
     grep -E '^ +(×)|^ +Tests ' "$SP/mut-$name.log" >> "$OUT"
   fi

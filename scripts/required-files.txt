@@ -31,3 +31,4 @@ plugins/rahal/skills/pr-followup/SKILL.md
 plugins/rahal/skills/pr-followup/references/phase-1-analyse.md
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md
 README.md
+scripts/forbidden-text.txt

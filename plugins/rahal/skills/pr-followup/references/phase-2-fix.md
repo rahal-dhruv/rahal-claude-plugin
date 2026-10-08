@@ -38,7 +38,7 @@ git -C <repo> diff --name-only --diff-filter=U
 
 ## 4. Gate
 
-`NODE_OPTIONS="<e2e_node_options>" pnpm check` in the background. Record the counts, and label environmental failures as such.
+`NODE_OPTIONS='<e2e_node_options>' pnpm check` in the background. Record the counts, and label environmental failures as such.
 
 ## 5. Internal review
 

@@ -20,7 +20,7 @@ linear:
   tools: <tool name prefix ending in __>
 toolchain:
   bash_node_path: <Git Bash form of the Node folder; may be empty>
-  e2e_node_options: <--require <shim path>; may be empty>
+  e2e_node_options: <--require "<shim path>"; may be empty>
   docker_ports: { postgres: <port>, redis: <port> }
   dev_database_url_port: <port>
 workspace_extras:

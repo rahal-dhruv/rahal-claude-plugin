@@ -84,4 +84,11 @@ EOF
 if [ -n "$hits" ]; then fail "personal data found:"; printf '%s' "$hits" | sed 's/^/    /'; fi
 if [ -n "$acct" ]; then fail "account name outside README.md:"; printf '%s' "$acct" | sed 's/^/    /'; fi
 
+# 8. Forbidden text: fixed strings that must not appear in the plugin ("text|why")
+while IFS='|' read -r text why || [ -n "$text" ]; do
+  [ -z "$text" ] && continue
+  found="$(grep -rnF -- "$text" "$PLUGIN" 2>/dev/null)"
+  if [ -n "$found" ]; then fail "forbidden text ($why): $text"; printf '%s\n' "$found" | sed 's/^/    /'; fi
+done < "$ROOT/scripts/forbidden-text.txt"
+
 if [ "$FAILS" -eq 0 ]; then echo "check: all clear"; else echo "check: $FAILS problem(s)"; exit 1; fi

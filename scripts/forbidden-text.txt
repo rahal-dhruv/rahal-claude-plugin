@@ -1,0 +1,1 @@
+NODE_OPTIONS="<e2e_node_options>"|NODE_OPTIONS splits at spaces; single-quote it so the inner double quotes reach Node
