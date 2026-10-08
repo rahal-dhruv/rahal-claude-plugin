@@ -49,7 +49,7 @@ git -C <repo> diff --name-only --diff-filter=U
 
 ## 6. PR body
 
-Update `<work>/<slug>/pr-body.md`; if absent, start from `gh pr view <n> --json body --jq .body`:
+Update the ticket folder's `pr-body.md`; if absent, start from `GH_CONFIG_DIR="<gh_config_dir>" gh pr view <n> --repo DigitalZoneApp/<repo name> --json body --jq .body`:
 - the reviewed SHA and the gate counts;
 - the changed test-case lines;
 - new measurements;
@@ -76,7 +76,7 @@ MSYS_NO_PATHCONV=1 GH_CONFIG_DIR="<gh_config_dir>" gh api -X POST repos/DigitalZ
 GH_CONFIG_DIR="<gh_config_dir>" gh pr view <n> --repo DigitalZoneApp/<repo name> --json mergeable,mergeStateStatus,reviewDecision,statusCheckRollup
 ```
 
-- A conversation comment (not inline) is answered with `gh pr comment <n> --body-file <reply file>`.
+- A conversation comment (not inline) is answered with `GH_CONFIG_DIR="<gh_config_dir>" gh pr comment <n> --repo DigitalZoneApp/<repo name> --body-file "<reply file>"`.
 - Push: never with `--force`.
 - PR description: replace it with the updated `pr-body.md`.
 - Reply: post in the reviewer's thread.

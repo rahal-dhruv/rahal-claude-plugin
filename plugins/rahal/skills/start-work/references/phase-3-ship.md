@@ -4,6 +4,10 @@ Each step follows `choices` in `.claude/rahal.local.md`. With `ask`, ask before 
 
 `<branch>` below is the `**Branch:**` line of the ticket folder's `plan.md` (step 0 → The ticket folder), e.g. `feat/orb-183-visa-destinations`.
 
+## 0. Step 0
+
+Run checks 1, 2, 4 and 5 of `${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` first: this phase may start in a new session, where the gh account, the remote or the tree may have changed. Any ✗ stops before the push.
+
 ## 1. Push
 
 ```bash

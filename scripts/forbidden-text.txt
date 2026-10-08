@@ -7,3 +7,5 @@ One file per reviewer|one reply file per comment
 reply-2026-10-08-amr.md|one reply file per comment
 git -C <repo> merge origin/<base>|merge with --no-ff --no-commit, so regenerate, install, typecheck and lint run before the titled commit
 "pull/<n>/head:|fetch the PR head with a leading + so a force-pushed PR is followed
+`gh pr view <n> --json body|give gh GH_CONFIG_DIR and --repo DigitalZoneApp/<repo name>
+`gh pr comment <n> --body-file|give gh GH_CONFIG_DIR and --repo DigitalZoneApp/<repo name>, and quote the file

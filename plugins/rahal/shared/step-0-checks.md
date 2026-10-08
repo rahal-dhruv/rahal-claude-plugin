@@ -18,7 +18,7 @@ Step 0 — checks
 - Check 1 reads `.claude/rahal.local.md`; use its values in every command below.
 - In Git Bash, start every command that runs `node`, `pnpm`, `claude` or a git hook (commit, push) with
   `export PATH="<toolchain.bash_node_path>:$PATH";` when that value is set.
-- Start every `gh` command with `GH_CONFIG_DIR="<github.gh_config_dir>"` when that value is set.
+- Start every `gh` command with `GH_CONFIG_DIR="<github.gh_config_dir>"` when that value is set, and give every `gh pr` and `gh repo` command `--repo DigitalZoneApp/<repo name>`: the workspace root is not a repo, and inside another repo `gh` would act on that repo's PR.
 - In Git Bash, start `git show <rev>:<path>` and `gh api <path>` with `MSYS_NO_PATHCONV=1`, or the path is rewritten.
 - Quote every path: a workspace path may contain spaces.
 - `<repo>` below means `"<workspace_root>/<repos.backend>"` (or the dashboard or docs folder the command targets).
