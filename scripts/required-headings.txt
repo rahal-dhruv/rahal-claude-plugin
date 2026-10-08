@@ -54,3 +54,4 @@ plugins/rahal/shared/templates/followup-plan.md|### 1. <Reviewer> · <file:line>
 plugins/rahal/skills/pr-followup/SKILL.md|- **It has `Accepted:` but no `Handled:` line:** phase two is unfinished. Read `${CLAUDE_PLUGIN_ROOT}/skills/pr-followup/references/phase-2-fix.md` and resume at the first step the ledger does not record as done.
 plugins/rahal/skills/pr-followup/references/phase-1-analyse.md|- Skip comment ids listed on a `Handled:` line of an earlier `followup-*.md` in the ticket folder.
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|After the replies are posted, append `Handled: <comment ids>` to the follow-up file (`Handled: none` when nothing was accepted). Record each step in the ledger.
+plugins/rahal/shared/templates/reply.md|Write one file per comment: `work/<slug>/reply-<date>-<reviewer>-<comment id>.md`. Each is posted into that comment's thread. Never mention other PRs or issues by number.

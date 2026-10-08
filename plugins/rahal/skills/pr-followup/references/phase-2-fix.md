@@ -56,7 +56,7 @@ Update `<work>/<slug>/pr-body.md`; if absent, start from `gh pr view <n> --json 
 
 ## 7. Replies
 
-One file per reviewer, `<work>/<slug>/reply-<date>-<reviewer>.md`, from `${CLAUDE_PLUGIN_ROOT}/shared/templates/reply.md`:
+One file per comment, `<ticket folder>/reply-<date>-<reviewer>-<comment id>.md`, from `${CLAUDE_PLUGIN_ROOT}/shared/templates/reply.md`:
 - **fix:** the fix SHA, what changed, the test line, the gate result;
 - **push-back:** "Evidence:" with the command and result.
 

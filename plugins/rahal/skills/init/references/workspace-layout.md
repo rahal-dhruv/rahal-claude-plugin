@@ -12,7 +12,7 @@
       brief.md  plan.md  ledger.md  pr-body.md
       review-2026-10-07.md
       followup-2026-10-08.md
-      reply-2026-10-08-amr.md
+      reply-2026-10-08-amr-2417.md      one reply per review comment
   docs/                             optional notes on what was built
 ```
 

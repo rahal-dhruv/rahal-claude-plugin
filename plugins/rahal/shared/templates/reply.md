@@ -1,6 +1,6 @@
 # Reply shapes
 
-Write one file per reviewer: `work/<slug>/reply-<date>-<reviewer>.md`. Never mention other PRs or issues by number.
+Write one file per comment: `work/<slug>/reply-<date>-<reviewer>-<comment id>.md`. Each is posted into that comment's thread. Never mention other PRs or issues by number.
 
 ## When the comment was fixed
 
