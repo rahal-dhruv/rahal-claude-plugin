@@ -18,7 +18,7 @@ Always read:
 - `${CLAUDE_PLUGIN_ROOT}/shared/evidence.md`
 - `${CLAUDE_PLUGIN_ROOT}/shared/profiles/orbit.md`
 
-No local file is assumed. `<work_folder>/<slug>/` only receives outputs; read it for extra context if it happens to exist.
+No local file is assumed. The ticket folder (`${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` → The ticket folder) receives the outputs; read it for extra context if it already exists.
 
 ## Which phase
 

@@ -22,7 +22,7 @@ Then follow the workspace's own `CLAUDE.md` task-start steps if it has any.
 
 ## Which phase
 
-Run step 0 check 1, read the ticket id, and derive the slug `orb-<n>-<two to four words from the title>`. Look at `<workspace_root>/<work_folder>/<slug>/`:
+Run step 0 check 1, read the ticket id, and find the ticket folder (`${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` → The ticket folder). Then:
 - **No `plan.md`:** phase one. Read `${CLAUDE_PLUGIN_ROOT}/skills/start-work/references/phase-1-understand.md`.
 - **`plan.md` with open decisions:** continue phase one from step 7 (ask the next decision).
 - **Decisions done, `ledger.md` absent or without completed tasks:** ask "Ready to execute?". On yes, read `${CLAUDE_PLUGIN_ROOT}/skills/start-work/references/phase-2-execute.md`.

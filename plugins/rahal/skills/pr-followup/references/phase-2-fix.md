@@ -25,7 +25,7 @@ git -C <repo> diff --name-only --diff-filter=U
 
 - For a generated file only: `git -C <repo> checkout --ours <file>`, then `pnpm db:generate && pnpm openapi`, and `git -C <repo> add openapi/`.
 - Any other conflicting file: stop and ask.
-- Then `pnpm typecheck && pnpm lint`, and commit `chore(ORB-<n>): merge main into the <slug> branch`.
+- Then `pnpm typecheck && pnpm lint`, and commit `chore(ORB-<n>): merge main into the <branch words> branch`.
 - Then `pnpm db:migrate` with the dev database URL.
 - Never rebase, never force push, and never rename the PR's migration folders.
 

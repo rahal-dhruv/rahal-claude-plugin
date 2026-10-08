@@ -23,6 +23,13 @@ Step 0 — checks
 - Quote every path: a workspace path may contain spaces.
 - `<repo>` below means `"<workspace_root>/<repos.backend>"` (or the dashboard or docs folder the command targets).
 
+## The ticket folder
+
+A ticket's outputs live in `<workspace_root>/<work_folder>/<slug>/`. The slug is `orb-<n>-<two to four words from the ticket title>`, lower case, joined by `-` (e.g. `orb-183-visa-destinations`). Find the folder before making one, so a later run lands in the same place:
+1. List `"<workspace_root>/<work_folder>"/orb-<n>-*/`. One folder: use it; its name is the slug. Several: ask which.
+2. None: make the slug from the ticket title. Create the folder when the first file is written.
+3. The branch is the `**Branch:**` line of that folder's `plan.md` when it has one; for a PR, the PR's `headRefName`; otherwise `feat/<slug>`.
+
 ## Check 1 — Config
 
 1. Find `.claude/rahal.local.md` in the folder Claude Code started in, or its nearest parent folder that has one.

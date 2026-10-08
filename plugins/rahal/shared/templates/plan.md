@@ -3,7 +3,7 @@
 **Goal:** <one sentence>
 **Approach:** <2–3 sentences>
 **Tech stack:** <from the profile and the ticket>
-**Ticket:** <link> · **Brief:** `work/<slug>/brief.md`
+**Ticket:** <link> · **Brief:** `work/<slug>/brief.md` · **Branch:** `feat/<slug>`
 
 ## Tasks at a glance
 
@@ -31,7 +31,7 @@
 
 ```bash
 git -C <repo> fetch origin && git -C <repo> switch main && git -C <repo> merge --ff-only origin/main
-git -C <repo> switch -c feat/orb-<n>-<slug>
+git -C <repo> switch -c feat/<slug>
 pnpm install --frozen-lockfile && pnpm db:generate
 <docker compose up --wait with the configured ports; pnpm db:migrate with the dev database port>
 ```

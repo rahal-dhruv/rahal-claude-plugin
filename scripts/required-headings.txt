@@ -47,3 +47,6 @@ plugins/rahal/skills/init/references/checks.md|Record `e2e_node_options: --requi
 plugins/rahal/skills/init/references/config-template.md|  e2e_node_options: <--require "<shim path>"; may be empty>
 plugins/rahal/shared/step-0-checks.md|4. Windows: the folder in `toolchain.bash_node_path` must contain `node`; the shim file named in `toolchain.e2e_node_options` (the path between its double quotes) must exist; and `NODE_OPTIONS='<e2e_node_options>' node -e 1` must exit 0.
 plugins/rahal/skills/init/references/config-template.md|  tools: <tool name prefix ending in __; may be empty only while Linear is not connected, which step 0 reports>
+plugins/rahal/shared/step-0-checks.md|## The ticket folder
+plugins/rahal/shared/templates/plan.md|**Ticket:** <link> · **Brief:** `work/<slug>/brief.md` · **Branch:** `feat/<slug>`
+plugins/rahal/skills/start-work/SKILL.md|Run step 0 check 1, read the ticket id, and find the ticket folder (`${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` → The ticket folder). Then:

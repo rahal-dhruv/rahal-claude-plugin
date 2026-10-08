@@ -16,5 +16,5 @@
   docs/                             optional notes on what was built
 ```
 
-- Ticket folder slug: `orb-<n>-<two to four words from the ticket title>`, lower case.
+- Ticket folder slug: `orb-<n>-<two to four words from the ticket title>`, lower case. Commands reuse an existing `orb-<n>-*` folder before making a new one. The branch is `feat/<slug>`.
 - Nothing of yours goes inside a repo: no `.claude/`, no `work/`, no notes.

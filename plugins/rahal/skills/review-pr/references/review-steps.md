@@ -13,7 +13,7 @@ A merged PR: ask whether to continue (step 0 check 2).
 
 ## 2. The ticket
 
-Take `ORB-<n>` from the PR title or branch. `get_issue` with relations, and `list_comments`. Note whether the ticket was updated after the PR opened (`updatedAt`): a reviewer may have amended it. Slug for the output folder: `orb-<n>-<two to four words>`.
+Take `ORB-<n>` from the PR title or branch. `get_issue` with relations, and `list_comments`. Note whether the ticket was updated after the PR opened (`updatedAt`): a reviewer may have amended it. The output folder is the ticket folder (step 0 → The ticket folder).
 
 ## 3. Read the code at the PR head
 

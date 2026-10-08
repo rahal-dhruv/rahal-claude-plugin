@@ -1,1 +1,4 @@
 NODE_OPTIONS="<e2e_node_options>"|NODE_OPTIONS splits at spaces; single-quote it so the inner double quotes reach Node
+feat/orb-<n>-<slug>|the slug already starts with orb-<n>; the branch is feat/<slug>
+derive the slug|find the existing ticket folder first (step 0 → The ticket folder)
+Slug for the output folder|find the existing ticket folder first (step 0 → The ticket folder)
