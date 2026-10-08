@@ -39,26 +39,31 @@ For each key guard (a live-row filter, a unique-violation-to-409 mapping, a perm
 
 ```bash
 #!/usr/bin/env bash
-# Breaks one guard at a time, runs one e2e file, records the failing cases, restores the file.
+# Breaks one guard at a time, runs one e2e file, records the failing cases, and restores each
+# file from its own copy, so uncommitted changes and new untracked files survive.
 set -u
-cd "<repo>"
-OUT="<scratchpad>/mutations.md"; : > "$OUT"
+cd <repo>
+SP="<scratchpad>"; OUT="$SP/mutations.md"; : > "$OUT"
+BEFORE="$(git status --porcelain=v1)"
+snap() { cp "$2" "$SP/orig-$1"; }
 run() {
   name="$1"; file="$2"
-  diff="$(git diff -U0 -- "$file" | grep -E '^[-+][^-+]')"
+  diff="$(diff -U0 "$SP/orig-$name" "$file" | grep -E '^[-+][^-+]')"
   { echo "## $name"; echo '```diff'; echo "$diff"; echo '```'; } >> "$OUT"
   if [ -z "$diff" ]; then echo "MUTATION NOT APPLIED" >> "$OUT"; else
-    NODE_OPTIONS="<e2e_node_options>" pnpm test:e2e <e2e file> > "<scratchpad>/mut-$name.log" 2>&1
+    NODE_OPTIONS="<e2e_node_options>" pnpm test:e2e <e2e file> > "$SP/mut-$name.log" 2>&1
     echo "exit=$?" >> "$OUT"
-    grep -E '^ +(×)|^ +Tests ' "<scratchpad>/mut-$name.log" >> "$OUT"
+    grep -E '^ +(×)|^ +Tests ' "$SP/mut-$name.log" >> "$OUT"
   fi
-  git checkout -- "$file"; echo >> "$OUT"
+  cp "$SP/orig-$name" "$file"; echo >> "$OUT"
 }
-# one block per guard: an edit (sed or perl -0pi), then: run <name> <file>
-git status --porcelain=v1 >> "$OUT"
+# one block per guard: snap <name> <file>; an edit (perl -0pi, or sed into a temp file and cp back); run <name> <file>
+if [ "$(git status --porcelain=v1)" = "$BEFORE" ]; then echo "tree: as before" >> "$OUT"; else
+  { echo "TREE CHANGED"; git status --porcelain=v1; } >> "$OUT"; fi
 ```
 
-- Run it in the background and read `mutations.md`. The tree must be clean afterwards.
+- Run it in the background and read `mutations.md`. It must end with `tree: as before`. Anything else: restore each file from its `orig-<name>` copy before going on.
+- It never uses `git checkout` or `git stash`, so it is safe whatever the commit choice: uncommitted task changes and new files are restored exactly.
 - Where the suite deliberately has no permanent case (a row lock the ticket proves "once in the pull request"), write a one-off proof script. Run it once as written and once with the mutation, and record both outputs.
 
 ## 7. Library measurements

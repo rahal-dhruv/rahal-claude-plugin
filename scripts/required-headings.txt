@@ -41,3 +41,5 @@ README.md|## /rahal:review-pr
 README.md|## /rahal:pr-followup
 README.md|## Troubleshooting
 README.md|## Adding a profile
+plugins/rahal/skills/start-work/references/phase-2-execute.md|snap() { cp "$2" "$SP/orig-$1"; }
+plugins/rahal/skills/start-work/references/phase-2-execute.md|  cp "$SP/orig-$name" "$file"; echo >> "$OUT"
