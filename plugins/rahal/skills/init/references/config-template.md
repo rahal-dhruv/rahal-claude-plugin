@@ -17,7 +17,7 @@ github:
   remote_prefix: <e.g. git@github.com: or git@<alias>:>
   commit_email: <git user.email inside the repos>
 linear:
-  tools: <tool name prefix ending in __>
+  tools: <tool name prefix ending in __; may be empty only while Linear is not connected, which step 0 reports>
 toolchain:
   bash_node_path: <Git Bash form of the Node folder; may be empty>
   e2e_node_options: <--require "<shim path>"; may be empty>

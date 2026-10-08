@@ -1,14 +1,14 @@
 ---
 profile: orbit
-workspace_root: <root>
+workspace_root: /srv/orbit-work
 repos:
   backend: rahal-orbit-backend
 work_folder: work
 github:
-  account: <login>
+  account: orbit-dev
   gh_config_dir:
   remote_prefix: git@github.com:
-  commit_email: <email>
+  commit_email: orbit-dev@example.com
 linear:
   tools:
 toolchain:
