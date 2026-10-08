@@ -9,3 +9,4 @@ git -C <repo> merge origin/<base>|merge with --no-ff --no-commit, so regenerate,
 "pull/<n>/head:|fetch the PR head with a leading + so a force-pushed PR is followed
 `gh pr view <n> --json body|give gh GH_CONFIG_DIR and --repo DigitalZoneApp/<repo name>
 `gh pr comment <n> --body-file|give gh GH_CONFIG_DIR and --repo DigitalZoneApp/<repo name>, and quote the file
+corepack enable 2>/dev/null|corepack enable changes the global Node install; offer it with a yes, never as a check

@@ -31,10 +31,12 @@ git -C "<workspace>/rahal-orbit-backend" config user.email           # commit_em
 
 ```bash
 node -v; cat "<workspace>/rahal-orbit-backend/.nvmrc"
-corepack enable 2>/dev/null; pnpm -v
+pnpm -v; corepack --version
 docker info --format '{{.ServerVersion}}'
 docker ps --format '{{.Names}} {{.Ports}}'      # a non-Orbit container on :5432 or :6379 is a clash
 ```
+
+`corepack enable` writes pnpm shims into the global Node install, so it is a change, not a check: offer it only when `pnpm -v` fails, and run it only with a yes.
 
 To pick free ports, add 10 to each default and check the result with `docker ps`; keep adding 10 until both are free. Start Orbit with `ORBIT_POSTGRES_PORT=<p> ORBIT_REDIS_PORT=<r> docker compose up --wait` from the backend folder. Prisma dev commands then need `DATABASE_URL` with that port, passed in the shell; never edit `.env`. Record `dev_database_url_port`.
 
