@@ -1,6 +1,6 @@
 ---
 name: start-work
-description: "Work an Orbit Linear ticket end to end in three phases with stops: (1) understand the ticket against the code and write a brief and a test-first plan, then stop for decisions; (2) execute the plan with a ledger, the gate, guard checks and a two-pass review, then stop with the findings; (3) ship under your commit and GitHub choices. Re-run it with the same link to resume. Usage: /rahal:start-work <ORB ticket link> [model=<name>]"
+description: "Work an Orbit Linear ticket end to end in three phases with stops: (1) understand the ticket against the code and write a brief and a test-first plan, then stop for decisions; (2) execute the plan with a ledger, the gate, guard checks and one review pass (the rahal reviewer, on the model you choose, runs code-review and checks the ticket), then stop with the findings; (3) ship under your commit and GitHub choices. Re-run it with the same link to resume. Usage: /rahal:start-work <ORB ticket link> [model=<name>]"
 argument-hint: "<ORB ticket link> [model=<name>]"
 disable-model-invocation: true
 ---

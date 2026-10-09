@@ -19,3 +19,5 @@ the review then runs the reviewer agent only|without code-review the review coun
 Never dispatch other agents|the reviewer runs code-review, which starts its own helper agent
 then `code-review` at effort `high` on the range|one review pass: the reviewer agent runs code-review itself
 Run `code-review` at `high` on the full PR URL|one review pass: the reviewer agent runs code-review itself
+two-pass|one review pass: the reviewer agent runs code-review itself
+two passes|one review pass: the reviewer agent runs code-review itself
