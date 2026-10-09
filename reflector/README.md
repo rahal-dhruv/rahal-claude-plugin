@@ -50,7 +50,7 @@ The reflector's edits to `notes.md` and `docs/` appear as ordinary uncommitted c
 ## What it may change
 
 - **On its own:** `reflector/notes.md` (between its markers), `docs/`, and 1–3 line `AGENTS.md` promotions.
-- **Never; it escalates to `pending-approvals.md`:** `plugins/rahal/`, `scripts/`, `tests/`, the manifests, `README.md`, `.claude/agents/`, `.claude/hooks/`, structural `AGENTS.md` changes, and new skills or agents.
+- **Never; it escalates to `pending-approvals.md`:** `plugins/rahal/`, `scripts/`, `tests/`, the manifests, `README.md`, `.claude/agents/`, `.claude/hooks/`, structural `AGENTS.md` changes, new skills or agents, and any other file except its own log and approvals file.
 - **Never writes personal data** (paths, accounts, emails, ports); `scripts/check.sh` catches a local path, an email address or an account name before the commit, but not every port.
 
 The maintainer closes pending approvals.
