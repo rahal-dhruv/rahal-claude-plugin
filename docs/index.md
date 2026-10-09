@@ -8,6 +8,7 @@ Agent-facing documentation of what is built in this repo. Read this file first, 
 | [shared-rules.md](shared-rules.md) | Step 0, approval gates, evidence, the review model and single review pass, config keys, templates. |
 | [checks.md](checks.md) | `check.sh` sections, `check-output.sh` kinds, fixtures, probes, the test-first practice. |
 | [testing-and-release.md](testing-and-release.md) | Loading the plugin, dry runs, proving a run used the plugin, Windows traps, release steps. |
+| [decisions.md](decisions.md) | Every design decision and ruling (PD-nn): what, why, cost if wrong, where it lives. |
 
 ## Rules for this folder
 
