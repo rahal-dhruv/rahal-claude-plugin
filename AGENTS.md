@@ -51,7 +51,7 @@ scripts/test-probes.sh
 
 ## 6. Reflector
 
-- At the start of a session, read `reflector/pending-approvals.md` and `reflector/notes.md`, and mention any open approval.
+- If you opted in, read your own `reflector/pending-approvals.md` and `reflector/notes.md` at the start of a session and mention any open approval. Both are git-ignored and stay on your machine.
 - Before the final message of every turn, write `.claude/reflector-context.json` (schema: `reflector/README.md`), but only when your `.claude/settings.local.json` registers the reflector hook. Without it, skip this.
 - Open plugin work in a session started in this repo's folder; a session opened in a parent folder does not run this repo's hook.
 

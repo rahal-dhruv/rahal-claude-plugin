@@ -86,8 +86,10 @@ plugins/rahal/skills/start-work/SKILL.md|description: "Work an Orbit Linear tick
 .gitignore|reflector/improvement-log.md
 .gitignore|reflector/reflector-runs.log
 .gitignore|reflector/.last-context.hash
-reflector/notes.md|<!-- BEGIN reflector-notes -->
-reflector/notes.md|<!-- END reflector-notes -->
+.gitignore|reflector/notes.md
+.gitignore|reflector/pending-approvals.md
+.claude/agents/reflector.md|<!-- BEGIN reflector-notes -->
+.claude/agents/reflector.md|<!-- END reflector-notes -->
 reflector/README.md|## Turn it on
 reflector/README.md|The hook runs with bash: on Windows that is Git Bash, which must be on PATH for the shell Claude Code starts. Without it the hook fails to start and Claude Code shows a hook error; the session itself is unaffected.
 .claude/agents/reflector.md|## 6. Never edit; escalate instead
@@ -114,3 +116,11 @@ AGENTS.md|- **Portable bash:** no `grep -P`, `\b` or `sed -i`; quote every path 
 .claude/agents/reflector.md|- any other file, except the two you always write: `reflector/pending-approvals.md` (this section) and `reflector/improvement-log.md` (§8). For example `reflector/README.md`, `CLAUDE.md` and `.gitignore`.
 .claude/agents/reflector.md|Compare `git_status_diff` (this repo's `git status --porcelain=v1`) with `files_modified`. A file listed in `files_modified` but absent from the diff is an implicit `partial_completion` signal: the session claimed a change that is not there. The reverse is not a signal: an unlisted modified file may be an earlier turn's uncommitted work, or one of your own earlier edits under `reflector/` or `docs/`. Both empty is normal.
 reflector/README.md|- **Never; it escalates to `pending-approvals.md`:** `plugins/rahal/`, `scripts/`, `tests/`, the manifests, `README.md`, `.claude/agents/`, `.claude/hooks/`, structural `AGENTS.md` changes, new skills or agents, and any other file except its own log and approvals file.
+AGENTS.md|- If you opted in, read your own `reflector/pending-approvals.md` and `reflector/notes.md` at the start of a session and mention any open approval. Both are git-ignored and stay on your machine.
+reflector/README.md|| `reflector/notes.md`, `pending-approvals.md` | ignored | one person's lessons and escalations; created on the first run |
+reflector/README.md|The reflector's edits to `docs/` and `AGENTS.md` appear as ordinary uncommitted changes in your branch. Review them and commit them with your work, or on their own as `docs(reflector): …`. Its notes and escalations stay on your machine.
+reflector/README.md|You close your own pending approvals; to raise one with the maintainer, open a pull request.
+.claude/agents/reflector.md|2. Read `reflector/notes.md`; if it is missing, create it from the skeleton in §11.
+.claude/agents/reflector.md|4. Read `reflector/pending-approvals.md`; if it is missing, create it from the skeleton in §11.
+.claude/agents/reflector.md|Read the file first and do not duplicate an open entry. The person who opted in closes entries.
+.claude/agents/reflector.md|## 11. Skeletons for missing files

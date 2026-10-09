@@ -1,6 +1,6 @@
 # Reflector — operating manual
 
-The reflector is an optional self-improvement loop for people working on this repo. After each Claude Code turn it reads a short context file the session wrote, curates shared lessons, keeps `docs/` honest, and asks the maintainer before anything bigger. It never changes the plugin.
+The reflector is an optional self-improvement loop for people working on this repo. After each Claude Code turn it reads a short context file the session wrote, curates your lessons, keeps `docs/` honest, and asks you before anything bigger. It never changes the plugin.
 
 ## Turn it on
 
@@ -32,7 +32,7 @@ To turn it off, remove the `Stop` entry from your `.claude/settings.local.json`.
 
 | Tier | File | Nature |
 | --- | --- | --- |
-| Working memory | `reflector/notes.md` | Cheap to add, curated, pruned after 30 days untouched |
+| Working memory | `reflector/notes.md` | Yours only; cheap to add, curated, pruned after 30 days untouched |
 | Contract | `AGENTS.md` | Read by every contributor's agent in every session |
 
 A lesson moves from notes into `AGENTS.md` only after the same friction appears in at least 3 entries of your `reflector/improvement-log.md`, and only as a 1–3 line edit. Anything bigger is escalated.
@@ -41,11 +41,12 @@ A lesson moves from notes into `AGENTS.md` only after the same friction appears 
 
 | File | In git? | Why |
 | --- | --- | --- |
-| `reflector/README.md`, `notes.md`, `pending-approvals.md` | committed | curated knowledge everyone benefits from |
+| `reflector/README.md`, `.claude/agents/reflector.md`, `.claude/hooks/post-task.sh` | committed | what anyone needs to opt in |
+| `reflector/notes.md`, `pending-approvals.md` | ignored | one person's lessons and escalations; created on the first run |
 | `reflector/improvement-log.md`, `reflector-runs.log`, `.last-context.hash` | ignored | one person's raw history; never causes merge conflicts |
 | `.claude/reflector-context.json`, `.claude/settings.local.json` | ignored | per session, per person |
 
-The reflector's edits to `notes.md` and `docs/` appear as ordinary uncommitted changes in your branch. Review them and commit them with your work, or on their own as `docs(reflector): …`.
+The reflector's edits to `docs/` and `AGENTS.md` appear as ordinary uncommitted changes in your branch. Review them and commit them with your work, or on their own as `docs(reflector): …`. Its notes and escalations stay on your machine.
 
 ## What it may change
 
@@ -53,7 +54,7 @@ The reflector's edits to `notes.md` and `docs/` appear as ordinary uncommitted c
 - **Never; it escalates to `pending-approvals.md`:** `plugins/rahal/`, `scripts/`, `tests/`, the manifests, `README.md`, `.claude/agents/`, `.claude/hooks/`, structural `AGENTS.md` changes, new skills or agents, and any other file except its own log and approvals file.
 - **Never writes personal data** (paths, accounts, emails, ports); `scripts/check.sh` catches a local path, an email address or an account name before the commit, but not every port.
 
-The maintainer closes pending approvals.
+You close your own pending approvals; to raise one with the maintainer, open a pull request.
 
 ## Context schema
 

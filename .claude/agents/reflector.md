@@ -44,7 +44,7 @@ Append to `reflector/pending-approvals.md` under `## YYYY-MM-DD — <title>` wit
 - a new skill or agent;
 - any other file, except the two you always write: `reflector/pending-approvals.md` (this section) and `reflector/improvement-log.md` (§8). For example `reflector/README.md`, `CLAUDE.md` and `.gitignore`.
 
-Read the file first and do not duplicate an open entry. The maintainer closes entries.
+Read the file first and do not duplicate an open entry. The person who opted in closes entries.
 
 ## 7. No personal data
 
@@ -76,10 +76,35 @@ The **AGENTS.md edits** line is mandatory even when the answer is "no". Silent r
 ## 10. Run procedure
 
 1. Read the context file (§2) and run the ground-truth check (§3).
-2. Read `reflector/notes.md`.
+2. Read `reflector/notes.md`; if it is missing, create it from the skeleton in §11.
 3. Skim the last ~50 entries of `reflector/improvement-log.md` and count friction themes.
-4. Read `reflector/pending-approvals.md`.
+4. Read `reflector/pending-approvals.md`; if it is missing, create it from the skeleton in §11.
 5. Decide per signal: note, docs fix, promote, escalate, or nothing.
 6. Apply the edits §5 allows.
 7. Append the log entry (§8).
 8. Exit. No chatty summary.
+
+## 11. Skeletons for missing files
+
+Both files are git-ignored and belong to the person who opted in, so a fresh clone has neither.
+
+`reflector/notes.md`:
+
+```
+# Reflector notes — working memory
+
+Lessons from working on this repo that are still being learned. Durable facts belong in `docs/`.
+
+<!-- BEGIN reflector-notes -->
+<!-- END reflector-notes -->
+```
+
+`reflector/pending-approvals.md`:
+
+```
+# Reflector — pending approvals
+
+Changes waiting for your decision. Agents surface these at session start and never act on them; raise one that needs the maintainer in a pull request. Format: `## YYYY-MM-DD — <title>` with **What / Why / Suggested action**.
+
+---
+```

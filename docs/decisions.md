@@ -268,10 +268,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Where:** `AGENTS.md`, `CLAUDE.md`
 - **Date:** 2026-10-09
 
-### PD-39 — The reflector is opt-in per person
+### PD-39 — The reflector is opt-in per person (curated files: superseded by PD-49)
 - **Decision:** the hook is registered in each contributor's own `.claude/settings.local.json`; curated files are committed and raw logs ignored.
 - **Why:** nobody pays for a background run each turn unless they choose to, and raw logs never conflict in git.
-- **Cost if wrong:** lessons are only captured for contributors who opt in.
+- **Cost if wrong:** lessons are only captured for contributors who opt in. Committing the curated files is superseded by PD-49; the opt-in hook stands.
 - **Where:** `reflector/README.md`, `.gitignore`, `scripts/check.sh`
 - **Date:** 2026-10-09
 
@@ -336,4 +336,11 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Why:** the reflector runs in Git Bash, so a leaked path most likely has that form, and the docs promised email coverage.
 - **Cost if wrong:** a legitimate path in prose that starts with a one-letter folder is flagged and must be reworded (this entry's own first draft was).
 - **Where:** `scripts/check.sh`, `tests/probes/check-sections.sh`
+- **Date:** 2026-10-09
+
+### PD-49 — The reflector's notes and approvals stay on each machine
+- **Decision:** `reflector/notes.md` and `reflector/pending-approvals.md` are git-ignored, and the reflector creates them from skeletons on its first run. The hook, the agent and `reflector/README.md` stay committed, so anyone can still opt in. Partly supersedes PD-39.
+- **Why:** the maintainer chose to keep the reflector's output out of the repo while keeping the loop available to anyone who opts in; per-person files also never conflict in git.
+- **Cost if wrong:** one contributor's lessons and escalations no longer reach others; an escalation that needs the maintainer travels in a pull request instead.
+- **Where:** `.gitignore`, `.claude/agents/reflector.md`, `reflector/README.md`, `tests/probes/check-sections.sh`
 - **Date:** 2026-10-09
