@@ -34,3 +34,7 @@ README.md
 scripts/forbidden-text.txt
 scripts/test-probes.sh
 tests/probes/check-sections.sh
+tests/probes/guard-runner.sh
+tests/probes/merge-step.sh
+tests/probes/pr-fetch.sh
+tests/probes/review-clone.sh
