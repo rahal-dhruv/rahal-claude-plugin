@@ -46,3 +46,8 @@ reflector/pending-approvals.md
 tests/probes/reflector-hook.sh
 AGENTS.md
 CLAUDE.md
+docs/index.md
+docs/commands.md
+docs/shared-rules.md
+docs/checks.md
+docs/testing-and-release.md

@@ -1,0 +1,48 @@
+# Testing and release
+
+## Loading the plugin
+
+- **One terminal session:** `claude --plugin-dir "<repo>/plugins/rahal"`. Only that session sees `/rahal:` commands; desktop sessions do not.
+- **Every new session in one workspace:** a local-scope install from the repo folder:
+  ```bash
+  claude plugin marketplace add "<repo>" --scope local
+  claude plugin install rahal@rahal-claude-plugin --scope local
+  ```
+  Run these from the workspace folder. `claude plugin list` then shows "Read from: <repo>/plugins/rahal": the plugin is read straight from the folder, so edits reach every new session without reinstalling; it is enabled in that workspace only. Sessions already open do not pick it up.
+- **Undo:** `claude plugin uninstall rahal@rahal-claude-plugin --scope local`, then `claude plugin marketplace remove rahal-claude-plugin`.
+- **Size:** `claude --plugin-dir plugins/rahal plugin details rahal` prints the components and the token cost (`claude plugin details` alone takes an installed name, not a path).
+- **Never** use `claude plugin init` to explore: it writes into the user's own skills folder and loads there.
+
+## Proving a run used the plugin
+
+A plugin command opens with the "Step 0 — checks" block. Its session transcript (`~/.claude/projects/<encoded workspace>/<session>.jsonl`) contains `<command-name>/rahal:<command></command-name>`. A slash command typed into a session without the plugin is just text, and a "result" from it is not a plugin result.
+
+## Headless runs
+
+`claude -p --plugin-dir <dir> --permission-mode auto --max-budget-usd <n> --settings '{"disableAllHooks":true}' "/rahal:review-pr <link>"` runs read-only checks with a spending cap and without the workspace's hooks. A plugin command in a headless run prints its first question and stops.
+
+## Dry runs
+
+| Scenario | Proves |
+| --- | --- |
+| `/rahal:init` in the real workspace | the config is complete: `scripts/check-output.sh config <workspace>/.claude/rahal.local.md` |
+| `/rahal:init` in an empty folder with a space in its name | missing repos are offered, not fatal; paths are quoted |
+| `/rahal:review-pr` with no argument | it asks for the link and stops |
+| wrong `gh_config_dir` | step 0 names the account conflict and stops before reviewing |
+| `/rahal:start-work <ticket>` | `brief.md` and `plan.md` pass `check-output.sh`; it stops at decision 1 |
+| `/rahal:review-pr <open PR>` | the reviewer's first line says `code-review: ran at high on <sha>`; findings cite only the PR's files; the checkout is unchanged |
+| `/rahal:pr-followup <PR>` | `followup-<date>.md` passes `check-output.sh followup`; answered threads are skipped |
+
+## Windows traps
+
+- Git Bash does not read PowerShell Node managers (fnm, nvm-windows): put the Node folder first on PATH per shell (`toolchain.bash_node_path`).
+- The backend's e2e setup spawns `pnpm` without a shell; init's shim fixes it, loaded through `NODE_OPTIONS='--require "<path>"'` (the inner double quotes keep a path with spaces whole).
+- Git Bash rewrites `rev:path` and `/api/...` arguments; prefix `git show` and `gh api` with `MSYS_NO_PATHCONV=1`.
+- The Claude desktop app's terminal integration can be missing, so Claude cannot type into a terminal tab; open the tab and type the command yourself.
+
+## Release
+
+1. The maintainer merges the pull request into `main`.
+2. Bump `version` in `plugins/rahal/.claude-plugin/plugin.json`.
+3. `claude plugin tag plugins/rahal` creates the `rahal--v<version>` tag; push `main` and the tag.
+4. Teammates install from the marketplace address in `README.md`'s Install section (with an SSH alias if they use several GitHub accounts), then `/plugin install rahal@rahal-claude-plugin`.
