@@ -1,6 +1,6 @@
 # Review — PR #<n> · <PR title>
 
-At <head SHA> · <open | merged> · CI <green | red | running> · by <author> · reviewed with <model> + code-review (high)
+At <head SHA> · <open | merged> · CI <green | red | running> · by <author> · reviewed with <model>: code-review (high) plus ticket checks
 
 ## 1. What the ticket is trying to solve
 

@@ -85,7 +85,7 @@ You answer each decision. It updates the plan, then asks "Ready to execute?".
   - the full `pnpm check`;
   - breaking each key guard once to prove a test catches it;
   - the PR body from the repo's template;
-  - a review by the `rahal-reviewer` agent and Claude Code's `code-review`.
+  - one review pass: the `rahal-reviewer` agent, on the model you pick, runs Claude Code's `code-review` and checks the change against the ticket.
 - **Then it stops** with the findings at a glance and in detail, and you choose which to fix.
 
 **Phase three — ship.** Push, open the PR and read CI once, each per your choices.

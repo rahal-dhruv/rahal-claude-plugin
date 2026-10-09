@@ -26,19 +26,16 @@ The user decides. "Always <model>" writes `choices.review_model: <model>` into `
 
 ## How to run the review
 
-1. The reviewer agent first. Use the Agent tool with `subagent_type: "rahal:rahal-reviewer"` and `model: <chosen model>`. Its prompt holds:
+1. Run the reviewer agent, once: the Agent tool with `subagent_type: "rahal:rahal-reviewer"` and `model: <chosen model>`. In that one pass it runs `code-review` at effort `high` on the chosen model, then checks the change against the ticket. There is no second review run in this session. Its prompt holds:
    - the ticket text;
    - the plan path, if any;
-   - the base and head SHAs;
-   - the repo folder;
+   - the repo folder and its default branch name;
+   - the base and head SHAs (fetch first, so `origin/<default>` and the head are current);
+   - this session's scratchpad folder (the agent builds its review clone there);
    - `AGENTS.md` read from `origin/<default>`;
    - the plan's Review Focus, if any;
    - the ledger's rulings, if any;
    - existing PR comments, if any.
-2. Then Claude Code's `code-review` skill at effort `high`, on the same change:
-   - First `cd <repo>`, so its git commands see the repo; the workspace root is not one.
-   - Give it the full PR URL (`https://github.com/DigitalZoneApp/<repo name>/pull/<n>`) when there is a PR; otherwise the range `<base SHA>..<head SHA>`.
-   - Run every `gh` command it needs with step 0's `GH_CONFIG_DIR` prefix and `--repo`.
-   - If it is not available (step 0 check 5), fails, or reports that it reviewed nothing, record it as **not run**, never as clean, and continue with the reviewer's findings only.
-3. Merge the two lists and remove duplicates. Re-open every citation (`shared/evidence.md`), and probe, mutate or dry-run where a claim needs it.
+2. Read its first line. `code-review: not run — <reason>` means the review covers the ticket checks only: say so in the report header and never call the result clean.
+3. Re-open every citation it returns (`shared/evidence.md`), and probe, mutate or dry-run where a claim needs it.
 4. Write the result with `${CLAUDE_PLUGIN_ROOT}/shared/templates/review-report.md`.

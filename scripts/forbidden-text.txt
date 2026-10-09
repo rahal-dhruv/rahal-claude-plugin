@@ -12,3 +12,10 @@ git -C <repo> merge origin/<base>|merge with --no-ff --no-commit, so regenerate,
 corepack enable 2>/dev/null|corepack enable changes the global Node install; offer it with a yes, never as a check
 on the PR number|code-review needs the full PR URL from inside the repo (review-model.md step 2)
 then `git -C <repo> rev-list --left-right --count <default>...origin/<default>`|guard the behind-count with a check that the local default branch exists
+2. Then Claude Code's `code-review` skill at effort `high`, on the same change:|one review pass: the reviewer agent runs code-review itself
+Merge the two lists|one review pass: the reviewer agent returns one merged list
++ code-review (high)|one review pass: name the model, then code-review (high) plus ticket checks
+the review then runs the reviewer agent only|without code-review the review counts as ticket checks only, never as clean
+Never dispatch other agents|the reviewer runs code-review, which starts its own helper agent
+then `code-review` at effort `high` on the range|one review pass: the reviewer agent runs code-review itself
+Run `code-review` at `high` on the full PR URL|one review pass: the reviewer agent runs code-review itself

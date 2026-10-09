@@ -54,6 +54,8 @@ if [ -f "$agent" ]; then
     && fail "rahal-reviewer.md must not have Edit, Write or NotebookEdit"
   model="$(printf '%s\n' "$front" | grep '^model:')"
   [ -n "$model" ] && [ "$model" != "model: inherit" ] && fail "rahal-reviewer.md must not pin a model"
+  flags="$(grep -nE -- '--fix|--comment' "$agent" | grep -v 'Never add')"
+  [ -n "$flags" ] && fail "rahal-reviewer.md mentions --fix or --comment outside the rule forbidding them: $flags"
 fi
 
 # 6. Every ${CLAUDE_PLUGIN_ROOT}/<path> named in the plugin exists
