@@ -32,3 +32,5 @@ plugins/rahal/skills/pr-followup/references/phase-1-analyse.md
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md
 README.md
 scripts/forbidden-text.txt
+scripts/test-probes.sh
+tests/probes/check-sections.sh

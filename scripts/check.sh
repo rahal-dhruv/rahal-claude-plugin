@@ -93,4 +93,46 @@ while IFS='|' read -r text why || [ -n "$text" ]; do
   if [ -n "$found" ]; then fail "forbidden text ($why): $text"; printf '%s\n' "$found" | sed 's/^/    /'; fi
 done < "$ROOT/scripts/forbidden-text.txt"
 
+# 9. The docs map: every link in docs/index.md resolves, and every docs/*.md is linked from it
+if [ -f "$ROOT/docs/index.md" ]; then
+  links="$(grep -oE '\]\([^)#]+\.md\)' "$ROOT/docs/index.md" | sed -E 's/^\]\(//; s/\)$//' | sort -u)"
+  for l in $links; do
+    [ -f "$ROOT/docs/$l" ] || fail "docs/index.md links a missing file: $l"
+  done
+  for f in "$ROOT"/docs/*.md; do
+    n="${f##*/}"; [ "$n" = index.md ] && continue
+    printf '%s\n' "$links" | grep -qxF -- "$n" || fail "docs/$n is not listed in docs/index.md"
+  done
+fi
+
+# 10. The decision log: each PD entry has its fields, no id repeats, every Where path exists
+D="$ROOT/docs/decisions.md"
+if [ -f "$D" ]; then
+  dups="$(grep -oE '^### PD-[0-9]+' "$D" | sed 's/^### //' | sort | uniq -d)"
+  for id in $dups; do fail "docs/decisions.md repeats: $id"; done
+  missing="$(awk '
+    function check() { if (id != "") { if (!d) print id " lacks Decision"; if (!w) print id " lacks Why"; if (!c) print id " lacks Cost if wrong"; if (!p) print id " lacks Where" } }
+    /^### PD-[0-9]+/ { check(); id = $2; d = w = c = p = 0; next }
+    /^- \*\*Decision:\*\*/ { d = 1 }
+    /^- \*\*Why:\*\*/ { w = 1 }
+    /^- \*\*Cost if wrong:\*\*/ { c = 1 }
+    /^- \*\*Where:\*\*/ { p = 1 }
+    END { check() }' "$D")"
+  while IFS= read -r m; do [ -n "$m" ] && fail "docs/decisions.md: $m"; done <<EOF
+$missing
+EOF
+  wheres="$(awk '/^### PD-[0-9]+/ { id = $2 } /^- \*\*Where:\*\*/ { line = $0; while (match(line, /`[^`]+`/)) { print id "|" substr(line, RSTART + 1, RLENGTH - 2); line = substr(line, RSTART + RLENGTH) } }' "$D")"
+  while IFS='|' read -r id path; do
+    [ -z "$path" ] && continue
+    [ -e "$ROOT/$path" ] || fail "docs/decisions.md: $id names a missing path: $path"
+  done <<EOF
+$wheres
+EOF
+fi
+
+# 11. The reflector stays opt-in: no committed setting registers its hook
+if [ -f "$ROOT/.claude/settings.json" ] && grep -q 'post-task.sh' "$ROOT/.claude/settings.json"; then
+  fail ".claude/settings.json turns the reflector hook on for everyone; register it in .claude/settings.local.json instead"
+fi
+
 if [ "$FAILS" -eq 0 ]; then echo "check: all clear"; else echo "check: $FAILS problem(s)"; exit 1; fi
