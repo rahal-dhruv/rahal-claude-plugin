@@ -44,3 +44,5 @@ reflector/README.md
 reflector/notes.md
 reflector/pending-approvals.md
 tests/probes/reflector-hook.sh
+AGENTS.md
+CLAUDE.md

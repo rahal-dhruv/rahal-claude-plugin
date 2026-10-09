@@ -91,3 +91,10 @@ reflector/notes.md|<!-- END reflector-notes -->
 reflector/README.md|## Turn it on
 reflector/README.md|The hook runs with bash: on Windows that is Git Bash, which must be on PATH for the shell Claude Code starts. Without it the hook fails to start and Claude Code shows a hook error; the session itself is unaffected.
 .claude/agents/reflector.md|## 6. Never edit; escalate instead
+CLAUDE.md|@AGENTS.md
+AGENTS.md|## 2. Commands
+AGENTS.md|## 3. How to change the plugin
+AGENTS.md|## 6. Reflector
+AGENTS.md|scripts/check.sh
+AGENTS.md|scripts/test-check-output.sh
+AGENTS.md|scripts/test-probes.sh
