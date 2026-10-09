@@ -1,0 +1,3 @@
+# Every file is stored and checked out with LF line endings, whatever core.autocrlf says:
+# check.sh and the probes read files line by line and break on Windows line endings.
+* text=auto eol=lf

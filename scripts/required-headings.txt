@@ -98,3 +98,4 @@ AGENTS.md|## 6. Reflector
 AGENTS.md|scripts/check.sh
 AGENTS.md|scripts/test-check-output.sh
 AGENTS.md|scripts/test-probes.sh
+.gitattributes|* text=auto eol=lf

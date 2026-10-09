@@ -52,3 +52,5 @@ docs/shared-rules.md
 docs/checks.md
 docs/testing-and-release.md
 docs/decisions.md
+.gitattributes
+tests/probes/fresh-clone.sh
