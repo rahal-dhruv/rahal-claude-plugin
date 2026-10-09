@@ -38,3 +38,9 @@ tests/probes/guard-runner.sh
 tests/probes/merge-step.sh
 tests/probes/pr-fetch.sh
 tests/probes/review-clone.sh
+.claude/hooks/post-task.sh
+.claude/agents/reflector.md
+reflector/README.md
+reflector/notes.md
+reflector/pending-approvals.md
+tests/probes/reflector-hook.sh

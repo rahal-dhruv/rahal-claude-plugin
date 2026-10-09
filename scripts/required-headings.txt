@@ -81,3 +81,13 @@ plugins/rahal/agents/rahal-reviewer.md|   Then `cd "$W"` and use the Skill tool 
 plugins/rahal/skills/start-work/references/phase-2-execute.md|2. The reviewer agent, once, on the branch: base `$(git merge-base origin/main HEAD)`, head `HEAD`'s SHA. It runs `code-review` itself, as `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md` says.
 plugins/rahal/skills/review-pr/references/review-steps.md|2. Run the reviewer agent once, with the ticket, base `$BASE`, head `origin/pr-<n>`'s SHA, the repo folder and its default branch name, the scratchpad folder, `AGENTS.md`, and the existing comments. It runs `code-review` itself; there is no separate `code-review` run.
 plugins/rahal/skills/start-work/SKILL.md|description: "Work an Orbit Linear ticket end to end in three phases with stops: (1) understand the ticket against the code and write a brief and a test-first plan, then stop for decisions; (2) execute the plan with a ledger, the gate, guard checks and one review pass (the rahal reviewer, on the model you choose, runs code-review and checks the ticket), then stop with the findings; (3) ship under your commit and GitHub choices. Re-run it with the same link to resume. Usage: /rahal:start-work <ORB ticket link> [model=<name>]"
+.gitignore|.claude/settings.local.json
+.gitignore|.claude/reflector-context.json
+.gitignore|reflector/improvement-log.md
+.gitignore|reflector/reflector-runs.log
+.gitignore|reflector/.last-context.hash
+reflector/notes.md|<!-- BEGIN reflector-notes -->
+reflector/notes.md|<!-- END reflector-notes -->
+reflector/README.md|## Turn it on
+reflector/README.md|The hook runs with bash: on Windows that is Git Bash, which must be on PATH for the shell Claude Code starts. Without it the hook fails to start and Claude Code shows a hook error; the session itself is unaffected.
+.claude/agents/reflector.md|## 6. Never edit; escalate instead

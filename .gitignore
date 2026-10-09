@@ -1,2 +1,7 @@
 .DS_Store
 *.local.md
+.claude/settings.local.json
+.claude/reflector-context.json
+reflector/improvement-log.md
+reflector/reflector-runs.log
+reflector/.last-context.hash
