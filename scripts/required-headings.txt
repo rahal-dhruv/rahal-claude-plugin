@@ -111,4 +111,4 @@ docs/commands.md|- **Known gaps:** reviews and conversation comments are read wi
 docs/checks.md|12. **Executable scripts:** every tracked `*.sh` is recorded as `100755`; a Windows checkout with `core.filemode=false` would otherwise commit scripts non-executable and break the gate on macOS and Linux.
 docs/checks.md|| `fresh-clone` | a clone made with Git for Windows' default `core.autocrlf=true` gets LF line endings (`.gitattributes`) and passes `check.sh`'s file and line sections |
 AGENTS.md|- **Portable bash:** no `grep -P`, `\b` or `sed -i`; quote every path (workspace paths can contain spaces); never `git config` in a probe; record a new script as executable with `git update-index --chmod=+x <file>` (`check.sh` section 12).
-.claude/agents/reflector.md|- anything else not named in §5, including `reflector/README.md`, `CLAUDE.md` and `.gitignore`.
+.claude/agents/reflector.md|- any other file, except the two you always write: `reflector/pending-approvals.md` (this section) and `reflector/improvement-log.md` (§8). For example `reflector/README.md`, `CLAUDE.md` and `.gitignore`.
