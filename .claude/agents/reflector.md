@@ -41,7 +41,8 @@ Append to `reflector/pending-approvals.md` under `## YYYY-MM-DD — <title>` wit
 - `scripts/` and `tests/` (the checks);
 - `.claude-plugin/`, `README.md`, `.claude/agents/` and `.claude/hooks/`;
 - `AGENTS.md` beyond §5's surgical edits;
-- a new skill or agent.
+- a new skill or agent;
+- anything else not named in §5, including `reflector/README.md`, `CLAUDE.md` and `.gitignore`.
 
 Read the file first and do not duplicate an open entry. The maintainer closes entries.
 
