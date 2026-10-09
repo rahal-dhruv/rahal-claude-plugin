@@ -1,6 +1,6 @@
 # Commands
 
-Four skills in `plugins/rahal/skills/`, invoked as `/rahal:<name>`. Each `SKILL.md` sets `disable-model-invocation: true`, so only a person can start one; Claude cannot, which is why every dry run needs someone typing. Each reads `shared/step-0-checks.md` first and finds the ticket folder through it.
+Four skills in `plugins/rahal/skills/`, invoked as `/rahal:<name>`. Each `SKILL.md` sets `disable-model-invocation: true`, so only a person can start one; Claude cannot, which is why every dry run needs someone typing. `start-work`, `review-pr` and `pr-followup` read `shared/step-0-checks.md` first and find the ticket folder through it; `init` runs the step 0 checks as its last step and has no ticket folder.
 
 ## /rahal:init `[workspace folder]`
 
@@ -40,6 +40,7 @@ Two phases; "Which phase" reads the latest `followup-*.md` in the ticket folder.
 - **Outputs:** `followup-<date>.md` (`check-output.sh followup`, which needs ` · comment <id>` in each fix heading), `reply-<date>-<reviewer>-<comment id>.md` (`reply`), `pr-body.md`, `ledger.md`, `review-<date>.md`.
 - **Resume:** no `Accepted:` → the question is open; `Accepted:` without `Handled:` → phase two resumes at the first step the ledger does not record.
 - **Gotchas:** replies are posted only after the push that contains their commit; replacing the PR description always asks.
+- **Known gaps:** reviews and conversation comments are read without `--paginate` (only inline comments use it), so past 30 of either the rest are silently skipped.
 
 ## Never on their own
 

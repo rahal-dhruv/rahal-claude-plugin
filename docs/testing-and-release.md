@@ -28,7 +28,7 @@ A plugin command opens with the "Step 0 — checks" block. Its session transcrip
 | `/rahal:init` in the real workspace | the config is complete: `scripts/check-output.sh config <workspace>/.claude/rahal.local.md` |
 | `/rahal:init` in an empty folder with a space in its name | missing repos are offered, not fatal; paths are quoted |
 | `/rahal:review-pr` with no argument | it asks for the link and stops |
-| wrong `gh_config_dir` | step 0 names the account conflict and stops before reviewing |
+| wrong `gh_config_dir` | step 0 names the account conflict and asks fix now / continue without that step / stop, before any review (whether it should stop outright is an open approval) |
 | `/rahal:start-work <ticket>` | `brief.md` and `plan.md` pass `check-output.sh`; it stops at decision 1 |
 | `/rahal:review-pr <open PR>` | the reviewer's first line says `code-review: ran at high on <sha>`; findings cite only the PR's files; the checkout is unchanged |
 | `/rahal:pr-followup <PR>` | `followup-<date>.md` passes `check-output.sh followup`; answered threads are skipped |

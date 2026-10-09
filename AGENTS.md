@@ -35,7 +35,7 @@ scripts/test-probes.sh
 - **A template's headings and `scripts/check-output.sh` change in the same commit.**
 - **The reviewer agent (`plugins/rahal/agents/rahal-reviewer.md`) stays read-only and never pins a model.** It may use the Skill tool only for `code-review`, and never with `--fix` or `--comment`.
 - **No personal data in any committed file:** no absolute local paths, account names, email addresses, local ports, or a filled-in gh config folder. `scripts/check.sh` catches local paths (Windows, macOS, Linux and the Git Bash `/c/…` form), email addresses other than `example.com`, the maintainer's account name outside `README.md`, the maintainer's two remapped ports and a filled-in gh config folder; any other port it cannot recognise, so keep ports out yourself.
-- **Portable bash:** no `grep -P`, `\b` or `sed -i`; quote every path (workspace paths can contain spaces); never `git config` in a probe.
+- **Portable bash:** no `grep -P`, `\b` or `sed -i`; quote every path (workspace paths can contain spaces); never `git config` in a probe; record a new script as executable with `git update-index --chmod=+x <file>` (`check.sh` section 12).
 
 ## 4. Git and releases
 

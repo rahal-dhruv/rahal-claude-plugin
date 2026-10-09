@@ -316,3 +316,24 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** a probe to maintain per block.
 - **Where:** `tests/probes`, `scripts/test-probes.sh`
 - **Date:** 2026-10-09
+
+### PD-46 — Every checkout uses LF line endings
+- **Decision:** `.gitattributes` sets `* text=auto eol=lf`.
+- **Why:** Git for Windows defaults to `core.autocrlf=true`; Windows line endings made `check.sh` report about 150 false failures in a fresh clone.
+- **Cost if wrong:** none; editors on Windows read LF files.
+- **Where:** `.gitattributes`, `tests/probes/fresh-clone.sh`
+- **Date:** 2026-10-09
+
+### PD-47 — Scripts are recorded executable, and check.sh checks it
+- **Decision:** every tracked `*.sh` is stored as mode `100755`; `check.sh` section 12 fails otherwise.
+- **Why:** a Windows checkout with `core.filemode=false` committed the scripts non-executable, which breaks the gate on macOS and Linux.
+- **Cost if wrong:** none.
+- **Where:** `scripts/check.sh`
+- **Date:** 2026-10-09
+
+### PD-48 — The personal-data scan covers Git Bash paths and email addresses
+- **Decision:** section 7 also matches `/c/…`-style paths and any email address except `example.com` and `git@` remotes; ports other than the maintainer's two remapped ones are left to contributors.
+- **Why:** the reflector runs in Git Bash, so a leaked path most likely has that form, and the docs promised email coverage.
+- **Cost if wrong:** a legitimate path in prose that starts with a one-letter folder is flagged and must be reworded (this entry's own first draft was).
+- **Where:** `scripts/check.sh`, `tests/probes/check-sections.sh`
+- **Date:** 2026-10-09
