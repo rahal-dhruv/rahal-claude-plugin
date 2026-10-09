@@ -17,7 +17,7 @@ Read `.claude/reflector-context.json` first. If it is missing or is not valid JS
 
 ## 3. Ground-truth check
 
-Compare `git_status_diff` (this repo's `git status --porcelain=v1`) with `files_modified`. A modified file the context does not list, or a listed file absent from the diff, is an implicit `partial_completion` signal. Both empty is normal.
+Compare `git_status_diff` (this repo's `git status --porcelain=v1`) with `files_modified`. A file listed in `files_modified` but absent from the diff is an implicit `partial_completion` signal: the session claimed a change that is not there. The reverse is not a signal: an unlisted modified file may be an earlier turn's uncommitted work, or one of your own earlier edits under `reflector/` or `docs/`. Both empty is normal.
 
 ## 4. Friction vocabulary
 
