@@ -37,12 +37,15 @@ EOF
 printf '{ "hooks": { "Stop": [ { "hooks": [ { "type": "command", "command": "bash .claude/hooks/post-task.sh" } ] } ] } }\n' > .claude/settings.json
 local_path="$(printf '%s:%s%s%s' C / Users /)someone/work"   # built at run time, so this file holds no local path
 printf '# Notes\n- seen in %s\n' "$local_path" > reflector/notes.md
+bash_path="$(printf '%s%s%s' / c /)work/rahal-claude-plugin"   # the Git Bash form of a local path, built at run time
+email="someone$(printf '%s' @)corp-mail.net"                    # a real-looking address, built at run time
+printf -- '- also %s\n- mailed %s\n' "$bash_path" "$email" >> reflector/notes.md
 out="$(bash scripts/check.sh 2>&1)"
 FAILS=0
 for want in 'docs/index.md links a missing file: gone.md' 'docs/orphan.md is not listed in docs/index.md' \
             'docs/decisions.md: PD-02 lacks Why' 'docs/decisions.md repeats: PD-01' \
             'docs/decisions.md: PD-01 names a missing path: scripts/no-such-file.sh' \
-            '.claude/settings.json turns the reflector hook on for everyone' 'reflector/notes.md:2:'; do
+            '.claude/settings.json turns the reflector hook on for everyone' 'reflector/notes.md:2:'             'reflector/notes.md:3:' 'reflector/notes.md:4:'; do
   printf '%s\n' "$out" | grep -qF -- "$want" || { echo "FAIL expected a check failure containing: $want"; FAILS=$((FAILS + 1)); }
 done
 # Now fix every planted problem: none of those failures may remain.

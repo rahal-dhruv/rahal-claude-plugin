@@ -68,14 +68,19 @@ if [ -d "$PLUGIN" ]; then
 fi
 
 # 7. No personal data in any file git would commit (ignored files such as *.local.md
-#    and tool scratch folders are skipped): absolute local paths, other accounts,
-#    local ports, a filled-in gh config folder
-personal='(^|[^A-Za-z0-9])[A-Za-z]:[\\/]|/Users/[A-Za-z]|/home/[a-z]|propelius|(^|[^0-9])(5442|6389)([^0-9]|$)|GH_CONFIG_DIR=[^<"$ ]'
+#    and tool scratch folders are skipped): absolute local paths (Windows, macOS, Linux and
+#    the Git Bash /c/... form), other accounts, email addresses (example.com and git@ remotes
+#    allowed), the maintainer's remapped ports, a filled-in gh config folder
+personal='(^|[^A-Za-z0-9])[A-Za-z]:[\\/]|/Users/[A-Za-z]|/home/[a-z]|(^|[^A-Za-z0-9_.~/-])/[a-z]/[A-Za-z]|propelius|(^|[^0-9])(5442|6389)([^0-9]|$)|GH_CONFIG_DIR=[^<"$ ]'
+email='[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}'
 hits=""; acct=""
 while IFS= read -r f; do
   [ -n "$f" ] && [ -f "$ROOT/$f" ] && [ "$f" != scripts/check.sh ] || continue
   if h="$(grep -nIE -- "$personal" "$ROOT/$f")"; then
     hits="$hits$(printf '%s\n' "$h" | sed "s|^|$f:|")"$'\n'
+  fi
+  if e="$(grep -noIE -- "$email" "$ROOT/$f" | grep -vE ':git@|@example\.com$')"; then
+    hits="$hits$(printf '%s\n' "$e" | sed "s|^|$f:|")"$'\n'
   fi
   if [ "${f##*/}" != README.md ] && a="$(grep -nI -- 'rahal-dhruv' "$ROOT/$f")"; then
     acct="$acct$(printf '%s\n' "$a" | sed "s|^|$f:|")"$'\n'

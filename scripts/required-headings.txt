@@ -99,3 +99,6 @@ AGENTS.md|scripts/check.sh
 AGENTS.md|scripts/test-check-output.sh
 AGENTS.md|scripts/test-probes.sh
 .gitattributes|* text=auto eol=lf
+AGENTS.md|- **No personal data in any committed file:** no absolute local paths, account names, email addresses, local ports, or a filled-in gh config folder. `scripts/check.sh` catches local paths (Windows, macOS, Linux and the Git Bash `/c/…` form), email addresses other than `example.com`, the maintainer's account name outside `README.md`, the maintainer's two remapped ports and a filled-in gh config folder; any other port it cannot recognise, so keep ports out yourself.
+reflector/README.md|- **Never writes personal data** (paths, accounts, emails, ports); `scripts/check.sh` catches a local path, an email address or an account name before the commit, but not every port.
+.claude/agents/reflector.md|Never write an absolute local path, an account name, an email address or a local port into any file. Use placeholders such as `<workspace>` or `<account>`. `scripts/check.sh` fails on local paths (including the Git Bash `/c/…` form), email addresses and account names in committed files, but cannot recognise every port: leave ports out entirely.

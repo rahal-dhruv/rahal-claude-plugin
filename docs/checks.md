@@ -10,13 +10,13 @@ The gate is `scripts/check.sh`, `scripts/test-check-output.sh` and `scripts/test
 4. **Skill front matter:** `name`, `description`, `argument-hint`, `disable-model-invocation: true`.
 5. **Reviewer agent:** named `rahal-reviewer`; no `Edit`, `Write` or `NotebookEdit`; no pinned model; `--fix` or `--comment` only on the line that forbids them.
 6. **References:** every `${CLAUDE_PLUGIN_ROOT}/<path>` resolves.
-7. **Personal data:** scans every file git would commit (`git ls-files --cached --others --exclude-standard`, so ignored files are skipped) for absolute local paths, a personal email domain, the maintainer's local ports and a filled-in gh config folder setting; the maintainer's account name only in `README.md`.
+7. **Personal data:** scans every file git would commit (`git ls-files --cached --others --exclude-standard`, so ignored files are skipped) for absolute local paths (Windows, macOS, Linux and the Git Bash `/c/…` form), email addresses other than `example.com` and `git@` remotes, a personal email domain, the maintainer's two remapped ports and a filled-in gh config folder setting; the maintainer's account name only in `README.md`.
 8. **Forbidden text:** no line of `scripts/forbidden-text.txt` (`text|why`) appears in the plugin.
 9. **Docs map:** every link in `docs/index.md` resolves; every `docs/*.md` is listed there.
 10. **Decision log:** each `### PD-nn` in `docs/decisions.md` has Decision, Why, Cost if wrong and Where; no id repeats; every backticked Where path exists.
 11. **Opt-in reflector:** a `.claude/settings.json` that names `post-task.sh` fails.
 
-Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 accepts a blank first line; section 7 scans nothing outside a git checkout and has no pattern for the maintainer's first name.
+Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 accepts a blank first line; section 7 scans nothing outside a git checkout, has no pattern for the maintainer's first name, and knows only the maintainer's two remapped ports (any other port passes).
 
 ## `scripts/check-output.sh <kind> <file>`
 

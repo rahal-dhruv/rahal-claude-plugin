@@ -34,7 +34,7 @@ scripts/test-probes.sh
 - **Shared rules live once, in `plugins/rahal/shared/`,** referenced as `${CLAUDE_PLUGIN_ROOT}/…`. Every `SKILL.md` keeps `disable-model-invocation: true`, an `argument-hint`, and the sentence saying the plugin root is two folders above the skill's base directory.
 - **A template's headings and `scripts/check-output.sh` change in the same commit.**
 - **The reviewer agent (`plugins/rahal/agents/rahal-reviewer.md`) stays read-only and never pins a model.** It may use the Skill tool only for `code-review`, and never with `--fix` or `--comment`.
-- **No personal data in any committed file:** no absolute local paths, account names, email addresses, local ports, or a filled-in gh config folder. `scripts/check.sh` enforces it; the maintainer's account name may appear only in `README.md`.
+- **No personal data in any committed file:** no absolute local paths, account names, email addresses, local ports, or a filled-in gh config folder. `scripts/check.sh` catches local paths (Windows, macOS, Linux and the Git Bash `/c/…` form), email addresses other than `example.com`, the maintainer's account name outside `README.md`, the maintainer's two remapped ports and a filled-in gh config folder; any other port it cannot recognise, so keep ports out yourself.
 - **Portable bash:** no `grep -P`, `\b` or `sed -i`; quote every path (workspace paths can contain spaces); never `git config` in a probe.
 
 ## 4. Git and releases

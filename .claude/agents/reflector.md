@@ -47,7 +47,7 @@ Read the file first and do not duplicate an open entry. The maintainer closes en
 
 ## 7. No personal data
 
-Never write an absolute local path, an account name, an email address or a local port into any file. Use placeholders such as `<workspace>` or `<account>`. Committed files are checked by `scripts/check.sh`, which fails on them.
+Never write an absolute local path, an account name, an email address or a local port into any file. Use placeholders such as `<workspace>` or `<account>`. `scripts/check.sh` fails on local paths (including the Git Bash `/c/…` form), email addresses and account names in committed files, but cannot recognise every port: leave ports out entirely.
 
 ## 8. Mandatory logging
 
