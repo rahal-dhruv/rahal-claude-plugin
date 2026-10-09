@@ -135,4 +135,9 @@ if [ -f "$ROOT/.claude/settings.json" ] && grep -q 'post-task.sh' "$ROOT/.claude
   fail ".claude/settings.json turns the reflector hook on for everyone; register it in .claude/settings.local.json instead"
 fi
 
+# 12. Every script is recorded as executable, so the gate runs on macOS and Linux
+#     (Windows checkouts often have core.filemode=false, which hides a missing bit locally)
+nonexec="$(git -C "$ROOT" ls-files -s -- '*.sh' 2>/dev/null | awk '$1 != "100755" { print $4 }')"
+for f in $nonexec; do fail "$f is not recorded as executable (git update-index --chmod=+x $f)"; done
+
 if [ "$FAILS" -eq 0 ]; then echo "check: all clear"; else echo "check: $FAILS problem(s)"; exit 1; fi
