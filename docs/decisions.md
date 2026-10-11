@@ -351,3 +351,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** a local branch holding unpushed commits stops the run instead of continuing; the user pushes or resets it first.
 - **Where:** `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `tests/probes/pr-checkout.sh`, `scripts/forbidden-text.txt`
 - **Date:** 2026-10-11
+
+### PD-61 — A stacked PR's follow-up reads main's rules and names its blocker
+- **Decision:** when a PR's base is not the default branch, phase one finds the blocker's PR by its head branch, states "stacked on #<n> (<state>, head <sha7>)", and diffs `AGENTS.md` and the PR template from the stack's merge-base with `origin/<default>` as well as with `origin/<base>`. The merge commit, PR body and reply name the real base; its title is `chore(ORB-<n>): merge orb-<blocker n> into the <branch words> branch`.
+- **Why:** the standard lives on the default branch, which the blocker's branch may not have merged; the full base branch name made the title 98 characters for ORB-196, over the 72-character limit (the maintainer's choice, decision 4 of the feature batch).
+- **Cost if wrong:** a rule added to `main` after the stack branched off is missed until the blocker merges; a title with the blocker's id hides which branch was merged until the PR body is read.
+- **Where:** `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `plugins/rahal/shared/templates/followup-plan.md`, `plugins/rahal/shared/profiles/orbit.md`, `tests/probes/stacked-rules.sh`
+- **Date:** 2026-10-11

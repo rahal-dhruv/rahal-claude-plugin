@@ -35,7 +35,7 @@ A check passes only when its output was seen passing; environmental failures are
 
 ## Profile (`profiles/orbit.md`)
 
-Team facts: Linear workspace and team key, GitHub org, the three repos and their default branches (`rahal-orbit-docs` uses `docs-main`), pnpm only, the gates, branch and commit practice, the `AGENTS.md` rules that bind every ticket.
+Team facts: Linear workspace and team key, GitHub org, the three repos and their default branches (`rahal-orbit-docs` uses `docs-main`), pnpm only, the gates, branch and commit practice (a stacked PR is updated from its blocker's branch, titled `merge orb-<blocker n> into …`), the `AGENTS.md` rules that bind every ticket.
 
 ## Config keys (`.claude/rahal.local.md`, written by init)
 

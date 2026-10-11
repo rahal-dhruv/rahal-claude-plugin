@@ -1,12 +1,12 @@
 # PR #<n> follow-up — <k> comments to handle
 
-<Branch: N behind main; trial merge conflicts: <files | none>> · <Ticket: unchanged | amended <time>: <what changed>> · <New rules on main since the branch: <commit — rule> | none>
+<Base: main | stacked on #<n> (<open | merged | closed>, head <sha7>)> · <Branch: N behind <base>; trial merge conflicts: <files | none>> · <Ticket: unchanged | amended <time>: <what changed>> · <New rules since the branch on <base>: <commit — rule> | none; when stacked, also on main: <commit — rule> | none>
 
 ## Comments at a glance
 
 1. <Reviewer> — <2 plain lines: what they ask>. Recommend: <fix (blocking | not blocking) | push back | follow-up ticket>. <Departs from the ticket? say so.>
    Example: <everyday example>.
-0. Branch update — <merge main first; which files conflict (generated?)> (only when the branch is behind)
+0. Branch update — <merge <base> first; which files conflict (generated?)> (only when the branch is behind)
 
 ## Detailed fixes
 
@@ -21,6 +21,6 @@
 
 ### 0. Branch update
 
-- `git merge origin/main`; regenerate generated files (`pnpm db:generate`, `pnpm openapi`); `pnpm db:migrate` locally; typecheck and lint. A conflict outside generated files stops and asks.
+- Merge `origin/<base>`, titled `chore(ORB-<n>): merge <main | orb-<blocker n>> into the <branch words> branch`; regenerate generated files (`pnpm db:generate`, `pnpm openapi`); `pnpm db:migrate` locally; typecheck and lint. A conflict outside generated files stops and asks.
 
 Which do you accept? e.g. "0, 1, 2" · "1 only, push back on 2"

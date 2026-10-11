@@ -125,7 +125,7 @@ Which do you accept? e.g. "0, 1, 2"
 ```
 
 **Phase two** does only what you accepted:
-1. merges `main` into the branch;
+1. merges the base branch into the branch: `main`, or the blocker's branch for a PR stacked on another ticket's PR;
 2. fixes each comment test-first in its own commit;
 3. runs the gate and an internal review;
 4. updates the PR body and drafts one reply per comment.

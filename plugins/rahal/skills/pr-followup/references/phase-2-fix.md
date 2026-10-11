@@ -31,7 +31,7 @@ git -C <repo> diff --name-only --diff-filter=U
 - A conflict in a generated file only (`openapi/*.json`, `src/generated/`): take either side with `git -C <repo> checkout --ours <file>`; it is regenerated below, never hand-merged.
 - Any other conflicting file: stop and ask. `git -C <repo> merge --abort` undoes the merge.
 - Then, in the repo: `pnpm install --frozen-lockfile`, `pnpm db:generate && pnpm openapi`, `git add` what they regenerated, then `pnpm typecheck && pnpm lint`.
-- Commit: `git -C <repo> commit -m "chore(ORB-<n>): merge main into the <branch words> branch"`.
+- Commit: `git -C <repo> commit -m "chore(ORB-<n>): merge <main | orb-<blocker n>> into the <branch words> branch"`: `main`, or for a stacked PR the blocker's ticket id, e.g. `chore(ORB-196): merge orb-194 into the visa provider admin routes branch`.
 - Then `pnpm db:migrate` with the dev database URL.
 - Never rebase, never force push, and never rename the PR's migration folders.
 
@@ -57,7 +57,7 @@ Update the ticket folder's `pr-body.md`; if absent, start from `GH_CONFIG_DIR="<
 - the reviewed SHA and the gate counts;
 - the changed test-case lines;
 - new measurements;
-- a line saying `main` was merged in (with the merge SHA);
+- a line naming the base branch that was merged in (with the merge SHA);
 - anything the fixes made untrue.
 
 ## 7. Replies

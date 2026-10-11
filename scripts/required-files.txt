@@ -53,3 +53,4 @@ docs/decisions.md
 .gitattributes
 tests/probes/fresh-clone.sh
 tests/probes/pr-checkout.sh
+tests/probes/stacked-rules.sh

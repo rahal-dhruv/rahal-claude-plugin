@@ -35,7 +35,7 @@ Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 acc
 
 ## Probes (`tests/probes/`, run by `scripts/test-probes.sh`)
 
-Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Five extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections` and `fresh-clone` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
+Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Six extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections` and `fresh-clone` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
 
 | Probe | Proves |
 | --- | --- |
@@ -44,6 +44,7 @@ Each probe works in throwaway git repos under a folder whose name has a space, a
 | `guard-runner` | the guard runner restores uncommitted and untracked files exactly |
 | `merge-step` | the main merge stays open (`--no-commit`) instead of committing with Git's message |
 | `pr-fetch` | the PR fetch follows a force-pushed head (`+` refspec), in both files that carry it |
+| `stacked-rules` | for a PR stacked on a blocker's branch, the follow-up's second rules diff shows a rule added to `AGENTS.md` on `main` that the blocker never merged |
 | `pr-checkout` | the follow-up checkout reaches the PR head even when the branch tracks its blocker's branch, and when the switch fails it leaves the other branch in place and prints a `STOP` line naming both |
 | `review-clone` | the reviewer's scratch clone reviews only the PR's files when the local `main` is stale, and leaves the user's repo untouched |
 | `reflector-hook` | the hook spawns once per new context file, never for a reflector run, with hooks off |

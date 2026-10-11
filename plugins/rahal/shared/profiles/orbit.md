@@ -34,6 +34,7 @@ The same for every Orbit engineer. Personal values live in `.claude/rahal.local.
 - Commit: `type(ORB-<n>): lowercase imperative title`. Accurate type (`feat`, `test`, `fix`, `refactor`, `docs`, `chore`), ≤72 characters, title only. commitlint enforces the shape.
 - PR title: `feat(ORB-<n>): <ticket title as a lowercase imperative>`.
 - A PR branch behind `main` is updated by merging `origin/main` into it: `chore(ORB-<n>): merge main into the <branch words> branch`, e.g. `chore(ORB-183): merge main into the visa destinations branch`. Never rebase a pushed branch and never force push.
+- A stacked PR, whose base is its blocker's branch, is updated the same way from `origin/<base>`, titled with the blocker's ticket id: `chore(ORB-<n>): merge orb-<blocker n> into the <branch words> branch`, e.g. `chore(ORB-196): merge orb-194 into the visa provider admin routes branch`.
 - A PR's migration folders keep their names when `main` lands later-timestamped ones. Recreate one only when its ticket says so.
 - Git hooks (lefthook):
   - pre-commit: eslint and prettier on staged files, plus `pnpm openapi` when controllers or DTOs are staged;

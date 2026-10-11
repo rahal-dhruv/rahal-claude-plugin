@@ -22,3 +22,9 @@ Run `code-review` at `high` on the full PR URL|one review pass: the reviewer age
 two-pass|one review pass: the reviewer agent runs code-review itself
 two passes|one review pass: the reviewer agent runs code-review itself
 pull --ff-only|git pull follows the checkout's upstream and once moved another ticket's branch; fast-forward from origin/<headRefName> by name and compare HEAD with headRefOid
+commit -m "chore(ORB-<n>): merge main into|a stacked PR merges its blocker's branch; the title names main or the blocker's ticket id (PD-61)
+<Branch: N behind main;|a stacked PR is behind its base, not main
+The branch also merges `main` in|a stacked PR merges its base branch; name the branch that was merged
+a line saying `main` was merged in|a stacked PR merges its base branch; name the branch that was merged
+- `git merge origin/main`; regenerate|a stacked PR merges origin/<base>, its blocker's branch
+0. Branch update — <merge main first;|a stacked PR merges origin/<base>, its blocker's branch

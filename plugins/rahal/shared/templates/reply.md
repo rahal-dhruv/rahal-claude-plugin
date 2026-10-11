@@ -8,7 +8,7 @@ Fixed in `<fix commit SHA>`. <What changed, in one or two sentences.>
 
 Proved by <the test case name>: <the assertion line that proves it, in a code block>. Before the fix it answered <the red result>.
 
-<If the branch was updated: "The branch also merges `main` in `<merge SHA>`.">
+<If the branch was updated: "The branch also merges `<base branch>` in `<merge SHA>`.">
 
 `pnpm check` on `<head SHA>`: <lint, prettier, typecheck, knip; unit <files/tests>; e2e <files/tests>; contract <files/tests>; openapi:check clean>.
 
