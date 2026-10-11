@@ -57,6 +57,7 @@ MSYS_NO_PATHCONV=1 git -C <repo> show origin/<base>:<path>             # each fi
 - Read the standard on `origin/main`, even when stacked: `AGENTS.md`, `CODEOWNERS` (`.github/CODEOWNERS` or `CODEOWNERS`) and `.github/pull_request_template.md`. Read the tooling on `origin/<base>`, which is what the branch will run: `lefthook.yml`, `eslint.config.js` (`moduleMap`) and the `package.json` scripts.
 - When the build needs the design notes the ticket cites, read them from the docs repo on `origin/docs-main`.
 - Flag every drift: a file that moved or vanished, a symbol renamed, a new suite or rule the ticket does not know about.
+- **Stacked:** check what the ticket takes from the blocker against what the blocker built, on `origin/<base>`. Each "From ORB-<blocker n>" item and each Dependencies entry (a symbol, route, table or file) must exist there with the name and shape the ticket expects; a difference is a decision (step 5). When a ticket folder for the blocker exists (`<workspace_root>/<work_folder>/orb-<blocker n>-*/`), also read its `plan.md` Decisions and `ledger.md` Rulings for departures from the blocker's ticket. That folder is optional: the blocker is often someone else's work, and no command depends on another person's folder.
 
 ## 4. Measure library behaviour
 
