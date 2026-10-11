@@ -55,3 +55,4 @@ tests/probes/fresh-clone.sh
 tests/probes/code-checks.sh
 tests/probes/stack-start.sh
 plugins/rahal/shared/stack-notice.md
+tests/probes/overlap-prs.sh

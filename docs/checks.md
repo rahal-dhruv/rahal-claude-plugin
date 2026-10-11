@@ -35,7 +35,7 @@ Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 acc
 
 ## Probes (`tests/probes/`, run by `scripts/test-probes.sh`)
 
-Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Six extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections` and `fresh-clone` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
+Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Seven extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections` and `fresh-clone` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
 
 | Probe | Proves |
 | --- | --- |
@@ -46,6 +46,7 @@ Each probe works in throwaway git repos under a folder whose name has a space, a
 | `pr-fetch` | the PR fetch follows a force-pushed head (`+` refspec), in both files that carry it |
 | `code-checks` | start-work's code checks find a path the blocker added on `origin/<base>`, show its content, and list the blocker's commit as drift |
 | `stack-start` | the plan's Pre-flight starts the branch at `origin/<base>` with no upstream, so a pull cannot follow the blocker's branch |
+| `overlap-prs` | the open-PR overlap list (with a stand-in `gh`) names exactly the PRs that change a path the ticket names, matching whole paths, spaces included |
 | `review-clone` | the reviewer's scratch clone reviews only the PR's files when the local `main` is stale and when the PR is stacked on another PR's branch, and leaves the user's repo untouched |
 | `reflector-hook` | the hook spawns once per new context file, never for a reflector run, with hooks off |
 

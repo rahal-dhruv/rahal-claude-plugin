@@ -41,6 +41,19 @@ Keep only a PR whose title holds `ORB-<blocker n>` (not a longer number) or whos
   - **Stack:** `<base>` is the top PR's `headRefName`. Step 6 records it in the plan's `**Base:**` line, with the PR number and the blocker's ticket id.
 - **Otherwise** (two independent open PRs, or an open PR beside a blocker that has none): list each unmerged blocker with its PR and that PR's base, say "A branch can start from only one of them, so stacking is not offered. Re-run /rahal:start-work <link> once one of them merges.", and stop.
 
+### Open PRs on the same files
+
+List the open PRs that change a path the ticket names (quote each path):
+
+```bash
+printf '%s\n' <each path the ticket names> > "<scratchpad>/ticket-paths.txt"
+GH_CONFIG_DIR="<gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo name> --state open --limit 100 \
+  --json number,headRefName,files --jq '.[] | .number as $n | .headRefName as $b | .files[] | "\($n)\t\($b)\t\(.path)"' \
+  | awk -F '\t' 'NR == FNR { want[$0]; next } $3 in want { print "#" $1 " (" $2 "): " $3 }' "<scratchpad>/ticket-paths.txt" -
+```
+
+Report each in the brief's "Shares files with" line, beside the Linear siblings: whichever PR merges second must merge the other's change in. When stacked, the blocker's PR is expected there. gh lists at most 100 files per PR.
+
 ## 3. Check the ticket against the code
 
 Everything on `origin/<base>` (step 2: `main`, or the blocker's branch when stacked), never the local checkout:

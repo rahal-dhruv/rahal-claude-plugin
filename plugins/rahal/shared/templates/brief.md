@@ -14,7 +14,7 @@
 - Blocked by: <ticket — status; merged? its open PR, if any>
 - Base: <`main`, or stacked on #<blocker PR> (`<blocker branch>`)>
 - Unblocks: <tickets — what each reuses from this one>
-- Shares files with: <tickets — which files, e.g. `openapi/admin.json`>
+- Shares files with: <tickets — which files, e.g. `openapi/admin.json`>; open PRs: <#n (branch): path, or none>
 - Size: <as the ticket states>
 
 ## What I checked
