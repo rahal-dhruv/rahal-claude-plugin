@@ -79,6 +79,7 @@ Each step follows `choices`; with `ask`, ask per step.
 ```bash
 GH_CONFIG_DIR="<gh_config_dir>" gh pr edit <n> --repo DigitalZoneApp/<repo name> --base <default>
 git -C <repo> merge-base --is-ancestor origin/<headRefName> HEAD && export PATH="<bash_node_path>:$PATH" && git -C <repo> push origin <headRefName>
+GH_CONFIG_DIR="<gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo name> --base <headRefName> --state open --json number,headRefName
 GH_CONFIG_DIR="<gh_config_dir>" gh pr edit <n> --repo DigitalZoneApp/<repo name> --body-file "<work>/<slug>/pr-body.md"
 MSYS_NO_PATHCONV=1 GH_CONFIG_DIR="<gh_config_dir>" gh api -X POST repos/DigitalZoneApp/<repo name>/pulls/<n>/comments/<comment id>/replies -F body=@"<reply file>"
 MSYS_NO_PATHCONV=1 GH_CONFIG_DIR="<gh_config_dir>" gh api -X POST repos/DigitalZoneApp/<repo name>/pulls/<n>/requested_reviewers -f "reviewers[]=<login>"
@@ -88,6 +89,7 @@ GH_CONFIG_DIR="<gh_config_dir>" gh pr view <n> --repo DigitalZoneApp/<repo name>
 - A conversation comment (not inline) is answered with `GH_CONFIG_DIR="<gh_config_dir>" gh pr comment <n> --repo DigitalZoneApp/<repo name> --body-file "<reply file>"`.
 - Retarget: only when item 0 was a retarget, before the push. It always asks first (`approval-gates.md` → Fixed for everyone).
 - Push: never with `--force`.
+- Stacked on this PR: after the push, each open PR whose base is `<headRefName>` is reported in chat and in the ledger as "#<m> (`<its branch>`) needs `git merge origin/<headRefName>`". Never update those branches from this run.
 - PR description: replace it with the updated `pr-body.md`. This always asks first, whatever the other choices (`approval-gates.md` → Fixed for everyone).
 - Reply: post in the comment's thread, only after the push that contains the commit it cites. If the push was declined, keep the replies as drafts and say so.
 - Re-request review from the reviewer whose comments were handled.
