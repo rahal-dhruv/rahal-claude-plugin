@@ -5,7 +5,7 @@ Write exactly this structure to `<workspace>/.claude/rahal.local.md`, filling ev
 ```markdown
 ---
 profile: orbit
-workspace_root: <absolute workspace path, forward slashes>
+workspace_root: <absolute workspace path, forward slashes; on Windows the drive form <drive>:/…, never Git Bash's /c/… form, which MSYS_NO_PATHCONV passes to git unconverted>
 repos:
   backend: rahal-orbit-backend
   dashboard: rahal-orbit-dashboard

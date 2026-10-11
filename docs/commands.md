@@ -4,7 +4,7 @@ Four skills in `plugins/rahal/skills/`, invoked as `/rahal:<name>`. Each `SKILL.
 
 ## /rahal:init `[workspace folder]`
 
-- **Does:** finds the Orbit repos; checks `gh`, Linear, git and the toolchain; asks two groups of personal choices (commits; GitHub actions); writes `<workspace>/.claude/rahal.local.md` from `skills/init/references/config-template.md`; on Windows offers the e2e shim at `<workspace>/.claude/rahal/win-pnpm-shim.cjs`; ends by running step 0 checks 1–5.
+- **Does:** finds the Orbit repos; records `workspace_root` in the Windows drive form with forward slashes (never `/c/…`, which breaks commands run with `MSYS_NO_PATHCONV=1`); checks `gh`, Linear, git and the toolchain; asks two groups of personal choices (commits; GitHub actions); writes `<workspace>/.claude/rahal.local.md` from `skills/init/references/config-template.md`; on Windows offers the e2e shim at `<workspace>/.claude/rahal/win-pnpm-shim.cjs`; ends by running step 0 checks 1–5.
 - **Asks, never assumes:** every clone, install, shim, `work/` folder, `.gitignore` line and `corepack enable` needs a yes. The review model is never asked here.
 - **Output check:** `scripts/check-output.sh config <file>`.
 - **Known gaps:** re-running init writes `review_model: ask`, losing a saved standing model; started inside a repo it would write its settings into that repo (step 1 only confirms the folder); port clashes are looked for in Docker only.
