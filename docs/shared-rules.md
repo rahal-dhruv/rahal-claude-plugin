@@ -5,7 +5,7 @@ Files in `plugins/rahal/shared/`, read by every command. Referenced as `${CLAUDE
 ## Step 0 (`step-0-checks.md`)
 
 - **Header line:** `Step 0 — checks · rahal <version> from <plugin root>`, the version read from the loaded copy's `.claude-plugin/plugin.json`, so a run on a stale cached copy shows it.
-- **How to run commands:** Git Bash commands that run `node`, `pnpm`, `claude` or a git hook start with `export PATH="<bash_node_path>:$PATH";`; every `gh` command starts with `GH_CONFIG_DIR="<gh_config_dir>"` when set, and every `gh pr`/`gh repo` command carries `--repo DigitalZoneApp/<repo name>`; `git show <rev>:<path>` and `gh api <path>` start with `MSYS_NO_PATHCONV=1`; every path is quoted.
+- **How to run commands:** Git Bash commands that run `node`, `pnpm`, `claude` or a git hook start with `export PATH="<bash_node_path>:$PATH";`; every `gh` command starts with `GH_CONFIG_DIR="<gh_config_dir>"` when set, and every `gh pr`/`gh repo` command carries `--repo DigitalZoneApp/<repo name>`; `git show <rev>:<path>` and `gh api <path>` start with `MSYS_NO_PATHCONV=1`; every path is quoted; `pnpm` runs from inside the repo in a subshell, `(cd <repo> && pnpm …)`, because corepack reads pnpm's version from the repo's `package.json`; Prisma dev commands get `DATABASE_URL` rewritten to `<dev_database_url_port>` (the one copy of that line; start-work and pr-followup phase two point here).
 - **The ticket folder:** outputs live in `<workspace_root>/<work_folder>/<slug>/`, slug `orb-<n>-<two to four words>`. An existing `orb-<n>-*` folder is reused before a new one is made; the branch comes from `plan.md`'s `**Branch:**` line, the PR's `headRefName`, or `feat/<slug>`; the base from `plan.md`'s `**Base:**` line, the PR's `baseRefName`, or `main`. A stacked base is re-checked with `gh pr view` when phase two or three starts: merged switches it to `main` (a ledger ruling, and the stack notice leaves `pr-body.md`), closed without merging stops. The standard always comes from `origin/main`.
 - **Check 1 Config:** `.claude/rahal.local.md` in the start folder or a parent; `profile: orbit`.
 - **Check 2 GitHub:** `gh` installed; the active account equals `github.account`; it can read the repo; a merged PR asks "continue anyway?".
@@ -49,7 +49,7 @@ Team facts: Linear workspace and team key, GitHub org, the three repos and their
 | `profile`, `workspace_root`, `repos.*`, `work_folder` | step 0 check 1, the ticket folder |
 | `github.account`, `gh_config_dir`, `remote_prefix`, `commit_email` | step 0 checks 2 and 4, every `gh` and push command |
 | `linear.tools` | step 0 check 3 |
-| `toolchain.bash_node_path`, `e2e_node_options`, `docker_ports`, `dev_database_url_port` | step 0 check 5, `start-work` phase two, `pr-followup` phase two |
+| `toolchain.bash_node_path`, `e2e_node_options`, `docker_ports`, `dev_database_url_port` | step 0 check 5 and "How to run commands" (the dev database URL), `start-work` phase two, `pr-followup` phase two |
 | `workspace_extras.*` | init's summary; `docs_folder` gates the docs step in phase two |
 | `choices.*` | `approval-gates.md`, `review-model.md` |
 

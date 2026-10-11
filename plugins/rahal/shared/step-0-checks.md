@@ -22,6 +22,8 @@ The header line names the plugin copy this run loaded: `<plugin root>` is the ro
   `export PATH="<toolchain.bash_node_path>:$PATH";` when that value is set.
 - Start every `gh` command with `GH_CONFIG_DIR="<github.gh_config_dir>"` when that value is set, and give every `gh pr` and `gh repo` command `--repo DigitalZoneApp/<repo name>`: the workspace root is not a repo, and inside another repo `gh` would act on that repo's PR.
 - In Git Bash, start `git show <rev>:<path>` and `gh api <path>` with `MSYS_NO_PATHCONV=1`, or the path is rewritten.
+- Run `pnpm` from inside the repo, in the same command: `(cd <repo> && pnpm …)`. Corepack takes pnpm's version from the repo's `package.json`, so from the workspace folder another version runs; the parentheses keep the session's own folder unchanged.
+- Prisma commands on the dev database (`pnpm db:migrate`, `pnpm db:migrate:dev`) run with `DATABASE_URL` on port `<dev_database_url_port>` when `.env` names another: `export DATABASE_URL="$(grep '^DATABASE_URL=' .env | cut -d= -f2- | sed 's#:5432/#:<dev_database_url_port>/#')"` in the same command, inside the backend. Never edit `.env`.
 - Quote every path: a workspace path may contain spaces.
 - `<repo>` below means `"<workspace_root>/<repos.backend>"` (or the dashboard or docs folder the command targets).
 

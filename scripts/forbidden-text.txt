@@ -28,3 +28,4 @@ branch --force <base>|the clone's default branch is set to origin/<base>, so cod
 the default branch name (`<base>`)|<base> is the PR's or the plan's base; the default branch is <default>
 Note whether the ticket was updated after the PR opened (`updatedAt`)|updatedAt moves on any comment; compare the description with the saved ticket-<date>.md
 ^ +Tests ' "$SP/mut-$name.log"|keep vitest's Test Files and Errors lines: a hook error fails a file while every test passes
+For Prisma dev commands, `export DATABASE_URL|the dev database URL line lives once, in step 0 → How to run commands

@@ -9,7 +9,7 @@
 
 - Run the plan's Pre-flight block, adapted to the config:
   - `ORBIT_POSTGRES_PORT=<docker_ports.postgres> ORBIT_REDIS_PORT=<docker_ports.redis> docker compose up --wait` from the backend folder.
-  - For Prisma dev commands, `export DATABASE_URL="$(grep '^DATABASE_URL=' .env | cut -d= -f2- | sed 's#:5432/#:<dev_database_url_port>/#')"` when the port differs. Never edit `.env`.
+  - Prisma dev commands run with the dev database URL (step 0 → How to run commands).
   - `pnpm db:migrate`.
 - Create `<work>/<slug>/ledger.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/ledger.md`. Record every ruling, task completion, environmental problem, review finding and remote step there as it happens. It is what a later session resumes from.
 
