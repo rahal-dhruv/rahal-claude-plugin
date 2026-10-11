@@ -2,6 +2,8 @@
 
 Four skills in `plugins/rahal/skills/`, invoked as `/rahal:<name>`. Each `SKILL.md` sets `disable-model-invocation: true`, so only a person can start one; Claude cannot, which is why every dry run needs someone typing. `start-work`, `review-pr` and `pr-followup` read `shared/step-0-checks.md` first and find the ticket folder through it; `init` runs the step 0 checks as its last step and has no ticket folder.
 
+A side session that another Claude Code session started cannot start a `/rahal:` command either, so a brief that needs one tells the person to type it there. Letting Claude start phase one would break `AGENTS.md` §3 and `check.sh` section 4.
+
 ## /rahal:init `[workspace folder]`
 
 - **Does:** finds the Orbit repos; records `workspace_root` in the Windows drive form with forward slashes (never `/c/…`, which breaks commands run with `MSYS_NO_PATHCONV=1`); checks `gh`, Linear, git and the toolchain; asks two groups of personal choices (commits; GitHub actions); writes `<workspace>/.claude/rahal.local.md` from `skills/init/references/config-template.md`; on Windows offers the e2e shim at `<workspace>/.claude/rahal/win-pnpm-shim.cjs`; ends by running step 0 checks 1–5.
