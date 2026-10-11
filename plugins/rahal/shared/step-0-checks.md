@@ -33,7 +33,7 @@ A ticket's outputs live in `<workspace_root>/<work_folder>/<slug>/`. The slug is
 1. List `"<workspace_root>/<work_folder>"/orb-<n>-*/`. One folder: use it; its name is the slug. Several: ask which.
 2. None: make the slug from the ticket title. Create the folder when the first file is written.
 3. The branch is the `**Branch:**` line of that folder's `plan.md` when it has one; for a PR, the PR's `headRefName`; otherwise `feat/<slug>`.
-4. The base is the branch in the first backticks of `plan.md`'s `**Base:**` line (`orb-103-car-rental-search-route` in ``**Base:** `orb-103-car-rental-search-route` · stacked on #146 (ORB-103)``); for a PR, the PR's `baseRefName`; otherwise `main`. The standard (`AGENTS.md`, `CODEOWNERS`, the PR template) always comes from `origin/main`, whatever the base.
+4. The base: for a PR command (`review-pr`, `pr-followup`), the PR's `baseRefName`, because GitHub moves a stacked PR to `main` once its blocker merges; in `start-work`, the branch in the first backticks of `plan.md`'s `**Base:**` line (`orb-103-car-rental-search-route` in ``**Base:** `orb-103-car-rental-search-route` · stacked on #146 (ORB-103)``); otherwise `main`. The standard (`AGENTS.md`, `CODEOWNERS`, the PR template) always comes from `origin/main`, whatever the base.
 5. A stacked base is re-checked when phase two or phase three starts: `GH_CONFIG_DIR="<gh_config_dir>" gh pr view <blocker PR> --repo DigitalZoneApp/<repo name> --json state,mergedAt`.
    - Merged: say so ("#146 (ORB-103) merged on <date>; ORB-<n> now starts from main"), set the Base line to `` `main` ``, record the change as a `Ruling:` in `ledger.md`, and remove the stack notice from `pr-body.md` if it has one.
    - Closed without merging: stop and ask.
