@@ -344,3 +344,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** one contributor's lessons and escalations no longer reach others; an escalation that needs the maintainer travels in a pull request instead.
 - **Where:** `.gitignore`, `.claude/agents/reflector.md`, `reflector/README.md`, `tests/probes/check-sections.sh`
 - **Date:** 2026-10-09
+
+### PD-52 — Step 0 names the plugin copy and version
+- **Decision:** the step 0 header reads `Step 0 — checks · rahal <version> from <plugin root>`, with the version read from the loaded copy's `plugin.json`.
+- **Why:** desktop sessions ran a copy cached at install for three days after newer commits landed, and nothing on screen showed it.
+- **Cost if wrong:** one longer line at the top of every run.
+- **Where:** `plugins/rahal/shared/step-0-checks.md`
+- **Date:** 2026-10-11

@@ -4,6 +4,7 @@ Files in `plugins/rahal/shared/`, read by every command. Referenced as `${CLAUDE
 
 ## Step 0 (`step-0-checks.md`)
 
+- **Header line:** `Step 0 — checks · rahal <version> from <plugin root>`, the version read from the loaded copy's `.claude-plugin/plugin.json`, so a run on a stale cached copy shows it.
 - **How to run commands:** Git Bash commands that run `node`, `pnpm`, `claude` or a git hook start with `export PATH="<bash_node_path>:$PATH";`; every `gh` command starts with `GH_CONFIG_DIR="<gh_config_dir>"` when set, and every `gh pr`/`gh repo` command carries `--repo DigitalZoneApp/<repo name>`; `git show <rev>:<path>` and `gh api <path>` start with `MSYS_NO_PATHCONV=1`; every path is quoted.
 - **The ticket folder:** outputs live in `<workspace_root>/<work_folder>/<slug>/`, slug `orb-<n>-<two to four words>`. An existing `orb-<n>-*` folder is reused before a new one is made; the branch comes from `plan.md`'s `**Branch:**` line, the PR's `headRefName`, or `feat/<slug>`.
 - **Check 1 Config:** `.claude/rahal.local.md` in the start folder or a parent; `profile: orbit`.

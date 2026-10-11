@@ -1,9 +1,9 @@
 # Step 0 — access checks
 
-Run these first in every command and print one line per check:
+Run these first in every command and print the header line, then one line per check:
 
 ```
-Step 0 — checks
+Step 0 — checks · rahal <version> from <plugin root>
 ✓ Config      workspace <root>, profile orbit
 ✓ GitHub      gh signed in as <account>, can read DigitalZoneApp/<repo>
 ✓ Linear      read ORB-<n> ("<title>", <status>)
@@ -12,6 +12,8 @@ Step 0 — checks
 ```
 
 `✓` passed · `✗` failed · `–` not run. The calling command names the checks it needs.
+
+The header line names the plugin copy this run loaded: `<plugin root>` is the root the command's `SKILL.md` gave, and `<version>` is the `version` in `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`. A root inside Claude Code's `plugins/cache/` folder is the copy cached at install: it changes only after a version bump and `claude plugin update`, so an older version there means this run uses an older plugin.
 
 ## How to run commands
 
