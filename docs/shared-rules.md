@@ -34,6 +34,10 @@ A check passes only when its output was seen passing; environmental failures are
   4. returns one merged list, first line `code-review: ran at high on <sha>` or `code-review: not run — <reason>`.
 - **Not run** means the report covers ticket checks only, never "clean".
 
+## Stack notice (`stack-notice.md`)
+
+The paragraph that opens a stacked PR's body: merge the blocker alone, let GitHub move this PR to `main`, merge `origin/main` in, run `pnpm openapi`, never "merge stack" (it rebases and drops the merge commit with the regenerated API documents). start-work fills in the blocker's PR and branch, and drops it once the blocker merges.
+
 ## Profile (`profiles/orbit.md`)
 
 Team facts: Linear workspace and team key, GitHub org, the three repos and their default branches (`rahal-orbit-docs` uses `docs-main`), pnpm only, the gates, branch and commit practice, the `AGENTS.md` rules that bind every ticket.

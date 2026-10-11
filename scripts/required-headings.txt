@@ -147,3 +147,5 @@ plugins/rahal/agents/rahal-reviewer.md|- The repo folder, its default branch nam
 plugins/rahal/agents/rahal-reviewer.md|- `AGENTS.md` as it is on `origin/<default>`.
 plugins/rahal/shared/review-model.md|   - the repo folder, its default branch name and the base branch (the PR's `baseRefName`, or the plan's `**Base:**` branch);
 plugins/rahal/skills/review-pr/references/review-steps.md|- Read the standard on `origin/<default>`, even for a PR stacked on another branch: `AGENTS.md`, `CODEOWNERS`, `.github/pull_request_template.md`.
+plugins/rahal/shared/stack-notice.md|# Stack notice
+plugins/rahal/skills/start-work/references/phase-2-execute.md|- a stacked base (the plan's `**Base:**` line names a PR): the notice in `${CLAUDE_PLUGIN_ROOT}/shared/stack-notice.md` at the very top, with the blocker's PR number and branch filled in;

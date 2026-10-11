@@ -365,3 +365,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** none for an ordinary PR, where `<base>` and `<default>` are the same branch.
 - **Where:** `plugins/rahal/agents/rahal-reviewer.md`, `plugins/rahal/shared/review-model.md`, `plugins/rahal/skills/review-pr/references/review-steps.md`, `tests/probes/review-clone.sh`
 - **Date:** 2026-10-11
+
+### PD-55 — One stack notice, warning against "merge stack"
+- **Decision:** a stacked PR's body opens with the notice in `shared/stack-notice.md`: merge the blocker alone, let GitHub move this PR to `main`, merge `origin/main` in, run `pnpm openapi`, and never use GitHub's "merge stack" button. start-work adds it, and removes it once the blocker has merged. The text lives once, so pr-followup can use the same file.
+- **Why:** "merge stack" rebased a stacked PR and dropped the merge commit holding the regenerated `openapi/admin.json`.
+- **Cost if wrong:** one paragraph at the top of a rare kind of PR.
+- **Where:** `plugins/rahal/shared/stack-notice.md`, `plugins/rahal/skills/start-work/references/phase-2-execute.md`
+- **Date:** 2026-10-11

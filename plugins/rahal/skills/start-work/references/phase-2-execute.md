@@ -73,6 +73,7 @@ Re-run the measurements from phase one against the final code, and record the co
 ## 8. The PR body
 
 Build `<work>/<slug>/pr-body.md` from `git show origin/main:.github/pull_request_template.md`, keeping its sections. Fill in:
+- a stacked base (the plan's `**Base:**` line names a PR): the notice in `${CLAUDE_PLUGIN_ROOT}/shared/stack-notice.md` at the very top, with the blocker's PR number and branch filled in;
 - the ticket id;
 - **What:** the change; the existing definitions reused, by file and name; departures from the ticket with reasons; additions beyond the ticket's symbols; deployment notes (for example a storage bucket policy that must change);
 - **Not in this pull request:** the ticket's Deferred list, then findings left unchanged;
