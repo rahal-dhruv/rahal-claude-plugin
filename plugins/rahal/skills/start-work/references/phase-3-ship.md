@@ -36,8 +36,8 @@ Use `--draft` when `pr_state: draft`. Record the URL in the ledger.
 
 ```bash
 GH_CONFIG_DIR="<gh_config_dir>" gh pr view <n> --repo DigitalZoneApp/<repo name> \
-  --json headRefOid,mergeable,mergeStateStatus,statusCheckRollup \
-  --jq '"head=\(.headRefOid[0:7]) mergeable=\(.mergeable)", (.statusCheckRollup[]? | "  \(.name // .context): \(.status // .state) \(.conclusion // "")")'
+  --json headRefOid,mergeable,mergeStateStatus,reviewRequests,statusCheckRollup \
+  --jq '"head=\(.headRefOid[0:7]) mergeable=\(.mergeable)", "reviewers=\([.reviewRequests[]? | .login // .slug // .name] | join(", "))", (.statusCheckRollup[]? | "  \(.name // .context): \(.status // .state) \(.conclusion // "")")'
 ```
 
-Report what it shows, once. Never poll.
+Report what it shows, once, including who is asked to review. An empty `reviewers=` means nobody is: say so, so the user can request reviewers on GitHub; the plugin never requests them itself. Never poll.
