@@ -139,3 +139,4 @@ plugins/rahal/skills/pr-followup/references/phase-2-fix.md|When item 0 is a reta
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|- Then `git -C <repo> diff origin/<base> -- openapi/` must show only this ticket's own changes. A path or schema removed, or one that another ticket adds, means a stale document: stop and say so.
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|GH_CONFIG_DIR="<gh_config_dir>" gh pr edit <n> --repo DigitalZoneApp/<repo name> --base <default>
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|- Retarget: only when item 0 was a retarget, before the push. It always asks first (`approval-gates.md` → Fixed for everyone).
+plugins/rahal/skills/pr-followup/references/phase-2-fix.md|- The regenerated files stay in this merge commit. The backend's pre-commit hook runs `pnpm openapi && git add openapi/` whenever a merged-in controller or DTO is staged, so a separate commit would need `--no-verify`.

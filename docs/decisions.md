@@ -365,3 +365,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** one extra question per retarget; a ticket that legitimately removes a path explains it at the stop.
 - **Where:** `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `plugins/rahal/shared/templates/followup-plan.md`
 - **Date:** 2026-10-11
+
+### PD-63 — Regenerated API documents stay in the merge commit
+- **Decision:** PD-27 stands: the branch update regenerates `openapi/*.json` and commits it inside the titled merge commit, not in a commit of its own. Protection against a rebase dropping them comes from the stack notice and the `openapi/` diff check (PD-62).
+- **Why:** measured on 2026-10-11 with the backend's lefthook 2.1.14 and its exact `openapi` job (a stand-in generator in place of `pnpm openapi`): a merge that brings in a controller stages it, the job runs during the merge commit, and `git add openapi/` folds the regenerated file in even when the old version was staged. A separate commit would need `--no-verify` (the maintainer's choice, decision 3 of the feature batch).
+- **Cost if wrong:** a rebase of the stacked PR, such as GitHub's "merge stack", drops the regenerated lines with the merge commit; the stack notice forbids that button.
+- **Where:** `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `tests/probes/merge-step.sh`
+- **Date:** 2026-10-11

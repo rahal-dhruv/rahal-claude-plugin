@@ -34,6 +34,7 @@ git -C <repo> diff --name-only --diff-filter=U
 - Any other conflicting file: stop and ask. `git -C <repo> merge --abort` undoes the merge.
 - Then, in the repo: `pnpm install --frozen-lockfile`, `pnpm db:generate && pnpm openapi`, `git add` what they regenerated, then `pnpm typecheck && pnpm lint`.
 - Then `git -C <repo> diff origin/<base> -- openapi/` must show only this ticket's own changes. A path or schema removed, or one that another ticket adds, means a stale document: stop and say so.
+- The regenerated files stay in this merge commit. The backend's pre-commit hook runs `pnpm openapi && git add openapi/` whenever a merged-in controller or DTO is staged, so a separate commit would need `--no-verify`.
 - Commit: `git -C <repo> commit -m "chore(ORB-<n>): merge <main | orb-<blocker n>> into the <branch words> branch"`: `main`, or for a stacked PR the blocker's ticket id, e.g. `chore(ORB-196): merge orb-194 into the visa provider admin routes branch`.
 - Then `pnpm db:migrate` with the dev database URL.
 - Never rebase, never force push, and never rename the PR's migration folders.
