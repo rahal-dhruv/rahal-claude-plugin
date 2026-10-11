@@ -64,7 +64,7 @@ A ticket's outputs live in `<workspace_root>/<work_folder>/<slug>/`. The slug is
 For each repo the command touches:
 1. `git -C <repo> remote get-url origin` must start with `github.remote_prefix`. Otherwise: "The remote does not use your configured address, so pushes may sign in as another account." Show the fix: `git -C <repo> remote set-url origin <remote_prefix>DigitalZoneApp/<repo name>.git`.
 2. `git -C <repo> config user.email` must equal `github.commit_email`. Otherwise report it. The fix is the user's own git identity setup; never run `git config`.
-3. `git -C <repo> fetch origin --quiet`. When a local `<default>` branch exists (`git -C <repo> rev-parse -q --verify refs/heads/<default>`), report how far it is behind with `git -C <repo> rev-list --left-right --count <default>...origin/<default>`. When it does not (a docs clone often has only feature branches), say "no local <default> branch; commands read origin/<default>". Either way this is information, not a failure: every command reads code from `origin/<default>`.
+3. `git -C <repo> fetch origin --quiet`. When a local `<default>` branch exists (`git -C <repo> rev-parse -q --verify refs/heads/<default>`), report how far it is behind with `git -C <repo> rev-list --left-right --count <default>...origin/<default>`. When it does not (a docs clone often has only feature branches), say "no local <default> branch; commands read origin/<default>". Either way this is information, not a failure: every command reads code from `origin/<default>`, or from `origin/<base>` for a stacked ticket.
 4. Phases that commit: `git -C <repo> status --porcelain=v1` must print nothing. Otherwise list the files.
 
 ## Check 5 — Toolchain

@@ -43,18 +43,18 @@ Keep only a PR whose title holds `ORB-<blocker n>` (not a longer number) or whos
 
 ## 3. Check the ticket against the code
 
-Everything on `origin/<default>`, never the local checkout:
+Everything on `origin/<base>` (step 2: `main`, or the blocker's branch when stacked), never the local checkout:
 
 ```bash
 git -C <repo> fetch origin --quiet
 git -C <repo> rev-list --left-right --count main...origin/main          # local lag, for the brief
-git -C <repo> log --oneline <ticket base sha>..origin/main -- <files the ticket names>   # drift since the ticket was written
-MSYS_NO_PATHCONV=1 git -C <repo> cat-file -e origin/main:<path> && echo ok || echo missing   # every cited path
-MSYS_NO_PATHCONV=1 git -C <repo> show origin/main:<path>               # each file the ticket says to copy
+git -C <repo> log --oneline <ticket base sha>..origin/<base> -- <files the ticket names>   # drift since the ticket was written
+MSYS_NO_PATHCONV=1 git -C <repo> cat-file -e origin/<base>:<path> && echo ok || echo missing   # every cited path
+MSYS_NO_PATHCONV=1 git -C <repo> show origin/<base>:<path>             # each file the ticket says to copy
 ```
 
 - The ticket's base commit is usually written as "On `main` (`<sha>`)". Paths are the backticked `src/…`, `test/…`, `prisma/…` names.
-- Read the standard on `origin/main`: `AGENTS.md`, `CODEOWNERS` (`.github/CODEOWNERS` or `CODEOWNERS`), `lefthook.yml`, `.github/pull_request_template.md`, `eslint.config.js` (`moduleMap`), and the `package.json` scripts.
+- Read the standard on `origin/main`, even when stacked: `AGENTS.md`, `CODEOWNERS` (`.github/CODEOWNERS` or `CODEOWNERS`) and `.github/pull_request_template.md`. Read the tooling on `origin/<base>`, which is what the branch will run: `lefthook.yml`, `eslint.config.js` (`moduleMap`) and the `package.json` scripts.
 - When the build needs the design notes the ticket cites, read them from the docs repo on `origin/docs-main`.
 - Flag every drift: a file that moved or vanished, a symbol renamed, a new suite or rule the ticket does not know about.
 

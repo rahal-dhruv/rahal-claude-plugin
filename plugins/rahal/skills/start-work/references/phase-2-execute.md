@@ -87,7 +87,7 @@ Follow anything the workspace's `CLAUDE.md` asks for at the end of a task (for e
 ## 10. Review
 
 1. The review model, per `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md`. `model=<name>` in the arguments answers it.
-2. The reviewer agent, once, on the branch: base `$(git merge-base origin/main HEAD)`, head `HEAD`'s SHA. It runs `code-review` itself, as `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md` says.
+2. The reviewer agent, once, on the branch: base `$(git merge-base origin/<base> HEAD)`, head `HEAD`'s SHA. It runs `code-review` itself, as `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md` says.
 3. Verify every finding (`shared/evidence.md`).
 4. Write `<work>/<slug>/review-<date>.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/review-report.md`.
 5. Show "Issues at a glance" and "Issues in detail", then stop. Ask which to fix.

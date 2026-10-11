@@ -20,7 +20,7 @@
 ## What I checked
 
 - main: <how far local main is behind>; <commits since the ticket's base commit that touch its files, or "none">
-- Files and symbols the ticket names: <all exist on origin/main, or which are missing>
+- Files and symbols the ticket names: <all exist on origin/<base>, or which are missing>
 - Library behaviour measured: <command → result>, or "nothing the ticket relies on needed measuring"
 - Drift: <each place the ticket and the code disagree>, or "none"
 

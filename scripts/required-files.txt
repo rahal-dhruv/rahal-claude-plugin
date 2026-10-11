@@ -52,3 +52,5 @@ docs/testing-and-release.md
 docs/decisions.md
 .gitattributes
 tests/probes/fresh-clone.sh
+tests/probes/code-checks.sh
+tests/probes/stack-start.sh

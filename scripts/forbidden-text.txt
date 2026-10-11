@@ -21,3 +21,6 @@ then `code-review` at effort `high` on the range|one review pass: the reviewer a
 Run `code-review` at `high` on the full PR URL|one review pass: the reviewer agent runs code-review itself
 two-pass|one review pass: the reviewer agent runs code-review itself
 two passes|one review pass: the reviewer agent runs code-review itself
+gh pr create --repo DigitalZoneApp/<repo name> --base main|a stacked PR targets the blocker's branch: use --base <base>
+git merge-base origin/main HEAD|the review range starts at the ticket's base: origin/<base>
+git -C <repo> switch main && git -C <repo> merge --ff-only origin/main|the branch starts from origin/<base> with --no-track

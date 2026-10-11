@@ -31,8 +31,8 @@
 ## Pre-flight
 
 ```bash
-git -C <repo> fetch origin && git -C <repo> switch main && git -C <repo> merge --ff-only origin/main
-git -C <repo> switch -c feat/<slug>
+git -C <repo> fetch origin
+git -C <repo> switch -c feat/<slug> --no-track origin/<base>
 pnpm install --frozen-lockfile && pnpm db:generate
 <docker compose up --wait with the configured ports; pnpm db:migrate with the dev database port>
 ```
