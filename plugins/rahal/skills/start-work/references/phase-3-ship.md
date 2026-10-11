@@ -6,7 +6,7 @@ Each step follows `choices` in `.claude/rahal.local.md`. With `ask`, ask before 
 
 ## 0. Step 0
 
-Run checks 1, 2, 4 and 5 of `${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` first: this phase may start in a new session, where the gh account, the remote or the tree may have changed. Any ✗ stops before the push.
+Run checks 1, 2, 4 and 5 of `${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` first, and re-check a stacked base (The ticket folder, item 5): this phase may start in a new session, where the gh account, the remote, the tree or the blocker's PR may have changed. Any ✗ stops before the push.
 
 ## 1. Push
 

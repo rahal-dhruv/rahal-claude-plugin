@@ -351,3 +351,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** one longer line at the top of every run.
 - **Where:** `plugins/rahal/shared/step-0-checks.md`
 - **Date:** 2026-10-11
+
+### PD-53 — start-work can stack a ticket on an unmerged blocker's PR
+- **Decision:** when a blocker is not merged, phase one looks up its open PR. If the unmerged blockers form one chain of open PRs, it prints the facts and asks "Wait or stack?" with no default answer. Wait stops with nothing written; stack records `**Base:** `<blocker branch>` · stacked on #<PR> (ORB-<n>)` in `plan.md`. Every plan writes its Base line, and `check-output.sh plan` requires it. Two independent open PRs, or an open PR beside a blocker with none, stop with stacking not offered. Phases two and three re-read a stacked PR first: merged switches the base to `main` and says so; closed without merging stops.
+- **Why:** ORB-196 needed eight hand-written overrides to stack on an unmerged blocker. The maintainer chose to keep the choice with the user, because only 3 of about 240 team PRs were ever stacked. A branch can start from only one base, so two independent blockers cannot both be stacked on.
+- **Cost if wrong:** a ticket whose blockers merge out of order may wait longer than it needs to.
+- **Where:** `plugins/rahal/skills/start-work/references/phase-1-understand.md`, `plugins/rahal/shared/step-0-checks.md`, `plugins/rahal/shared/templates/plan.md`, `scripts/check-output.sh`
+- **Date:** 2026-10-11

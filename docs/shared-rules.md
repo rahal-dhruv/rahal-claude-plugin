@@ -6,7 +6,7 @@ Files in `plugins/rahal/shared/`, read by every command. Referenced as `${CLAUDE
 
 - **Header line:** `Step 0 — checks · rahal <version> from <plugin root>`, the version read from the loaded copy's `.claude-plugin/plugin.json`, so a run on a stale cached copy shows it.
 - **How to run commands:** Git Bash commands that run `node`, `pnpm`, `claude` or a git hook start with `export PATH="<bash_node_path>:$PATH";`; every `gh` command starts with `GH_CONFIG_DIR="<gh_config_dir>"` when set, and every `gh pr`/`gh repo` command carries `--repo DigitalZoneApp/<repo name>`; `git show <rev>:<path>` and `gh api <path>` start with `MSYS_NO_PATHCONV=1`; every path is quoted.
-- **The ticket folder:** outputs live in `<workspace_root>/<work_folder>/<slug>/`, slug `orb-<n>-<two to four words>`. An existing `orb-<n>-*` folder is reused before a new one is made; the branch comes from `plan.md`'s `**Branch:**` line, the PR's `headRefName`, or `feat/<slug>`.
+- **The ticket folder:** outputs live in `<workspace_root>/<work_folder>/<slug>/`, slug `orb-<n>-<two to four words>`. An existing `orb-<n>-*` folder is reused before a new one is made; the branch comes from `plan.md`'s `**Branch:**` line, the PR's `headRefName`, or `feat/<slug>`; the base from `plan.md`'s `**Base:**` line, the PR's `baseRefName`, or `main`. A stacked base is re-checked with `gh pr view` when phase two or three starts: merged switches it to `main` (a ledger ruling, and the stack notice leaves `pr-body.md`), closed without merging stops. The standard always comes from `origin/main`.
 - **Check 1 Config:** `.claude/rahal.local.md` in the start folder or a parent; `profile: orbit`.
 - **Check 2 GitHub:** `gh` installed; the active account equals `github.account`; it can read the repo; a merged PR asks "continue anyway?".
 - **Check 3 Linear:** loads `<linear.tools>get_issue` and friends; when they are missing or `tools` is empty, searches ToolSearch for `linear get_issue` and offers to record a new prefix; refuses non-`ORB-` tickets.
@@ -56,7 +56,7 @@ Known gap: the front matter is not strict YAML (`remote_prefix: git@<alias>:` is
 | Template | Written by | Checked by |
 | --- | --- | --- |
 | `brief.md` | start-work phase one | `check-output.sh brief` |
-| `plan.md` | start-work phase one | `check-output.sh plan` (also its Details anchors) |
+| `plan.md` | start-work phase one | `check-output.sh plan` (also its Details anchors and the `**Base:**` line) |
 | `ledger.md` | start-work phase two, pr-followup phase two | `check-output.sh ledger` |
 | `review-report.md` | every review | `check-output.sh review` |
 | `followup-plan.md` | pr-followup phase one | `check-output.sh followup` |

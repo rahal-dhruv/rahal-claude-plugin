@@ -8,10 +8,38 @@ Run checks 1–4 of `${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md`. This phase 
 
 - `get_issue` with `id: "ORB-<n>"` and `includeRelations: true`; `list_comments` with `issueId: "ORB-<n>"`. When the description has images (designs), `extract_images` on it.
 - For each related ticket, `get_issue` with `fields: ["title","status","assignee","completedAt","description"]`, and note only what touches this ticket:
-  - **blocked by:** merged? If not, say so; the work may need to wait;
+  - **blocked by:** merged? A blocker that is not merged may have an open PR to stack on (below);
   - **blocks:** which files and symbols that ticket reuses or will change from this one;
   - **related or siblings:** which files both change (`openapi/admin.json` is the usual one).
 - Pick the target repo from the title (`[Backend]` → backend, `[Frontend]` → dashboard) or from the files the ticket names.
+
+### Stacking on an unmerged blocker
+
+For each blocker that is not merged, look for its open PR:
+
+```bash
+GH_CONFIG_DIR="<gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo name> --state open --search "ORB-<blocker n>" \
+  --json number,title,headRefName,headRefOid,baseRefName,reviewDecision,statusCheckRollup
+```
+
+Keep only a PR whose title holds `ORB-<blocker n>` (not a longer number) or whose branch holds `orb-<blocker n>-`. Then the base for this ticket (`<base>` below and in phase two and three) is:
+- **No unmerged blocker:** `main`.
+- **Unmerged blockers, none with an open PR:** `main`. Say so; there is nothing to stack on, and the work may need to wait.
+- **Every unmerged blocker's PR in one chain** (usually a single PR; with several, each PR's `baseRefName` is the next one's `headRefName`): print the facts for the top PR of the chain and ask, with no default answer:
+
+  ```
+  Blocked by ORB-103: not merged. Its PR #146 is open:
+    branch orb-103-car-rental-search-route · head 1a2b3c4
+    review: changes requested · CI: green
+    1. Wait:  stop here; re-run /rahal:start-work <link> after #146 merges. The branch then starts from main.
+    2. Stack: start now from orb-103-car-rental-search-route. This PR targets that branch until #146 merges;
+              GitHub then moves it to main, and you merge origin/main in once.
+  Wait or stack?
+  ```
+
+  - **Wait:** stop. Nothing is written.
+  - **Stack:** `<base>` is the top PR's `headRefName`. Step 6 records it in the plan's `**Base:**` line, with the PR number and the blocker's ticket id.
+- **Otherwise** (two independent open PRs, or an open PR beside a blocker that has none): list each unmerged blocker with its PR and that PR's base, say "A branch can start from only one of them, so stacking is not offered. Re-run /rahal:start-work <link> once one of them merges.", and stop.
 
 ## 3. Check the ticket against the code
 
@@ -59,6 +87,7 @@ Typical sources:
 
 - `<workspace_root>/<work_folder>/<slug>/brief.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/brief.md`.
 - `<workspace_root>/<work_folder>/<slug>/plan.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/plan.md`:
+  - The `**Base:**` line holds the base from step 2: `main`, or the blocker's branch with its PR number and ticket id.
   - Every task carries real code, exact paths, an `Expected:` line for every command, and test-first steps.
   - Commit points follow `choices.commit_size`.
   - The Review Focus lists the five likeliest untested failures. Extra test cases beyond the ticket's list are marked keep-or-drop.

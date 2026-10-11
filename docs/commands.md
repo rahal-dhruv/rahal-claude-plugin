@@ -13,12 +13,12 @@ Four skills in `plugins/rahal/skills/`, invoked as `/rahal:<name>`. Each `SKILL.
 
 Three phases; the SKILL's "Which phase" section picks one from the ticket folder's files.
 
-1. **Understand and plan** (`references/phase-1-understand.md`): reads the ticket, its relations and comments; checks every cited path on `origin/<default>`; measures library behaviour; turns each gap into a decision; writes `brief.md` and `plan.md`; shows the brief and asks decision 1 of N. **Stops.**
+1. **Understand and plan** (`references/phase-1-understand.md`): reads the ticket, its relations and comments; for each unmerged blocker looks up its open PR and, when the unmerged blockers form one chain of open PRs, prints the facts and asks "Wait or stack?" with no default (wait stops with nothing written; two independent open PRs, or an open PR beside a blocker with none, stop with stacking not offered); checks every cited path on `origin/<default>`; measures library behaviour; turns each gap into a decision; writes `brief.md` and `plan.md`; shows the brief and asks decision 1 of N. **Stops.**
 2. **Execute** (`references/phase-2-execute.md`): commit gate per `choices.commit_when`; pre-flight; `ledger.md`; each task test-first; docs; `pnpm check`; guard checks (the runner restores each file from its own copy); PR body from the live template; the single review pass; writes `review-<date>.md`. **Stops** with the findings; the fix pass runs only on accepted ones.
 3. **Ship** (`references/phase-3-ship.md`): step 0 checks 1, 2, 4, 5 first; push (only fast-forward; never force); `gh pr create` with `--repo`; read CI once.
 
 - **Outputs (ticket folder):** `brief.md` (`check-output.sh brief`), `plan.md` (`plan`), `ledger.md` (`ledger`), `pr-body.md`, `review-<date>.md` (`review`).
-- **Resume:** re-run with the same link; the ticket folder is found by its `orb-<n>-*` name, the branch read from `plan.md`'s `**Branch:**` line, and phase two resumes at the first task without a `complete` line in `ledger.md`.
+- **Resume:** re-run with the same link; the ticket folder is found by its `orb-<n>-*` name, the branch read from `plan.md`'s `**Branch:**` line and the base from its `**Base:**` line (re-checked when phase two or three starts: a merged blocker switches the base to `main` and says so), and phase two resumes at the first task without a `complete` line in `ledger.md`.
 - **Gotchas:** the branch is `feat/<slug>`, and the slug already starts with `orb-<n>-` (`feat/orb-183-visa-destinations`).
 - **Known gaps:** the review reads commits only (the reviewer's clone checks out the head commit), so with `commit_when: never` it sees none of the work; the end of phase two and its "gate green" resume marker are not written to the ledger; a ticket with no open decisions cannot pass the brief check (it requires `## Decision 1 of`); the stash recipe for splitting one file across commits can conflict on adjacent hunks (the stash is kept).
 

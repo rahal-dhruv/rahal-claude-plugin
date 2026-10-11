@@ -2,7 +2,7 @@
 
 ## 1. Step 0 and the commit gate
 
-- Run checks 1–5.
+- Run checks 1–5, and re-check a stacked base (step 0 → The ticket folder, item 5).
 - Read `choices.commit_when`. For `standing_yes_per_ticket`, ask once: "Commit as I go for ORB-<n>? (never a push)". For `ask_each`, ask before every commit. For `never`, leave changes uncommitted and say so at each task's end.
 
 ## 2. Pre-flight and the ledger
