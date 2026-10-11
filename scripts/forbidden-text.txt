@@ -24,3 +24,5 @@ two passes|one review pass: the reviewer agent runs code-review itself
 gh pr create --repo DigitalZoneApp/<repo name> --base main|a stacked PR targets the blocker's branch: use --base <base>
 git merge-base origin/main HEAD|the review range starts at the ticket's base: origin/<base>
 git -C <repo> switch main && git -C <repo> merge --ff-only origin/main|the branch starts from origin/<base> with --no-track
+branch --force <base>|the clone's default branch is set to origin/<base>, so code-review diffs a stacked change against its own base
+the default branch name (`<base>`)|<base> is the PR's or the plan's base; the default branch is <default>

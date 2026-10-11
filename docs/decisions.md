@@ -247,7 +247,7 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Where:** `plugins/rahal/agents/rahal-reviewer.md`, `plugins/rahal/shared/review-model.md`
 - **Date:** 2026-10-09
 
-### PD-36 — code-review runs in a scratch clone
+### PD-36 — code-review runs in a scratch clone (its base: superseded by PD-54)
 - **Decision:** the reviewer builds a `git clone --shared` scratch clone with the head as `review-target`, `<base>` set to the fetched `origin/<base>`, and no remote, and runs `code-review` there.
 - **Why:** `code-review` compares against the local default branch; with a stale local `main` it reported other people's merged files as the PR's. Without a remote it also needs no `gh`.
 - **Cost if wrong:** a few seconds and a little disk per review; the clone is removed after.
@@ -357,4 +357,11 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Why:** ORB-196 needed eight hand-written overrides to stack on an unmerged blocker. The maintainer chose to keep the choice with the user, because only 3 of about 240 team PRs were ever stacked. A branch can start from only one base, so two independent blockers cannot both be stacked on.
 - **Cost if wrong:** a ticket whose blockers merge out of order may wait longer than it needs to.
 - **Where:** `plugins/rahal/skills/start-work/references/phase-1-understand.md`, `plugins/rahal/shared/step-0-checks.md`, `plugins/rahal/shared/templates/plan.md`, `scripts/check-output.sh`
+- **Date:** 2026-10-11
+
+### PD-54 — The review clone diffs against the change's own base
+- **Decision:** the reviewer receives the default branch (`<default>`) and the base branch (`<base>`: the PR's `baseRefName`, or the plan's `**Base:**` branch), and its scratch clone sets `<default>` to the fetched `origin/<base>`. Supersedes the part of PD-36 that set the clone's base to the default branch. `AGENTS.md` still comes from `origin/<default>`.
+- **Why:** `code-review` compares against the local default branch. With that branch at `origin/main`, every stacked PR, in start-work and in review-pr alike, was also reviewed for its blocker's commits.
+- **Cost if wrong:** none for an ordinary PR, where `<base>` and `<default>` are the same branch.
+- **Where:** `plugins/rahal/agents/rahal-reviewer.md`, `plugins/rahal/shared/review-model.md`, `plugins/rahal/skills/review-pr/references/review-steps.md`, `tests/probes/review-clone.sh`
 - **Date:** 2026-10-11

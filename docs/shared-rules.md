@@ -28,7 +28,7 @@ A check passes only when its output was seen passing; environmental failures are
 
 - **The model:** skipped when the run has `model=<name>` or `choices.review_model` holds one; otherwise suggested from the change's size and risk and asked. "Always <model>" saves it.
 - **One pass:** the main session starts `rahal:rahal-reviewer` once with the chosen `model`. The agent:
-  1. builds a scratch clone of the repo with `git clone --shared --no-checkout`, checks out the head as `review-target`, sets `<base>` to the fetched `origin/<base>`, and removes the remote, because `code-review` compares against the local default branch, and a stale local `main` makes it report other people's merged files;
+  1. builds a scratch clone of the repo with `git clone --shared --no-checkout`, checks out the head as `review-target`, sets the default branch to the fetched `origin/<base>` (the PR's `baseRefName` or the plan's `**Base:**` branch), and removes the remote, because `code-review` compares against the local default branch: a stale local `main` makes it report other people's merged files, and a stacked change's blocker commits would be reviewed too;
   2. runs `code-review` there through the Skill tool with exactly `high review-target` (never `--fix` or `--comment`); `code-review` starts its own helper agent, which runs on the same model;
   3. checks the ticket, `AGENTS.md`, correctness beyond `code-review`, test strength, Review Focus and the PR body;
   4. returns one merged list, first line `code-review: ran at high on <sha>` or `code-review: not run — <reason>`.

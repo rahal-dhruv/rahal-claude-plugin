@@ -46,7 +46,7 @@ Each probe works in throwaway git repos under a folder whose name has a space, a
 | `pr-fetch` | the PR fetch follows a force-pushed head (`+` refspec), in both files that carry it |
 | `code-checks` | start-work's code checks find a path the blocker added on `origin/<base>`, show its content, and list the blocker's commit as drift |
 | `stack-start` | the plan's Pre-flight starts the branch at `origin/<base>` with no upstream, so a pull cannot follow the blocker's branch |
-| `review-clone` | the reviewer's scratch clone reviews only the PR's files when the local `main` is stale, and leaves the user's repo untouched |
+| `review-clone` | the reviewer's scratch clone reviews only the PR's files when the local `main` is stale and when the PR is stacked on another PR's branch, and leaves the user's repo untouched |
 | `reflector-hook` | the hook spawns once per new context file, never for a reflector run, with hooks off |
 
 ## The test-first practice for Markdown

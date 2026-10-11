@@ -26,7 +26,7 @@ Three phases; the SKILL's "Which phase" section picks one from the ticket folder
 
 `references/review-steps.md`: step 0 and the PR's state; the ticket; the PR head fetched with `"+pull/<n>/head:refs/remotes/origin/pr-<n>"` and checked against `headRefOid`; existing comments; the single review pass; verification; the report; drafted comments.
 
-- **Never touches the user's checkout.** The reviewer's `code-review` runs in a scratch clone (`shared-rules.md`, "The review").
+- **Never touches the user's checkout.** The reviewer's `code-review` runs in a scratch clone (`shared-rules.md`, "The review"), diffed against the PR's own base, so a PR stacked on another branch is reviewed without that branch's commits. The standard is read from `origin/main`.
 - **Output:** `review-<date>.md` in the ticket folder (`check-output.sh review`); comments are drafted inside it and posted only per `choices.post_comments`.
 - **Known gaps:** a PR whose title has no `ORB-<n>` is matched through its branch name only; step 0's Linear check names only the title. Comment reads lack `--paginate` (busy PRs lose comments past 30). The hunk listing errors on files with no patch, and an anchor outside every hunk needs a conversation comment.
 
