@@ -30,3 +30,4 @@ Note whether the ticket was updated after the PR opened (`updatedAt`)|updatedAt 
 ^ +Tests ' "$SP/mut-$name.log"|keep vitest's Test Files and Errors lines: a hook error fails a file while every test passes
 For Prisma dev commands, `export DATABASE_URL|the dev database URL line lives once, in step 0 → How to run commands
 --json headRefOid,mergeable,mergeStateStatus,statusCheckRollup|read reviewRequests back too, so an unrequested review shows
+Load SQL through `pg` against the dev database with bound parameters.|measure SQL on real rows inside a transaction that ends in ROLLBACK

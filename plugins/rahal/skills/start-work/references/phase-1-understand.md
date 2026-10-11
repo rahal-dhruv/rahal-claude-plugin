@@ -77,7 +77,7 @@ MSYS_NO_PATHCONV=1 git -C <repo> show origin/<base>:<path>             # each fi
 For each thing the ticket relies on a package doing (a validator, a parser, a driver, an SQL operator), run the real value through the installed package once in the scratchpad:
 - Load CommonJS through `createRequire('<repo>/package.json')`.
 - Load ESM-only packages by `file:///` URL to their `exports` entry.
-- Load SQL through `pg` against the dev database with bound parameters.
+- Measure SQL through `pg` against the dev database (port `<dev_database_url_port>`), with bound parameters, on real rows, inside a transaction that ends in `ROLLBACK`, so nothing the measurement writes stays.
 
 Record the command and the result: they go in the brief and later in the PR body.
 
