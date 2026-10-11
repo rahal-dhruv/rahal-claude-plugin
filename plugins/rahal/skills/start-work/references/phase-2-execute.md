@@ -35,7 +35,11 @@ Run `NODE_OPTIONS='<e2e_node_options>' pnpm check` in the background, and watch 
 
 ## 6. Guard checks
 
-For each key guard (a live-row filter, a unique-violation-to-409 mapping, a permission on a route, a size limit, a magic-number check, an object delete), break it once and record which case fails. Use a scratchpad runner:
+For each key guard (a live-row filter, a unique-violation-to-409 mapping, a permission on a route, a size limit, a magic-number check, an object delete), break it once and record which case fails.
+
+For an `ORDER BY`, delete the clause and run the suite. If it stays green, say so and name the order no test covers: Postgres often returns rows in the order they were stored, and cuid ids sort by creation time, so seeded rows can pass by luck.
+
+Use a scratchpad runner:
 
 ```bash
 #!/usr/bin/env bash
