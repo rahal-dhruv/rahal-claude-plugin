@@ -53,7 +53,7 @@ run() {
   if [ -z "$diff" ]; then echo "MUTATION NOT APPLIED" >> "$OUT"; else
     NODE_OPTIONS='<e2e_node_options>' pnpm test:e2e <e2e file> > "$SP/mut-$name.log" 2>&1
     echo "exit=$?" >> "$OUT"
-    grep -E '^ +(×)|^ +Tests ' "$SP/mut-$name.log" >> "$OUT"
+    grep -E '^ *(×|FAIL )|^ +(Test Files|Tests|Errors) |[Uu]nhandled' "$SP/mut-$name.log" >> "$OUT"; echo "log: $SP/mut-$name.log" >> "$OUT"
   fi
   cp "$SP/orig-$name" "$file"; echo >> "$OUT"
 }

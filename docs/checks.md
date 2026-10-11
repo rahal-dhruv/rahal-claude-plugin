@@ -41,7 +41,7 @@ Each probe works in throwaway git repos under a folder whose name has a space, a
 | --- | --- |
 | `check-sections` | `check.sh` sections 7 and 9–11 fail on planted problems and stop failing once fixed |
 | `fresh-clone` | a clone made with Git for Windows' default `core.autocrlf=true` gets LF line endings (`.gitattributes`) and passes `check.sh`'s file and line sections |
-| `guard-runner` | the guard runner restores uncommitted and untracked files exactly |
+| `guard-runner` | the guard runner restores uncommitted and untracked files exactly, and each run's record keeps vitest's `FAIL`, `Test Files` and `Errors` lines and names its full log |
 | `merge-step` | the main merge stays open (`--no-commit`) instead of committing with Git's message |
 | `pr-fetch` | the PR fetch follows a force-pushed head (`+` refspec), in both files that carry it |
 | `code-checks` | start-work's code checks find a path the blocker added on `origin/<base>`, show its content, and list the blocker's commit as drift |

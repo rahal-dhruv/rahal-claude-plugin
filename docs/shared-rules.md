@@ -22,7 +22,7 @@ Files in `plugins/rahal/shared/`, read by every command. Referenced as `${CLAUDE
 
 ## Evidence (`evidence.md`)
 
-A check passes only when its output was seen passing; environmental failures are labelled and never looped; library behaviour is measured; every helper citation is re-opened; process claims are checked against repo history; the standard is read from `origin/<default>`; a test must be seen failing first.
+A check passes only when its output was seen passing; a test run's `Test Files` and `Errors` lines count, not only its `Tests` line; environmental failures are labelled and never looped; library behaviour is measured; every helper citation is re-opened; process claims are checked against repo history; the standard is read from `origin/<default>`; a test must be seen failing first.
 
 ## The review (`review-model.md`, `agents/rahal-reviewer.md`)
 
