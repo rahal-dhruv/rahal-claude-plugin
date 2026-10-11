@@ -21,6 +21,7 @@ The same for every Orbit engineer. Personal values live in `.claude/rahal.local.
 - Gate in both code repos: `pnpm check`. The backend's needs Docker and regenerates `openapi/*.json`.
 - Backend commands: `pnpm typecheck`, `pnpm lint`, `pnpm format`, `pnpm test`, `pnpm test:e2e <file>`, `pnpm test:contract`, `pnpm db:generate`, `pnpm db:migrate`, `pnpm db:migrate:dev --name <verb>_<object>`, `pnpm openapi`.
 - Local services: `docker compose up --wait` from the backend. `ORBIT_POSTGRES_PORT` and `ORBIT_REDIS_PORT` move the ports.
+- A stacked branch and its blocker's branch share one dev database (port `<dev_database_url_port>`). Once the stacked branch has applied its own migration, `pnpm db:migrate:dev` on the blocker's branch finds that migration missing from its folder and offers to reset the database: answer no. A reset deletes every table and row in it, the stacked branch's included.
 - The e2e suite starts its own containers (testcontainers). Its global setup spawns `pnpm`, which needs a shim on Windows (`toolchain.e2e_node_options`).
 
 ## The standard
