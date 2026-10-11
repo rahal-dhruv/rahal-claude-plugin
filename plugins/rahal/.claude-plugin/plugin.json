@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "rahal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ticket-to-PR workflow for the Orbit team: understand and plan a Linear ticket, execute it test-first, review, ship, and handle review comments.",
   "author": { "name": "Rahal Orbit team" }
 }
