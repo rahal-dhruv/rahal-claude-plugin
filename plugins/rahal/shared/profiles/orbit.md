@@ -23,6 +23,7 @@ The same for every Orbit engineer. Personal values live in `.claude/rahal.local.
 - Local services: `docker compose up --wait` from the backend. `ORBIT_POSTGRES_PORT` and `ORBIT_REDIS_PORT` move the ports.
 - A stacked branch and its blocker's branch share one dev database (port `<dev_database_url_port>`). Once the stacked branch has applied its own migration, `pnpm db:migrate:dev` on the blocker's branch finds that migration missing from its folder and offers to reset the database: answer no. A reset deletes every table and row in it, the stacked branch's included.
 - The e2e suite starts its own containers (testcontainers). Its global setup spawns `pnpm`, which needs a shim on Windows (`toolchain.e2e_node_options`).
+- In e2e tests, build each supertest request when it is sent, through a factory such as `() => request(server).post(…)`, never as an array of requests built up front: supertest opens a listener per request on demand and closes it when the first one finishes, so the others fail with `ECONNREFUSED`. A `Promise.all` of requests started in the same instant is fine.
 
 ## The standard
 

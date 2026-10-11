@@ -62,6 +62,7 @@ if [ "$(git status --porcelain=v1)" = "$BEFORE" ]; then echo "tree: as before" >
   { echo "TREE CHANGED"; git status --porcelain=v1; } >> "$OUT"; fi
 ```
 
+- Write each mutation against the file as it is now, after prettier formatted it, never against the plan's code: once prettier wraps a line, a pattern copied from the plan no longer matches, and the record says `MUTATION NOT APPLIED`.
 - Run it in the background and read `mutations.md`. It must end with `tree: as before`. Anything else: restore each file from its `orig-<name>` copy before going on.
 - It never uses `git checkout` or `git stash`, so it is safe whatever the commit choice: uncommitted task changes and new files are restored exactly.
 - Where the suite deliberately has no permanent case (a row lock the ticket proves "once in the pull request"), write a one-off proof script. Run it once as written and once with the mutation, and record both outputs.
