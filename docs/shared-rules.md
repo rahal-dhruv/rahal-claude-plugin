@@ -40,7 +40,7 @@ The paragraph that opens a stacked PR's body: merge the blocker alone, let GitHu
 
 ## Profile (`profiles/orbit.md`)
 
-Team facts: Linear workspace and team key, GitHub org, the three repos and their default branches (`rahal-orbit-docs` uses `docs-main`), pnpm only, the gates, the shared dev database warning for stacked branches (answer no to `db:migrate:dev`'s reset offer), building supertest requests when sent (never an array built up front), branch and commit practice, the `AGENTS.md` rules that bind every ticket.
+Team facts: Linear workspace and team key, GitHub org, the three repos and their default branches (`rahal-orbit-docs` uses `docs-main`), pnpm only, the gates, the shared dev database warning for stacked branches (answer no to `db:migrate:dev`'s reset offer), building supertest requests when sent (never an array built up front), branch and commit practice (commitlint refuses any capital letter after the scope), the `AGENTS.md` rules that bind every ticket.
 
 ## Config keys (`.claude/rahal.local.md`, written by init)
 

@@ -33,7 +33,7 @@ The same for every Orbit engineer. Personal values live in `.claude/rahal.local.
 ## Branch practice
 
 - Branch: `feat/orb-<n>-<two to four words>`, e.g. `feat/orb-183-visa-destinations`.
-- Commit: `type(ORB-<n>): lowercase imperative title`. Accurate type (`feat`, `test`, `fix`, `refactor`, `docs`, `chore`), ≤72 characters, title only. commitlint enforces the shape.
+- Commit: `type(ORB-<n>): lowercase imperative title`. Accurate type (`feat`, `test`, `fix`, `refactor`, `docs`, `chore`), ≤72 characters, title only. commitlint enforces the shape, and it refuses any capital letter after the scope, camelCase names (`visaProduct`) and acronyms (`DTO`) included: write them in lower case or in words.
 - PR title: `feat(ORB-<n>): <ticket title as a lowercase imperative>`.
 - A PR branch behind `main` is updated by merging `origin/main` into it: `chore(ORB-<n>): merge main into the <branch words> branch`, e.g. `chore(ORB-183): merge main into the visa destinations branch`. Never rebase a pushed branch and never force push.
 - A PR's migration folders keep their names when `main` lands later-timestamped ones. Recreate one only when its ticket says so.
