@@ -13,7 +13,7 @@ A merged PR: ask whether to continue (step 0 check 2).
 
 ## 2. The ticket
 
-Take `ORB-<n>` from the PR title or branch. `get_issue` with relations, and `list_comments`. Note whether the ticket was updated after the PR opened (`updatedAt`): a reviewer may have amended it. The output folder is the ticket folder (step 0 → The ticket folder).
+Take `ORB-<n>` from the PR title or branch. `get_issue` with relations, and `list_comments`. When the ticket folder (step 0 → The ticket folder) holds a `ticket-<date>.md`, compare the description with the latest one and say what changed: a reviewer may have amended the ticket. `updatedAt` alone proves nothing, because any comment, ours included, moves it; with no saved copy, say the change cannot be checked. The output folder is the ticket folder.
 
 ## 3. Read the code at the PR head
 

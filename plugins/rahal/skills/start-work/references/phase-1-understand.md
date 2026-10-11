@@ -99,6 +99,7 @@ Typical sources:
 
 ## 6. Write the brief and the plan
 
+- `<workspace_root>/<work_folder>/<slug>/ticket-<date>.md`: the ticket as read in step 2, word for word, never summarised: its id, title, status and `updatedAt`, the full description, and every comment with its author and date. A later review compares the description against it.
 - `<workspace_root>/<work_folder>/<slug>/brief.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/brief.md`.
 - `<workspace_root>/<work_folder>/<slug>/plan.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/plan.md`:
   - The `**Base:**` line holds the base from step 2: `main`, or the blocker's branch with its PR number and ticket id.

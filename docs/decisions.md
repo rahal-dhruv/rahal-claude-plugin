@@ -372,3 +372,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** one paragraph at the top of a rare kind of PR.
 - **Where:** `plugins/rahal/shared/stack-notice.md`, `plugins/rahal/skills/start-work/references/phase-2-execute.md`
 - **Date:** 2026-10-11
+
+### PD-56 — The ticket is saved word for word; changes are judged by its text
+- **Decision:** start-work phase one saves `ticket-<date>.md` (id, title, status, `updatedAt`, the full description and every comment, never summarised) in the ticket folder. review-pr compares the current description with the latest saved copy, never with `updatedAt` alone.
+- **Why:** any comment, including our own, moves `updatedAt`, so "updated after the PR opened" was true on every PR we had commented on. A summary cannot show what a reviewer reworded.
+- **Cost if wrong:** one more file per ticket; a PR whose ticket was never saved can only report that the change cannot be checked.
+- **Where:** `plugins/rahal/skills/start-work/references/phase-1-understand.md`, `plugins/rahal/skills/review-pr/references/review-steps.md`
+- **Date:** 2026-10-11

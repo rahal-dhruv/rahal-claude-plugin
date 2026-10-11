@@ -26,3 +26,4 @@ git merge-base origin/main HEAD|the review range starts at the ticket's base: or
 git -C <repo> switch main && git -C <repo> merge --ff-only origin/main|the branch starts from origin/<base> with --no-track
 branch --force <base>|the clone's default branch is set to origin/<base>, so code-review diffs a stacked change against its own base
 the default branch name (`<base>`)|<base> is the PR's or the plan's base; the default branch is <default>
+Note whether the ticket was updated after the PR opened (`updatedAt`)|updatedAt moves on any comment; compare the description with the saved ticket-<date>.md

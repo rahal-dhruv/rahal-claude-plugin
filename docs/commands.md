@@ -17,14 +17,14 @@ Three phases; the SKILL's "Which phase" section picks one from the ticket folder
 2. **Execute** (`references/phase-2-execute.md`): commit gate per `choices.commit_when`; pre-flight; `ledger.md`; each task test-first; docs; `pnpm check`; guard checks (the runner restores each file from its own copy); PR body from the live template; the single review pass; writes `review-<date>.md`. **Stops** with the findings; the fix pass runs only on accepted ones.
 3. **Ship** (`references/phase-3-ship.md`): step 0 checks 1, 2, 4, 5 and the stacked-base re-check first; push (only fast-forward; never force); `gh pr create` with `--repo` and `--base <base>`; read CI once.
 
-- **Outputs (ticket folder):** `brief.md` (`check-output.sh brief`), `plan.md` (`plan`), `ledger.md` (`ledger`), `pr-body.md` (a stacked one opens with the stack notice), `review-<date>.md` (`review`).
+- **Outputs (ticket folder):** `ticket-<date>.md` (the ticket word for word), `brief.md` (`check-output.sh brief`), `plan.md` (`plan`), `ledger.md` (`ledger`), `pr-body.md` (a stacked one opens with the stack notice), `review-<date>.md` (`review`).
 - **Resume:** re-run with the same link; the ticket folder is found by its `orb-<n>-*` name, the branch read from `plan.md`'s `**Branch:**` line and the base from its `**Base:**` line (re-checked when phase two or three starts: a merged blocker switches the base to `main` and says so), and phase two resumes at the first task without a `complete` line in `ledger.md`.
 - **Gotchas:** the branch is `feat/<slug>`, and the slug already starts with `orb-<n>-` (`feat/orb-183-visa-destinations`). It is cut from `origin/<base>` with `--no-track`, so a later pull never follows the blocker's branch; the review range starts at `git merge-base origin/<base> HEAD`.
 - **Known gaps:** the review reads commits only (the reviewer's clone checks out the head commit), so with `commit_when: never` it sees none of the work; the end of phase two and its "gate green" resume marker are not written to the ledger; a ticket with no open decisions cannot pass the brief check (it requires `## Decision 1 of`); the stash recipe for splitting one file across commits can conflict on adjacent hunks (the stash is kept).
 
 ## /rahal:review-pr `<PR link or number> [model=<name>]`
 
-`references/review-steps.md`: step 0 and the PR's state; the ticket; the PR head fetched with `"+pull/<n>/head:refs/remotes/origin/pr-<n>"` and checked against `headRefOid`; existing comments; the single review pass; verification; the report; drafted comments.
+`references/review-steps.md`: step 0 and the PR's state; the ticket (its description compared with the latest saved `ticket-<date>.md`, never judged by `updatedAt`); the PR head fetched with `"+pull/<n>/head:refs/remotes/origin/pr-<n>"` and checked against `headRefOid`; existing comments; the single review pass; verification; the report; drafted comments.
 
 - **Never touches the user's checkout.** The reviewer's `code-review` runs in a scratch clone (`shared-rules.md`, "The review"), diffed against the PR's own base, so a PR stacked on another branch is reviewed without that branch's commits. The standard is read from `origin/main`.
 - **Output:** `review-<date>.md` in the ticket folder (`check-output.sh review`); comments are drafted inside it and posted only per `choices.post_comments`.
