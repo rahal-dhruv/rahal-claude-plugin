@@ -358,3 +358,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** a rule added to `main` after the stack branched off is missed until the blocker merges; a title with the blocker's id hides which branch was merged until the PR body is read.
 - **Where:** `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `plugins/rahal/shared/templates/followup-plan.md`, `plugins/rahal/shared/profiles/orbit.md`, `tests/probes/stacked-rules.sh`
 - **Date:** 2026-10-11
+
+### PD-62 — A PR whose blocker merged is retargeted before its branch update
+- **Decision:** when the blocker's PR is merged but this PR's base is still the blocker's branch, item 0 becomes "retarget to the default branch, then merge it". The local merge uses `origin/<default>`; `gh pr edit --base <default>` runs in the remote steps before the push and always asks. Every branch update then checks that `git diff origin/<base> -- openapi/` shows only this ticket's own changes.
+- **Why:** GitHub retargets a stacked PR only when the merged branch is deleted, and merging the old base then brings nothing; a regenerated document that lost or gained another ticket's paths is the symptom of the "merge stack" loss.
+- **Cost if wrong:** one extra question per retarget; a ticket that legitimately removes a path explains it at the stop.
+- **Where:** `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `plugins/rahal/shared/templates/followup-plan.md`
+- **Date:** 2026-10-11

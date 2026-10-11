@@ -20,7 +20,9 @@ Commits follow `choices.commit_when` (for `standing_yes_per_ticket`, ask once fo
 
 ## 2. Branch update
 
-Only if item 0 was accepted:
+Only if item 0 was accepted.
+
+When item 0 is a retarget (the blocker has merged), `<base>` in this step is `<default>`; the PR itself is retargeted in step 8, before the push.
 
 ```bash
 git -C <repo> merge --no-ff --no-commit origin/<base>
@@ -31,6 +33,7 @@ git -C <repo> diff --name-only --diff-filter=U
 - A conflict in a generated file only (`openapi/*.json`, `src/generated/`): take either side with `git -C <repo> checkout --ours <file>`; it is regenerated below, never hand-merged.
 - Any other conflicting file: stop and ask. `git -C <repo> merge --abort` undoes the merge.
 - Then, in the repo: `pnpm install --frozen-lockfile`, `pnpm db:generate && pnpm openapi`, `git add` what they regenerated, then `pnpm typecheck && pnpm lint`.
+- Then `git -C <repo> diff origin/<base> -- openapi/` must show only this ticket's own changes. A path or schema removed, or one that another ticket adds, means a stale document: stop and say so.
 - Commit: `git -C <repo> commit -m "chore(ORB-<n>): merge <main | orb-<blocker n>> into the <branch words> branch"`: `main`, or for a stacked PR the blocker's ticket id, e.g. `chore(ORB-196): merge orb-194 into the visa provider admin routes branch`.
 - Then `pnpm db:migrate` with the dev database URL.
 - Never rebase, never force push, and never rename the PR's migration folders.
@@ -73,6 +76,7 @@ Standalone, never mentioning other PRs.
 Each step follows `choices`; with `ask`, ask per step.
 
 ```bash
+GH_CONFIG_DIR="<gh_config_dir>" gh pr edit <n> --repo DigitalZoneApp/<repo name> --base <default>
 git -C <repo> merge-base --is-ancestor origin/<headRefName> HEAD && export PATH="<bash_node_path>:$PATH" && git -C <repo> push origin <headRefName>
 GH_CONFIG_DIR="<gh_config_dir>" gh pr edit <n> --repo DigitalZoneApp/<repo name> --body-file "<work>/<slug>/pr-body.md"
 MSYS_NO_PATHCONV=1 GH_CONFIG_DIR="<gh_config_dir>" gh api -X POST repos/DigitalZoneApp/<repo name>/pulls/<n>/comments/<comment id>/replies -F body=@"<reply file>"
@@ -81,6 +85,7 @@ GH_CONFIG_DIR="<gh_config_dir>" gh pr view <n> --repo DigitalZoneApp/<repo name>
 ```
 
 - A conversation comment (not inline) is answered with `GH_CONFIG_DIR="<gh_config_dir>" gh pr comment <n> --repo DigitalZoneApp/<repo name> --body-file "<reply file>"`.
+- Retarget: only when item 0 was a retarget, before the push. It always asks first (`approval-gates.md` → Fixed for everyone).
 - Push: never with `--force`.
 - PR description: replace it with the updated `pr-body.md`. This always asks first, whatever the other choices (`approval-gates.md` → Fixed for everyone).
 - Reply: post in the comment's thread, only after the push that contains the commit it cites. If the push was declined, keep the replies as drafts and say so.
