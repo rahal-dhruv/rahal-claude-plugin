@@ -52,3 +52,4 @@ docs/testing-and-release.md
 docs/decisions.md
 .gitattributes
 tests/probes/fresh-clone.sh
+tests/probes/pr-checkout.sh

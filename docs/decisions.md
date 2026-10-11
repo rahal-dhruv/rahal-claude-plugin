@@ -344,3 +344,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** one contributor's lessons and escalations no longer reach others; an escalation that needs the maintainer travels in a pull request instead.
 - **Where:** `.gitignore`, `.claude/agents/reflector.md`, `reflector/README.md`, `tests/probes/check-sections.sh`
 - **Date:** 2026-10-09
+
+### PD-60 — The follow-up checkout fast-forwards from the PR's branch by name
+- **Decision:** phase two fetches, switches to `<headRefName>`, fast-forwards only from `origin/<headRefName>` and only while that branch is checked out, then stops unless `HEAD` equals `headRefOid`, naming both branches. `pull --ff-only` is forbidden text.
+- **Why:** `git pull` follows the checkout's upstream. On 2026-10-10 a follow-up on a stacked PR moved the blocker's branch onto the stacked PR's commit; a branch made from a blocker's branch can also track it and never reach its own head.
+- **Cost if wrong:** a local branch holding unpushed commits stops the run instead of continuing; the user pushes or resets it first.
+- **Where:** `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `tests/probes/pr-checkout.sh`, `scripts/forbidden-text.txt`
+- **Date:** 2026-10-11

@@ -8,9 +8,13 @@ Checks 1–5, and check out the PR branch:
 
 ```bash
 git -C <repo> status --porcelain=v1          # must be empty
-git -C <repo> switch <headRefName> 2>/dev/null || git -C <repo> switch -c <headRefName> --track origin/<headRefName>
-git -C <repo> pull --ff-only
+git -C <repo> fetch origin --quiet
+git -C <repo> switch <headRefName> || git -C <repo> switch -c <headRefName> --track origin/<headRefName>
+[ "$(git -C <repo> branch --show-current)" = "<headRefName>" ] && git -C <repo> merge --ff-only "origin/<headRefName>"
+[ "$(git -C <repo> branch --show-current)" = "<headRefName>" ] && [ "$(git -C <repo> rev-parse HEAD)" = "<headRefOid>" ] || echo "STOP: the checkout is $(git -C <repo> branch --show-current) at $(git -C <repo> rev-parse --short HEAD), not <headRefName> at <headRefOid>"   # stop and say so
 ```
+
+The fast-forward names `origin/<headRefName>`, never the branch's upstream: a branch made from a blocker's branch can track it, and following the upstream once moved another ticket's branch onto this PR's commit. A `STOP` line means stop and name both branches; never commit or merge on another branch.
 
 Commits follow `choices.commit_when` (for `standing_yes_per_ticket`, ask once for this follow-up).
 

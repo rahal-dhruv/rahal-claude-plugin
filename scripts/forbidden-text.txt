@@ -21,3 +21,4 @@ then `code-review` at effort `high` on the range|one review pass: the reviewer a
 Run `code-review` at `high` on the full PR URL|one review pass: the reviewer agent runs code-review itself
 two-pass|one review pass: the reviewer agent runs code-review itself
 two passes|one review pass: the reviewer agent runs code-review itself
+pull --ff-only|git pull follows the checkout's upstream and once moved another ticket's branch; fast-forward from origin/<headRefName> by name and compare HEAD with headRefOid
