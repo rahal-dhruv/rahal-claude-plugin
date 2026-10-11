@@ -37,6 +37,10 @@ A check passes only when its output was seen passing; environmental failures are
 
 Team facts: Linear workspace and team key, GitHub org, the three repos and their default branches (`rahal-orbit-docs` uses `docs-main`), pnpm only, the gates, branch and commit practice (a stacked PR is updated from its blocker's branch, titled `merge orb-<blocker n> into …`), the `AGENTS.md` rules that bind every ticket.
 
+## Stack notice (`stack-notice.md`)
+
+The text put at the top of a stacked PR's body: merge the blocker's PR alone first, let GitHub move this PR's base to `main`, merge `origin/main` in and run `pnpm openapi`, and never use GitHub's "merge stack" button, which rebases the PR and drops the merge commit carrying the regenerated API documents. `pr-followup` phase two adds it to a stacked PR's body and removes it once the PR is retargeted.
+
 ## Config keys (`.claude/rahal.local.md`, written by init)
 
 | Key | Read by |

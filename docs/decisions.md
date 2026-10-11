@@ -372,3 +372,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** a rebase of the stacked PR, such as GitHub's "merge stack", drops the regenerated lines with the merge commit; the stack notice forbids that button.
 - **Where:** `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `tests/probes/merge-step.sh`
 - **Date:** 2026-10-11
+
+### PD-64 — A stacked PR's body warns against "merge stack"
+- **Decision:** one shared text, `shared/stack-notice.md`, goes at the top of a stacked PR's body: merge the blocker alone, let GitHub retarget, merge `origin/main` in and run `pnpm openapi`, never use "merge stack". `pr-followup` phase two adds it to the PR body and removes it once the PR is retargeted.
+- **Why:** GitHub's "merge stack" rebased a stacked PR and dropped the merge commit holding its regenerated `openapi/admin.json`; that commit cannot be split off (PD-63), so the warning has to reach whoever presses the button.
+- **Cost if wrong:** one paragraph of PR body to read and delete; a reviewer who ignores it still loses the regenerated lines.
+- **Where:** `plugins/rahal/shared/stack-notice.md`, `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`
+- **Date:** 2026-10-11

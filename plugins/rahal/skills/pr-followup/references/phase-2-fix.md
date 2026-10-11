@@ -62,6 +62,7 @@ Update the ticket folder's `pr-body.md`; if absent, start from `GH_CONFIG_DIR="<
 - the changed test-case lines;
 - new measurements;
 - a line naming the base branch that was merged in (with the merge SHA);
+- for a stacked PR, the notice from `${CLAUDE_PLUGIN_ROOT}/shared/stack-notice.md` at the top, filled in; once the PR is retargeted to `<default>`, remove it;
 - anything the fixes made untrue.
 
 ## 7. Replies
