@@ -8,7 +8,7 @@
   claude plugin marketplace add "<repo>" --scope local
   claude plugin install rahal@rahal-claude-plugin --scope local
   ```
-  Run these from the workspace folder. `claude plugin list` then shows "Read from: <repo>/plugins/rahal": the plugin is read straight from the folder, so edits reach every new session without reinstalling; it is enabled in that workspace only. Sessions already open do not pick it up.
+  Run these from the workspace folder. `claude plugin list` then shows "Read from: <repo>/plugins/rahal", but sessions load a copy cached at install time, not the folder. An edit reaches a session only after `version` in `plugins/rahal/.claude-plugin/plugin.json` is bumped, `claude plugin update rahal@rahal-claude-plugin --scope local` is run from the workspace folder, and a new session is opened. It is enabled in that workspace only. To try unreleased edits, use `--plugin-dir`.
 - **Undo:** `claude plugin uninstall rahal@rahal-claude-plugin --scope local`, then `claude plugin marketplace remove rahal-claude-plugin`.
 - **Size:** `claude --plugin-dir plugins/rahal plugin details rahal` prints the components and the token cost (`claude plugin details` alone takes an installed name, not a path).
 - **Never** use `claude plugin init` to explore: it writes into the user's own skills folder and loads there.
