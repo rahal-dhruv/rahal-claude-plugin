@@ -2,6 +2,8 @@
 
 Write one file per comment: `work/<slug>/reply-<date>-<reviewer>-<comment id>.md`. Each is posted into that comment's thread. Never mention other PRs or issues by number.
 
+Never a `suggestion` block or proposed code: a reply says what changed and how it was proved, or gives the evidence for keeping the code.
+
 ## When the comment was fixed
 
 Fixed in `<fix commit SHA>`. <What changed, in one or two sentences.>

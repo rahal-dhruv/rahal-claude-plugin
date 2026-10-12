@@ -22,7 +22,7 @@
   <A step that breaks code on purpose to prove a test opens with "Temporary: break <what> so the test fails on purpose; restore it byte for byte; never commit." The real fix is named on its own.>
 - **Dry run:** <numbered steps with real values (request → query → rows → answer), now and after the fix>
 - **Alternative:** <push back, with the evidence> (when it is worth considering)
-- **Reply draft:** <posted after the fix; stands alone and never names another PR or issue by number>
+- **Reply draft:** <posted after the fix; stands alone, never names another PR or issue by number, and never carries a `suggestion` block or proposed code>
 
 ### 0. Branch update
 

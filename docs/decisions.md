@@ -393,3 +393,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** a ticket folder made before start-work saved the ticket gets no ticket check until a copy exists.
 - **Where:** `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `plugins/rahal/shared/templates/followup-plan.md`
 - **Date:** 2026-10-12
+
+### PD-67 — Drafted comments state the issue plus an example only
+- **Decision:** every comment the plugin drafts on a teammate's PR states the issue plus one concrete example, and the author chooses the fix: no `suggestion` block, no proposed fix, no @-mention, no should or must, no other PR or commit. An anchor outside the diff becomes a conversation comment naming the file and line. Follow-up replies never carry a `suggestion` block or proposed code either. `check-output.sh` refuses a `suggestion` block in a review's drafted comments, in a reply, and in a follow-up's reply drafts; a reviewer's own suggestion quoted under What they raised is allowed.
+- **Why:** comment style is a team convention once the plugin is shared, and the maintainer chose this style for everyone (decision 8 of the feature batch), closing the reflector approval of 2026-10-09.
+- **Cost if wrong:** a one-line fix the author could have applied with a click now needs typing; reviewers who want to propose code write it by hand.
+- **Where:** `plugins/rahal/shared/templates/review-report.md`, `plugins/rahal/skills/review-pr/references/review-steps.md`, `plugins/rahal/shared/templates/reply.md`, `plugins/rahal/shared/templates/followup-plan.md`, `scripts/check-output.sh`
+- **Date:** 2026-10-12

@@ -33,6 +33,9 @@ Base: main · Branch: 2 behind main; trial merge conflicts: openapi/admin.json �
 - **Before this PR:** did not exist; `origin/main` has no destination search.
 - **Now:** at head abc1234, `contains: q` passes `_` through, and Postgres reads it as "any one character".
 - **What they raised:** escape `%` and `_` before the search.
+  ```suggestion
+  const term = q.replace(/[\%_]/g, (c) => `\${c}`);
+  ```
 - **How checked:** `GET /admin/v1/visas/destinations?q=_` → `total: 40`.
 - **Ticket:** departs: the ticket says "free-text search" only; list the escaping as a departure in the PR body.
 - **Fix we should apply:** test first — `listed('?q=_')` expects `[]`, red result 40 codes; then escape `\`, `%` and `_` in `q`. Commit: `fix(ORB-1): escape wildcards in the destination search`
