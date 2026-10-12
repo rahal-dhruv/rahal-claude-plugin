@@ -71,5 +71,6 @@ Name which conflicts are generated files (`openapi/*.json`), which are regenerat
   - "Comments at a glance": one line per comment with its recommendation, then `In plain words:` (why it matters, with no code terms) and `Example:` (someone does X → sees Y today → would see Z after);
   - item 0, the branch update, when the branch is behind or its blocker has merged;
   - "Detailed fixes": each with Before this PR, Now, What they raised, How checked, Ticket, Fix we should apply (test first, with its commit title), a Dry run with real values now and after the fix, an Alternative where reasonable, and a Reply draft;
+  - a step that breaks code on purpose to prove a test is labelled temporary ("Temporary: break <what> so the test fails on purpose; restore it byte for byte; never commit") and never stands in for the fix, which is named on its own;
   - each Reply draft stands alone and never names another PR or issue by number (`${CLAUDE_PLUGIN_ROOT}/shared/templates/reply.md`).
 - Show it in chat and end with "Which do you accept?". Stop.

@@ -19,6 +19,7 @@
 - **How checked:** <command → result>
 - **Ticket:** <matches | departs from the ticket text — how to handle it>
 - **Fix we should apply:** test first — <test change; the red result expected>; then <code change>. Commit: `<type>(ORB-<n>): <title>`
+  <A step that breaks code on purpose to prove a test opens with "Temporary: break <what> so the test fails on purpose; restore it byte for byte; never commit." The real fix is named on its own.>
 - **Dry run:** <numbered steps with real values (request → query → rows → answer), now and after the fix>
 - **Alternative:** <push back, with the evidence> (when it is worth considering)
 - **Reply draft:** <posted after the fix; stands alone and never names another PR or issue by number>
