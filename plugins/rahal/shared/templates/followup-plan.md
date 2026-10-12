@@ -4,20 +4,24 @@
 
 ## Comments at a glance
 
-1. <Reviewer> — <2 plain lines: what they ask>. Recommend: <fix (blocking | not blocking) | push back | follow-up ticket>. <Departs from the ticket? say so.>
-   Example: <everyday example>.
+1. <Reviewer> — <what they ask, one line>. Recommend: <fix (blocking | not blocking) | push back | follow-up ticket>. <Departs from the ticket? say so.>
+   In plain words: <why it matters, no code terms>.
+   Example: <someone does X → sees Y today → would see Z after>.
 0. Branch update — <merge <base> first, or, once the blocker has merged, retarget to main and merge main; which files conflict (generated?)> (only when the branch is behind or its blocker has merged)
 
 ## Detailed fixes
 
 ### 1. <Reviewer> · <file:line> · comment <id>
 
-- **What they ask:** <plain words>
-- **How I verified it:** <command → result>
+- **Before this PR:** <behaviour on `origin/<base>`, file:line; "did not exist" for new code>
+- **Now:** <the code at the PR head <sha7>: a 1–5 line excerpt and what it does>
+- **What they raised:** <their point in plain words; quote their suggestion>
+- **How checked:** <command → result>
 - **Ticket:** <matches | departs from the ticket text — how to handle it>
-- **Fix plan:** test first — <test change; the red result expected>; then <code change>. Commit: `<type>(ORB-<n>): <title>`
+- **Fix we should apply:** test first — <test change; the red result expected>; then <code change>. Commit: `<type>(ORB-<n>): <title>`
+- **Dry run:** <numbered steps with real values (request → query → rows → answer), now and after the fix>
 - **Alternative:** <push back, with the evidence> (when it is worth considering)
-- **Reply draft:** <posted after the fix>
+- **Reply draft:** <posted after the fix; stands alone and never names another PR or issue by number>
 
 ### 0. Branch update
 

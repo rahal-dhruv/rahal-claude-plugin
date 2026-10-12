@@ -61,14 +61,15 @@ Name which conflicts are generated files (`openapi/*.json`), which are regenerat
 
 ## 5. Verify each comment
 
-- Read the cited code at the PR head (`git show origin/pr-<n>:<path>`).
+- Read the cited code at the PR head (`MSYS_NO_PATHCONV=1 git -C <repo> show origin/pr-<n>:<path>`) for **Now**, and on the base (`origin/<base>:<path>`) for **Before this PR**; a path missing on the base means the code did not exist before this PR.
 - When the comment is about behaviour, measure it: a scratchpad script against the installed package or the dev database, with the command and result recorded.
 - Say whether the fix departs from the ticket text. If it does, the fix plan says how to handle it: ask the ticket owner to amend the ticket, or list it as a departure in the PR body.
 
 ## 6. Write the fix plan and stop
 
 - Write `<workspace_root>/<work_folder>/<slug>/followup-<date>.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/followup-plan.md`:
-  - "Comments at a glance" in plain words, each with an everyday example and a recommendation;
-  - item 0, the branch update, when the branch is behind;
-  - "Detailed fixes": each with how it was verified, the ticket alignment, a test-first fix plan with its commit title, an alternative push-back where reasonable, and a reply draft.
+  - "Comments at a glance": one line per comment with its recommendation, then `In plain words:` (why it matters, with no code terms) and `Example:` (someone does X → sees Y today → would see Z after);
+  - item 0, the branch update, when the branch is behind or its blocker has merged;
+  - "Detailed fixes": each with Before this PR, Now, What they raised, How checked, Ticket, Fix we should apply (test first, with its commit title), a Dry run with real values now and after the fix, an Alternative where reasonable, and a Reply draft;
+  - each Reply draft stands alone and never names another PR or issue by number (`${CLAUDE_PLUGIN_ROOT}/shared/templates/reply.md`).
 - Show it in chat and end with "Which do you accept?". Stop.

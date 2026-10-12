@@ -144,3 +144,16 @@ plugins/rahal/skills/pr-followup/references/phase-2-fix.md|GH_CONFIG_DIR="<gh_co
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|- Stacked on this PR: after the push, each open PR whose base is `<headRefName>` is reported in chat and in the ledger as "#<m> (`<its branch>`) needs `git merge origin/<headRefName>`". Never update those branches from this run.
 plugins/rahal/skills/pr-followup/references/phase-2-fix.md|- for a stacked PR, the notice from `${CLAUDE_PLUGIN_ROOT}/shared/stack-notice.md` at the top, filled in; once the PR is retargeted to `<default>`, remove it;
 plugins/rahal/shared/stack-notice.md|> **Stacked on #<blocker PR> (`<blocker branch>`).** Merge #<blocker PR> on its own first; GitHub then moves this PR's base to `main`. Then merge `origin/main` into this branch and run `pnpm openapi`. Do not use GitHub's "merge stack" button: it rebases this PR and drops the merge commit that carries the regenerated API documents.
+plugins/rahal/shared/templates/followup-plan.md|1. <Reviewer> — <what they ask, one line>. Recommend: <fix (blocking | not blocking) | push back | follow-up ticket>. <Departs from the ticket? say so.>
+plugins/rahal/shared/templates/followup-plan.md|   In plain words: <why it matters, no code terms>.
+plugins/rahal/shared/templates/followup-plan.md|   Example: <someone does X → sees Y today → would see Z after>.
+plugins/rahal/shared/templates/followup-plan.md|- **Before this PR:** <behaviour on `origin/<base>`, file:line; "did not exist" for new code>
+plugins/rahal/shared/templates/followup-plan.md|- **Now:** <the code at the PR head <sha7>: a 1–5 line excerpt and what it does>
+plugins/rahal/shared/templates/followup-plan.md|- **What they raised:** <their point in plain words; quote their suggestion>
+plugins/rahal/shared/templates/followup-plan.md|- **How checked:** <command → result>
+plugins/rahal/shared/templates/followup-plan.md|- **Dry run:** <numbered steps with real values (request → query → rows → answer), now and after the fix>
+plugins/rahal/shared/templates/followup-plan.md|- **Reply draft:** <posted after the fix; stands alone and never names another PR or issue by number>
+plugins/rahal/skills/pr-followup/references/phase-1-analyse.md|- Read the cited code at the PR head (`MSYS_NO_PATHCONV=1 git -C <repo> show origin/pr-<n>:<path>`) for **Now**, and on the base (`origin/<base>:<path>`) for **Before this PR**; a path missing on the base means the code did not exist before this PR.
+plugins/rahal/skills/pr-followup/references/phase-1-analyse.md|  - "Comments at a glance": one line per comment with its recommendation, then `In plain words:` (why it matters, with no code terms) and `Example:` (someone does X → sees Y today → would see Z after);
+plugins/rahal/skills/pr-followup/references/phase-1-analyse.md|  - "Detailed fixes": each with Before this PR, Now, What they raised, How checked, Ticket, Fix we should apply (test first, with its commit title), a Dry run with real values now and after the fix, an Alternative where reasonable, and a Reply draft;
+plugins/rahal/skills/pr-followup/references/phase-1-analyse.md|  - each Reply draft stands alone and never names another PR or issue by number (`${CLAUDE_PLUGIN_ROOT}/shared/templates/reply.md`).

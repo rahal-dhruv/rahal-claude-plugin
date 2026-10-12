@@ -379,3 +379,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** one paragraph of PR body to read and delete; a reviewer who ignores it still loses the regenerated lines.
 - **Where:** `plugins/rahal/shared/stack-notice.md`, `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`
 - **Date:** 2026-10-11
+
+### PD-65 — The follow-up explains each comment with before, now and a dry run
+- **Decision:** each glance entry adds `In plain words:` and `Example:` (someone does X → sees Y today → would see Z after). Each fix block gives Before this PR (the code on `origin/<base>`), Now (the code at the PR head), What they raised, How checked, Ticket, Fix we should apply, Dry run, Alternative and Reply draft, sharing labels with the review report. `check-output.sh followup` checks every entry and block from 1 up, and that no reply draft names another PR.
+- **Why:** the old four-string check passed a report whose second comment had no explanation, and a reader could not tell what the reviewer reacted to without opening the diff. Before means the base and the fix has its own field (the maintainer's choice, decision 5 of the feature batch).
+- **Cost if wrong:** a longer report per comment; a one-line nit still needs a dry run to pass the check.
+- **Where:** `plugins/rahal/shared/templates/followup-plan.md`, `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `scripts/check-output.sh`, `tests/fixtures/good-followup.md`
+- **Date:** 2026-10-12

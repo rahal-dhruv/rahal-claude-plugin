@@ -27,11 +27,11 @@ Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 acc
 | `plan` | `## Tasks at a glance`, `## Global Constraints`, `## Decisions`, `## Review Focus`, `## Pre-flight`, `### Task 1:`, `## Self-check`; every `[Details →](#…)` anchor matches a heading |
 | `ledger` | first line `# Ledger — plan: `, then `## Rulings`, `## Tasks`, `## Environment`, `## Review`, `## Remote steps` |
 | `review` | the six exact headings `## 1. What the ticket is trying to solve`, `## 2. What the PR does`, `## 3. Issues at a glance`, `## 4. Issues in detail`, `## 5. Already raised by other reviewers`, `## 6. Considered and set aside`, and a `Verdict:` line |
-| `followup` | `## Comments at a glance`, `## Detailed fixes`, `Which do you accept?`, and ` · comment ` in fix headings |
+| `followup` | `## Comments at a glance`, `## Detailed fixes`, `Which do you accept?`; per entry, from 1 up (item 0 exempt): each glance entry holds `In plain words:` and `Example:`, and each `### n.` fix holds ` · comment ` in its heading, the labels Before this PR, Now, What they raised, Fix we should apply and Dry run, and a reply draft with no `#<n>` or `/pull/<n>` |
 | `reply` | no `#<n>` or `/pull/<n>`; a commit SHA or the word `Evidence` |
 | `config` | every key present; required values real (not empty, `""`, `''`, a comment, or an unfilled `<placeholder>`) |
 
-`scripts/test-check-output.sh` proves it: each `tests/fixtures/good-<kind>.md` passes and each `bad-<kind>.md` and `bad-<kind>-<reason>.md` fails. Known gaps: a plan with no Details links passes; a heading with trailing spaces fails; the reply check misses "PR 145".
+`scripts/test-check-output.sh` proves it: each `tests/fixtures/good-<kind>.md` passes and each `bad-<kind>.md` and `bad-<kind>-<reason>.md` fails. Known gaps: a plan with no Details links passes; a heading with trailing spaces fails; the reply check, and the follow-up's reply-draft check, miss "PR 145".
 
 ## Probes (`tests/probes/`, run by `scripts/test-probes.sh`)
 
