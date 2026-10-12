@@ -1,6 +1,6 @@
 # PR #<n> follow-up — <k> comments to handle
 
-<Base: main | stacked on #<n> (<open | merged | closed>, head <sha7>)> · <Branch: N behind <base>; trial merge conflicts: <files | none>> · <Ticket: unchanged | amended <time>: <what changed>> · <New rules since the branch on <base>: <commit — rule> | none; when stacked, also on main: <commit — rule> | none>
+<Base: main | stacked on #<n> (<open | merged | closed>, head <sha7>)> · <Branch: N behind <base>; trial merge conflicts: <files | none>> · <Ticket: unchanged since ticket-<date>.md | changed since ticket-<date>.md: <what changed> | no saved copy to compare> · <New rules since the branch on <base>: <commit — rule> | none; when stacked, also on main: <commit — rule> | none>
 
 ## Comments at a glance
 

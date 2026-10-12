@@ -386,3 +386,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** a longer report per comment; a one-line nit still needs a dry run to pass the check.
 - **Where:** `plugins/rahal/shared/templates/followup-plan.md`, `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `scripts/check-output.sh`, `tests/fixtures/good-followup.md`
 - **Date:** 2026-10-12
+
+### PD-66 — The follow-up compares the ticket's text, not its update time
+- **Decision:** phase one compares the ticket's description word for word with the latest `ticket-<date>.md` in the ticket folder and reports what changed; without that file it says the text could not be compared. It never judges by `updatedAt`.
+- **Why:** `updatedAt` moves whenever anyone comments on the ticket, our own runs included, so "changed after the PR opened" was true for every ticket.
+- **Cost if wrong:** a ticket folder made before start-work saved the ticket gets no ticket check until a copy exists.
+- **Where:** `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `plugins/rahal/shared/templates/followup-plan.md`
+- **Date:** 2026-10-12

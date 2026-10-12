@@ -28,7 +28,7 @@ MSYS_NO_PATHCONV=1 git -C <repo> diff "$MAIN_BASE" origin/<default> -- AGENTS.md
 - The standard lives on `<default>`, so a rule added there since the stack branched off binds this PR too, even though the blocker's branch has not merged it yet. The second diff shows those rules.
 - The blocker's PR is merged but this PR's base is still its branch: GitHub retargets a PR only when the merged branch is deleted. Item 0 becomes "retarget to `<default>`, then merge `origin/<default>`", and §4 uses `<default>` in place of `<base>`.
 
-- The ticket from the PR title: `get_issue` and `list_comments`. Say whether it changed after the PR opened, and what changed.
+- The ticket from the PR title: `get_issue` and `list_comments`. Compare its description, word for word, with the latest `ticket-<date>.md` in the ticket folder, which start-work saves, and say what changed. Never judge by `updatedAt`: it moves whenever anyone comments, us included. With no saved copy, say the text could not be compared.
 - A rule added to `AGENTS.md` or the template since `$BASE` binds this PR. For example, a rule to measure a dependency's behaviour means the PR body needs that measurement.
 
 ## 3. Collect the comments

@@ -31,3 +31,5 @@ a line saying `main` was merged in|a stacked PR merges its base branch; name the
 **What they ask:**|the follow-up block says Before this PR, Now and What they raised (PD-65)
 **How I verified it:**|the follow-up block says How checked, as the review report does (PD-65)
 **Fix plan:**|the follow-up block says Fix we should apply, next to a Dry run (PD-65)
+Say whether it changed after the PR opened|compare the ticket text with the saved ticket-<date>.md; updatedAt moves on every comment
+amended <time>: <what changed>|compare the ticket text with the saved ticket-<date>.md; updatedAt moves on every comment
