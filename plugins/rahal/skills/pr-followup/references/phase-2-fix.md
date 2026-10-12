@@ -22,7 +22,7 @@ Commits follow `choices.commit_when` (for `standing_yes_per_ticket`, ask once fo
 
 Only if item 0 was accepted.
 
-When item 0 is a retarget (the blocker has merged), `<base>` in this step is `<default>`; the PR itself is retargeted in step 8, before the push.
+When item 0 is a retarget (the blocker has merged), `<base>` from this step on, the review range included, is `<default>`; the PR itself is retargeted in step 8, before the push.
 
 ```bash
 git -C <repo> merge --no-ff --no-commit origin/<base>
