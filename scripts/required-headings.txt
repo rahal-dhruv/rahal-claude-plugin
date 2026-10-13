@@ -164,3 +164,12 @@ docs/commands.md|## /rahal:plan-tickets (no arguments)
 docs/decisions.md|### PD-70 — A fifth command, /rahal:plan-tickets, that only reads
 docs/decisions.md|### PD-79 — Nothing is saved unless you choose; the output and the gh line are tested
 docs/index.md|| [commands.md](commands.md) | The five commands: arguments, phases and stops, outputs, resume rules, known gaps. |
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|If any of the four calls fails or stops before its last page, stop and say which kind could not be read: without the full table, a missing ticket can't be told apart from a closed one.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|A non-ORB blocker that was not read (past the 25th, or a failed read) has an unknown status: count it as blocking, so the tickets it blocks never earn `can start now`.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|| On Hold | `unstarted` | open and parked: marked `(On Hold)`; placed after the other tickets ready at the same time (step 7, key 1) |
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|An On Hold ticket never earns `can start now` or `(start now)` either: it is parked.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|  - **All lanes:** set `**Lanes saved:** all`.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|- those PRs form one chain: each PR except the bottom one is based on another's `headRefName`.
+plugins/rahal/skills/plan-tickets/SKILL.md|- **Check 2, GitHub:** items 1 and 2 only. Skip item 3 (`gh repo view`): a failing `gh pr list` in step 6 shows the same problem. Item 4 is for PR commands. Print it as `✓ GitHub      gh signed in as <account>`.
+plugins/rahal/skills/plan-tickets/SKILL.md|- **Check 3, Linear:** load `<linear.tools>list_issues` and `<linear.tools>get_issue`; item 2 still finds renamed tools, but don't offer to record a new prefix: say that `/rahal:init` records it. In place of items 4 and 5, step 1 of `queue-steps.md` is the proof, and its line reads `✓ Linear      read your <n> ORB tickets`. The team is ORB, from the profile.
+plugins/rahal/shared/templates/ticket-queue.md|<A section with nothing to list says "None.">

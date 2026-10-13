@@ -12,7 +12,7 @@ ORB's statuses and how this command reads them. A status not listed here is read
 | --- | --- | --- |
 | Triage, Backlog | `triage`, `backlog` | open; ordered like Todo; marked `(Triage)` or `(Backlog)` |
 | Todo | `unstarted` | open |
-| On Hold | `unstarted` | open and parked: marked `(On Hold)`, ordered after every other ticket |
+| On Hold | `unstarted` | open and parked: marked `(On Hold)`; placed after the other tickets ready at the same time (step 7, key 1) |
 | In Progress | `started` | open, blocking; "in progress" |
 | Code Review | `started` | open, blocking; "in review" |
 | Rework | `started` | open, blocking; "in rework" (changes requested) |
@@ -47,6 +47,8 @@ Add `(no project)` as an entry when some of your open tickets have no project. T
 
 Four calls, one per open kind: `list_issues(team: "ORB", state: "<kind>", limit: 250, fields: [id, status, statusType, assignee, assigneeId, project])` for `triage`, `backlog`, `unstarted` and `started`, each following `cursor`. Together they hold every open ORB ticket's status, owner and project. Titles come from step 1 and from relation entries.
 
+If any of the four calls fails or stops before its last page, stop and say which kind could not be read: without the full table, a missing ticket can't be told apart from a closed one.
+
 ## 4. Your tickets' links
 
 For each of your open tickets in the chosen project: `get_issue(id: "ORB-<n>", fields: [id, relations])`. `relations` holds `blockedBy`, `blocks` and `relatedTo`, each entry `{id, title}`. `relatedTo` serves only the related-ticket caveat in step 8.
@@ -56,6 +58,8 @@ A failed read: mark the ticket "links unknown", order it by its other keys, and 
 ## 5. One step out
 
 For each blocking ticket in step 4's `blockedBy` lists that is not yours (someone else's, unassigned, or in another team), in ticket-number order, at most 25: `get_issue(id, fields: [id, relations])`. A non-ORB id is not in the table, so ask for `fields: [id, title, status, statusType, assignee, assigneeId, relations]`. Name in Data gaps every blocker past the 25th ("ORB-x: links not read") and every failed read.
+
+A non-ORB blocker that was not read (past the 25th, or a failed read) has an unknown status: count it as blocking, so the tickets it blocks never earn `can start now`.
 
 ## 6. Open PRs
 
@@ -86,6 +90,8 @@ GH_CONFIG_DIR="<github.gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo na
 **Can start now:** every direct `blockedBy` ticket of T is closed or in QA. Only this earns the reason `can start now` and a lane's `(start now)`. Example: ORB-207, blocked by your in-progress ORB-206, waits on nobody else but can't start now.
 
 A ticket marked "links unknown" never earns `can start now` or `(start now)`: its blockers were not read.
+
+An On Hold ticket never earns `can start now` or `(start now)` either: it is parked.
 
 **Place the tickets one at a time:**
 1. The candidates are the Pick order tickets whose predecessors are all placed.
@@ -128,7 +134,7 @@ A ticket's repo comes from the tag after the title's emoji: `[Backend]` → `rah
 
 Check each Pick order ticket that has a blocking `blockedBy` ticket, in each repo its tag names. It **can stack** in a repo when both hold:
 - every one of its blocking `blockedBy` tickets has exactly one open PR in that repo;
-- those PRs form one chain: each PR's `baseRefName` is another's `headRefName`, and the bottom one is based on `main`.
+- those PRs form one chain: each PR except the bottom one is based on another's `headRefName`.
 
 The top PR, the one no other PR builds on, is the base. This is start-work's own rule, so both commands agree.
 
@@ -180,6 +186,7 @@ Save this ticket queue? all lanes · lane A only (recommended: it holds your fir
 - **Don't save:** write nothing, and end.
 - **A headless run** (`claude -p`): print the queue and the question, then stop.
 - **On a save:**
+  - **All lanes:** set `**Lanes saved:** all`.
   - **Path:** write `<workspace_root>/<work_folder>/ticket-queue/<project slug>-<YYYY-MM-DD>.md`, creating the folder if needed. The slug is the project name in lower case, with each run of other characters turned into one `-` and none at either end: `Car Rentals` → `car-rentals`, and `(no project)` → `no-project`.
   - **If the file exists:** ask "replace it, or keep both?". Keeping both writes `-2.md`, `-3.md` and so on, the first free name.
   - **Chosen lanes:** each section lists only those lanes' tickets, and `**Lanes saved:**` names them. Pick order keeps the numbers shown in chat. A section left with nothing says "None.".

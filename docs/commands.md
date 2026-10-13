@@ -55,9 +55,9 @@ Two phases; "Which phase" reads the latest `followup-*.md` in the ticket folder.
 8. the queue in chat, then the save question (step 11).
 
 - **Read-only:** Linear `list_issues` and `get_issue`; `gh --version`, `gh auth status`, `gh pr list`. Descriptions are never read: one is about 66,000 characters and overflows the call.
-- **Statuses:** QA Staging and QA UAT count as merged (they don't block). On Hold is parked and ordered last. Duplicate is closed.
+- **Statuses:** QA Staging and QA UAT count as merged (they don't block). On Hold is parked: placed after the other tickets ready at the same time, and never marked start now. Duplicate is closed.
 - **Unread data:** a ticket whose links could not be read is marked "links unknown" and is never called startable; a repo whose PRs could not be read shows "PRs not read", never "no open PR".
-- **Order:** predecessors come first, through any chain of blocking links. Then On Hold last, waits on someone else, unblocks the most, priority, ticket number. Tickets that can't be placed (loops) go under "Can't order".
+- **Order:** predecessors come first, through any chain of blocking links. Then, among tickets ready at the same time: On Hold after the rest, tickets that don't wait on someone else before those that do, then unblocks the most, priority, ticket number. Tickets that can't be placed (loops) go under "Can't order".
 - **Stacking:** start-work's own rule (each blocker's single open PR in the ticket's repo, all in one chain); each candidate says to run start-work and answer **Stack** at its "Wait or stack?" question. Never the default.
 - **Output:** shown in chat. It is saved only on request, whole or by lanes, to `<work_folder>/ticket-queue/<project>-<date>.md` (`check-output.sh queue`). An existing file asks replace or keep both.
 - **Known limits:**

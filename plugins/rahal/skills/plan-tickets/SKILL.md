@@ -25,8 +25,8 @@ Read:
 
 Run step 0 checks 1–3 from `step-0-checks.md` with these differences, then print checks 4 and 5 as not needed:
 - **Check 1, Config:** as written.
-- **Check 2, GitHub:** items 1 and 2 only. Skip item 3 (`gh repo view`): a failing `gh pr list` in step 6 shows the same problem. Item 4 is for PR commands.
-- **Check 3, Linear:** load `<linear.tools>list_issues` and `<linear.tools>get_issue`; item 2 still finds renamed tools. In place of items 4 and 5, step 1 of `queue-steps.md` is the proof, and its line reads `✓ Linear      read your <n> ORB tickets`. The team is ORB, from the profile.
+- **Check 2, GitHub:** items 1 and 2 only. Skip item 3 (`gh repo view`): a failing `gh pr list` in step 6 shows the same problem. Item 4 is for PR commands. Print it as `✓ GitHub      gh signed in as <account>`.
+- **Check 3, Linear:** load `<linear.tools>list_issues` and `<linear.tools>get_issue`; item 2 still finds renamed tools, but don't offer to record a new prefix: say that `/rahal:init` records it. In place of items 4 and 5, step 1 of `queue-steps.md` is the proof, and its line reads `✓ Linear      read your <n> ORB tickets`. The team is ORB, from the profile.
 - **Checks 4 and 5:** print `– Git         not needed: this command reads no repo` and `– Toolchain   not needed: this command runs no code`.
 
 When a check fails, follow step 0's "When a check fails". Linear failing stops the run. If GitHub fails and the user chooses "continue", no PRs are read; `queue-steps.md` step 6 says what the queue shows then.

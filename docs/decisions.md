@@ -347,21 +347,21 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 
 ### PD-70 — A fifth command, /rahal:plan-tickets, that only reads
 - **Decision:** `/rahal:plan-tickets` suggests a pick order, lanes, stack candidates and cross-owner blockers for your open tickets in one project. Its only tools are Linear `list_issues` and `get_issue` and `gh --version`, `gh auth status` and `gh pr list`, pinned as one line in its `SKILL.md`. Extends PD-05's command list.
-- **Why:** you asked for a way to plan what to pick, what can run in parallel and who to work with, without anything changing in Linear or GitHub.
+- **Why:** the maintainer asked for a way to plan what to pick, what can run in parallel and who to work with, without anything changing in Linear or GitHub.
 - **Cost if wrong:** a fifth name to learn; the name was chosen over `/rahal:queue` and `/rahal:next`.
 - **Where:** `plugins/rahal/skills/plan-tickets/SKILL.md`, `scripts/required-headings.txt`
 - **Date:** 2026-10-12
 
 ### PD-71 — No argument; it asks from the projects that hold your open tickets
 - **Decision:** the command takes no argument. Every run lists only the projects holding your open tickets, each with its count, and waits for a pick.
-- **Why:** you chose to be asked every time; projects with none of your tickets would give an empty queue.
+- **Why:** the maintainer chose to be asked every time; projects with none of your tickets would give an empty queue.
 - **Cost if wrong:** one round trip per run.
 - **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
 - **Date:** 2026-10-12
 
 ### PD-72 — Its step 0 variations live in its own SKILL.md
 - **Decision:** plan-tickets runs checks 1–3 with differences written in its own `SKILL.md`: no `gh repo view`, Linear proven by listing your tickets, checks 4–5 printed as not needed. `shared/step-0-checks.md` is unchanged.
-- **Why:** step 0 is written around one ticket and one repo; editing it for a command with neither would complicate it for the other four, and track A was editing it at the same time.
+- **Why:** step 0 is written around one ticket and one repo; editing it for a command with neither would complicate it for the other four, and another branch was editing it at the same time.
 - **Cost if wrong:** a later change to step 0 must be checked against this variant by hand.
 - **Where:** `plugins/rahal/skills/plan-tickets/SKILL.md`
 - **Date:** 2026-10-12
@@ -374,14 +374,14 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Date:** 2026-10-12
 
 ### PD-74 — How the pick order is built
-- **Decision:** predecessors come first, through any chain of blocking links, including through other people's tickets. Ties go by: On Hold last, then waits on someone else, unblocks the most, priority, ticket number. Tickets that can't be placed go under "Can't order" with the reason.
-- **Why:** tickets carry no estimates or due dates, and many have no priority, so links and how much each ticket unblocks are the only real signals. You chose "unblocks" ahead of priority.
+- **Decision:** predecessors come first, through any chain of blocking links, including through other people's tickets. Among tickets ready at the same time, ties go by: On Hold after the rest, then tickets that don't wait on someone else before those that do, unblocks the most, priority, ticket number. Tickets that can't be placed go under "Can't order" with the reason.
+- **Why:** tickets carry no estimates or due dates, and many have no priority, so links and how much each ticket unblocks are the only real signals. The maintainer chose "unblocks" ahead of priority.
 - **Cost if wrong:** a high-priority ticket nobody waits on can sit below one that unblocks others.
 - **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
 - **Date:** 2026-10-12
 
 ### PD-75 — ORB's status meanings
-- **Decision:** QA Staging and QA UAT count as merged and do not block; Code Review and Rework block; On Hold is parked and ordered last; Duplicate is closed. A status not in the table is read by its kind and named in Data gaps.
+- **Decision:** QA Staging and QA UAT count as merged and do not block; Code Review and Rework block; On Hold is parked: placed after the other tickets ready at the same time, and never marked start now; Duplicate is closed. A status not in the table is read by its kind and named in Data gaps.
 - **Why:** Linear's status kinds put QA, Rework and Code Review all under "started" and On Hold under "unstarted", which would sink tickets behind merged work and rank parked tickets first.
 - **Cost if wrong:** a ticket that fails QA and goes back is treated as unblocking its dependents until its status changes.
 - **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
@@ -403,7 +403,7 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 
 ### PD-78 — Other people's tickets: matched by id, suggestions in text
 - **Decision:** owners are matched by `assigneeId`. Each blocker owned by someone else gets one suggestion, most specific first: can't help yet, help review its PR, ask about timing and pair, pick it up if unowned, or take it on together. Nothing is reassigned, commented or messaged.
-- **Why:** `assignee` is a name for some people and an email for others; you asked that a teammate's blocker suggest working on it together.
+- **Why:** `assignee` is a name for some people and an email for others; the maintainer asked that a teammate's blocker suggest working on it together.
 - **Cost if wrong:** a suggestion may not fit the team's situation; it is text only.
 - **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
 - **Date:** 2026-10-12

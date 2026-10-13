@@ -51,4 +51,4 @@ Which files each ticket touches is unknown until `/rahal:start-work` reads the c
 
 - <unknown status, missing repo tag, failed read, unread blocker, PR list cut off at 100, Code Review with no open PR, QA with an open PR, PRs not read>
 
-A section with nothing to list says "None.".
+<A section with nothing to list says "None.">
