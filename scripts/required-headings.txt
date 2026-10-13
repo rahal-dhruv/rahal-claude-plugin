@@ -163,3 +163,4 @@ README.md|## /rahal:plan-tickets
 docs/commands.md|## /rahal:plan-tickets (no arguments)
 docs/decisions.md|### PD-70 — A fifth command, /rahal:plan-tickets, that only reads
 docs/decisions.md|### PD-79 — Nothing is saved unless you choose; the output and the gh line are tested
+docs/index.md|| [commands.md](commands.md) | The five commands: arguments, phases and stops, outputs, resume rules, known gaps. |

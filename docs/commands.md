@@ -51,7 +51,8 @@ Two phases; "Which phase" reads the latest `followup-*.md` in the ticket folder.
 4. each of your tickets' links (`get_issue` with `fields: [id, relations]`);
 5. up to 25 blockers owned by others, one step out;
 6. open PRs in backend and dashboard;
-7. the order, lanes, stack candidates and other people's tickets.
+7. the order, lanes, stack candidates and other people's tickets (steps 7–10);
+8. the queue in chat, then the save question (step 11).
 
 - **Read-only:** Linear `list_issues` and `get_issue`; `gh --version`, `gh auth status`, `gh pr list`. Descriptions are never read: one is about 66,000 characters and overflows the call.
 - **Statuses:** QA Staging and QA UAT count as merged (they don't block). On Hold is parked and ordered last. Duplicate is closed.

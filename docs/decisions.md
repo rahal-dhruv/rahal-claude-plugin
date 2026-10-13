@@ -348,7 +348,7 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 ### PD-70 — A fifth command, /rahal:plan-tickets, that only reads
 - **Decision:** `/rahal:plan-tickets` suggests a pick order, lanes, stack candidates and cross-owner blockers for your open tickets in one project. Its only tools are Linear `list_issues` and `get_issue` and `gh --version`, `gh auth status` and `gh pr list`, pinned as one line in its `SKILL.md`. Extends PD-05's command list.
 - **Why:** you asked for a way to plan what to pick, what can run in parallel and who to work with, without anything changing in Linear or GitHub.
-- **Cost if wrong:** a sixth name to learn; the name was chosen over `/rahal:queue` and `/rahal:next`.
+- **Cost if wrong:** a fifth name to learn; the name was chosen over `/rahal:queue` and `/rahal:next`.
 - **Where:** `plugins/rahal/skills/plan-tickets/SKILL.md`, `scripts/required-headings.txt`
 - **Date:** 2026-10-12
 

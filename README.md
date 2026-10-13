@@ -147,7 +147,7 @@ Pick order
 Lanes             A: ORB-901 (start now) → ORB-902 · B: ORB-904 (start now) · C: ORB-903
 Stack candidates  ORB-903 can stack on #12 (feat/orb-905-visa-product-reads). Stack if you can't wait:
                   run /rahal:start-work ORB-903 and answer Stack when it asks "Wait or stack?".
-Blocking you      ORB-905 — Sam · Code Review · PR #12: offer to help review it.
+Blocking you      ORB-905 — Sam · Code Review · PR #12 · holds up your ORB-903: offer to help review it, or stack on it (see Stack candidates).
 Save this ticket queue? all lanes · lane A only (recommended) · lanes … · don't save
 ```
 
