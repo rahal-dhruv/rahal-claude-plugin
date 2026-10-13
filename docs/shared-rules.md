@@ -60,3 +60,4 @@ Known gap: the front matter is not strict YAML (`remote_prefix: git@<alias>:` is
 | `review-report.md` | every review | `check-output.sh review` |
 | `followup-plan.md` | pr-followup phase one | `check-output.sh followup` |
 | `reply.md` | pr-followup phase two | `check-output.sh reply` |
+| `ticket-queue.md` | plan-tickets, only when you choose to save | `check-output.sh queue` |

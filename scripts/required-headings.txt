@@ -125,3 +125,14 @@ reflector/README.md|You close your own pending approvals; to raise one with the 
 .claude/agents/reflector.md|Read the file first and do not duplicate an open entry. The person who opted in closes entries.
 .claude/agents/reflector.md|## 11. Skeletons for missing files
 docs/testing-and-release.md|  Run these from the workspace folder. `claude plugin list` then shows "Read from: <repo>/plugins/rahal", but sessions load a copy cached at install time, not the folder. An edit reaches a session only after `version` in `plugins/rahal/.claude-plugin/plugin.json` is bumped, `claude plugin update rahal@rahal-claude-plugin --scope local` is run from the workspace folder, and a new session is opened. It is enabled in that workspace only. To try unreleased edits, use `--plugin-dir`.
+plugins/rahal/shared/templates/ticket-queue.md|A suggestion only: nothing in Linear or GitHub was changed.
+plugins/rahal/shared/templates/ticket-queue.md|## At a glance
+plugins/rahal/shared/templates/ticket-queue.md|## What the order rests on
+plugins/rahal/shared/templates/ticket-queue.md|## Finish first
+plugins/rahal/shared/templates/ticket-queue.md|## Pick order
+plugins/rahal/shared/templates/ticket-queue.md|## Lanes
+plugins/rahal/shared/templates/ticket-queue.md|## Stack candidates
+plugins/rahal/shared/templates/ticket-queue.md|## Blocking you
+plugins/rahal/shared/templates/ticket-queue.md|## Waiting on you
+plugins/rahal/shared/templates/ticket-queue.md|## Can't order
+plugins/rahal/shared/templates/ticket-queue.md|## Data gaps

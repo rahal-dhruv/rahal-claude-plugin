@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Checks a file the rahal plugin produced against the headings its template promises.
-# Usage: scripts/check-output.sh <brief|plan|ledger|review|followup|reply|config> <file>
+# Usage: scripts/check-output.sh <brief|plan|ledger|review|followup|reply|config|queue> <file>
 set -u
 kind="${1:-}"; file="${2:-}"
 if [ -z "$kind" ] || [ ! -f "$file" ]; then
-  echo "usage: $0 <brief|plan|ledger|review|followup|reply|config> <file>"; exit 2
+  echo "usage: $0 <brief|plan|ledger|review|followup|reply|config|queue> <file>"; exit 2
 fi
 FAILS=0
 fail() { printf 'FAIL: %s\n' "$*"; FAILS=$((FAILS + 1)); }
@@ -42,6 +42,12 @@ case "$kind" in
     for k in profile workspace_root work_folder account remote_prefix commit_email tools \
              commit_when commit_size attribution push open_pr pr_state post_comments re_request_review review_model; do key "$k"; done
     for k in gh_config_dir bash_node_path e2e_node_options docker_ports dev_database_url_port docs_folder reflector superpowers; do keyline "$k"; done ;;
+  queue)
+    for h in '**Lanes saved:**' '## At a glance' '## What the order rests on' '## Finish first' '## Pick order' '## Lanes' \
+             '## Stack candidates' '## Blocking you' '## Waiting on you' "## Can't order" '## Data gaps'; do need "$h"; done
+    # every numbered entry under "## Pick order" names a ticket and gives its reason after " — "
+    bad="$(awk '/^## / { s = ($0 == "## Pick order") } s && /^[0-9]+\. / && !/^[0-9]+\. ORB-[0-9]+ .+ — .+/' "$file")"
+    [ -z "$bad" ] || fail "queue pick-order entry lacks ORB-<n> or a reason: $bad" ;;
   *)
     echo "unknown kind: $kind"; exit 2 ;;
 esac

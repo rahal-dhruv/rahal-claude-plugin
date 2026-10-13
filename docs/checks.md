@@ -30,8 +30,9 @@ Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 acc
 | `followup` | `## Comments at a glance`, `## Detailed fixes`, `Which do you accept?`, and ` · comment ` in fix headings |
 | `reply` | no `#<n>` or `/pull/<n>`; a commit SHA or the word `Evidence` |
 | `config` | every key present; required values real (not empty, `""`, `''`, a comment, or an unfilled `<placeholder>`) |
+| `queue` | `**Lanes saved:**` and `## At a glance`, `## What the order rests on`, `## Finish first`, `## Pick order`, `## Lanes`, `## Stack candidates`, `## Blocking you`, `## Waiting on you`, `## Can't order`, `## Data gaps`; every numbered `## Pick order` line is `<n>. ORB-<id> <title> — <reason>` |
 
-`scripts/test-check-output.sh` proves it: each `tests/fixtures/good-<kind>.md` passes and each `bad-<kind>.md` and `bad-<kind>-<reason>.md` fails. Known gaps: a plan with no Details links passes; a heading with trailing spaces fails; the reply check misses "PR 145".
+`scripts/test-check-output.sh` proves it: each `tests/fixtures/good-<kind>.md` passes and each `bad-<kind>.md` and `bad-<kind>-<reason>.md` fails. Known gaps: a plan with no Details links passes; a heading with trailing spaces fails; the reply check misses "PR 145"; a queue entry whose title itself contains " — " passes without a reason.
 
 ## Probes (`tests/probes/`, run by `scripts/test-probes.sh`)
 
