@@ -106,7 +106,7 @@ reflector/README.md|- **Never writes personal data** (paths, accounts, emails, p
 .claude/agents/reflector.md|Never write an absolute local path, an account name, an email address or a local port into any file. Use placeholders such as `<workspace>` or `<account>`. `scripts/check.sh` fails on local paths (including the Git Bash `/c/…` form), email addresses and account names in committed files, but cannot recognise every port: leave ports out entirely.
 docs/testing-and-release.md|| wrong `gh_config_dir` | step 0 names the account conflict and asks fix now / continue without that step / stop, before any review (whether it should stop outright is an open approval) |
 docs/checks.md|| `review` | the six exact headings `## 1. What the ticket is trying to solve`, `## 2. What the PR does`, `## 3. Issues at a glance`, `## 4. Issues in detail`, `## 5. Already raised by other reviewers`, `## 6. Considered and set aside`, and a `Verdict:` line |
-docs/checks.md|Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Four extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections` and `fresh-clone` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
+docs/checks.md|Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Five extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections` and `fresh-clone` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
 docs/checks.md|A change to plugin Markdown starts in `scripts/`: pin the new exact line in `required-headings.txt`, or the removed wording in `forbidden-text.txt`, or add a fixture; run `check.sh` and watch it fail; then edit. A pinned line inside a list or code block keeps its indentation. A new bash block gets a probe. Example: the one-pass review began as pinned lines and forbidden strings that failed until the reviewer agent, `review-model.md`, the template header and step 0 said the same thing.
 docs/commands.md|Four skills in `plugins/rahal/skills/`, invoked as `/rahal:<name>`. Each `SKILL.md` sets `disable-model-invocation: true`, so only a person can start one; Claude cannot, which is why every dry run needs someone typing. `start-work`, `review-pr` and `pr-followup` read `shared/step-0-checks.md` first and find the ticket folder through it; `init` runs the step 0 checks as its last step and has no ticket folder.
 docs/commands.md|- **Known gaps:** reviews and conversation comments are read without `--paginate` (only inline comments use it), so past 30 of either the rest are silently skipped.
@@ -136,3 +136,24 @@ plugins/rahal/shared/templates/ticket-queue.md|## Blocking you
 plugins/rahal/shared/templates/ticket-queue.md|## Waiting on you
 plugins/rahal/shared/templates/ticket-queue.md|## Can't order
 plugins/rahal/shared/templates/ticket-queue.md|## Data gaps
+plugins/rahal/skills/plan-tickets/SKILL.md|Plugin root: `${CLAUDE_PLUGIN_ROOT}`. If that appears unexpanded, the plugin root is two folders above this skill's base directory.
+plugins/rahal/skills/plan-tickets/SKILL.md|This command only reads. Its only tools are Linear's `list_issues` and `get_issue`, and `gh --version`, `gh auth status` and `gh pr list`; its only write is the file you choose to save.
+plugins/rahal/skills/plan-tickets/SKILL.md|## Step 0 for this command
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|Every Linear call passes `fields`: a `get_issue` without them returned about 69,000 characters. Never ask for `description`: one ticket's is about 66,000 characters and overflows the call, losing its links with it.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## Statuses
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|- **Blocking:** open, and not QA Staging or QA UAT.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 1. Your tickets
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 2. Ask which project
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 3. The open-ticket table
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 4. Your tickets' links
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 5. One step out
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 6. Open PRs
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|GH_CONFIG_DIR="<github.gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo name> --state open --limit 100 --json number,title,headRefName,baseRefName,isDraft,reviewDecision,mergeStateStatus,url
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|- Drop the `GH_CONFIG_DIR="…"` prefix when `github.gh_config_dir` is empty.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 7. Order the tickets
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 8. Lanes
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 9. Stack candidates
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|  Run `/rahal:start-work ORB-217` and answer **Stack** when it asks *Wait or stack?*.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 10. Other people's tickets
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|These are suggestions in text only. Never reassign, comment on or change any ticket or PR, and never message anyone.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 11. Show the queue and ask to save

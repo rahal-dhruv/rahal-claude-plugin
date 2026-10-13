@@ -53,3 +53,6 @@ docs/decisions.md
 .gitattributes
 tests/probes/fresh-clone.sh
 plugins/rahal/shared/templates/ticket-queue.md
+plugins/rahal/skills/plan-tickets/SKILL.md
+plugins/rahal/skills/plan-tickets/references/queue-steps.md
+tests/probes/pr-list.sh
