@@ -1,6 +1,6 @@
 # Commands
 
-Four skills in `plugins/rahal/skills/`, invoked as `/rahal:<name>`. Each `SKILL.md` sets `disable-model-invocation: true`, so only a person can start one; Claude cannot, which is why every dry run needs someone typing. `start-work`, `review-pr` and `pr-followup` read `shared/step-0-checks.md` first and find the ticket folder through it; `init` runs the step 0 checks as its last step and has no ticket folder.
+Five skills in `plugins/rahal/skills/`, invoked as `/rahal:<name>`. Each `SKILL.md` sets `disable-model-invocation: true`, so only a person can start one; Claude cannot, which is why every dry run needs someone typing. `start-work`, `review-pr` and `pr-followup` read `shared/step-0-checks.md` first and find the ticket folder through it; `init` runs the step 0 checks as its last step and has no ticket folder. `plan-tickets` runs checks 1–3 its own way (`## Step 0 for this command` in its `SKILL.md`) and has no ticket folder.
 
 ## /rahal:init `[workspace folder]`
 
@@ -41,6 +41,33 @@ Two phases; "Which phase" reads the latest `followup-*.md` in the ticket folder.
 - **Resume:** no `Accepted:` → the question is open; `Accepted:` without `Handled:` → phase two resumes at the first step the ledger does not record.
 - **Gotchas:** replies are posted only after the push that contains their commit; replacing the PR description always asks.
 - **Known gaps:** reviews and conversation comments are read without `--paginate` (only inline comments use it), so past 30 of either the rest are silently skipped.
+
+## /rahal:plan-tickets (no arguments)
+
+`references/queue-steps.md`:
+1. your tickets (the Linear proof);
+2. which project, listing only those holding your open tickets;
+3. the open-ticket table (four `list_issues` calls, one per open status kind);
+4. each of your tickets' links (`get_issue` with `fields: [id, relations]`);
+5. up to 25 blockers owned by others, one step out;
+6. open PRs in backend and dashboard;
+7. the order, lanes, stack candidates and other people's tickets.
+
+- **Read-only:** Linear `list_issues` and `get_issue`; `gh --version`, `gh auth status`, `gh pr list`. Descriptions are never read: one is about 66,000 characters and overflows the call.
+- **Statuses:** QA Staging and QA UAT count as merged (they don't block). On Hold is parked and ordered last. Duplicate is closed.
+- **Unread data:** a ticket whose links could not be read is marked "links unknown" and is never called startable; a repo whose PRs could not be read shows "PRs not read", never "no open PR".
+- **Order:** predecessors come first, through any chain of blocking links. Then On Hold last, waits on someone else, unblocks the most, priority, ticket number. Tickets that can't be placed (loops) go under "Can't order".
+- **Stacking:** start-work's own rule (each blocker's single open PR in the ticket's repo, all in one chain); each candidate says to run start-work and answer **Stack** at its "Wait or stack?" question. Never the default.
+- **Output:** shown in chat. It is saved only on request, whole or by lanes, to `<work_folder>/ticket-queue/<project>-<date>.md` (`check-output.sh queue`). An existing file asks replace or keep both.
+- **Known limits:**
+  - which files a ticket touches is unknown until start-work;
+  - the order is only as good as Linear's links;
+  - a PR without `orb-<n>` in its title or branch isn't found;
+  - the docs repo's PRs aren't read;
+  - it plans only your own queue, in ORB only;
+  - a ticket's repo comes from its title tag;
+  - chains through three or more other people's tickets aren't seen;
+  - the status meanings are ORB's, written in `queue-steps.md`.
 
 ## Never on their own
 

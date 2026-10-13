@@ -344,3 +344,73 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** one contributor's lessons and escalations no longer reach others; an escalation that needs the maintainer travels in a pull request instead.
 - **Where:** `.gitignore`, `.claude/agents/reflector.md`, `reflector/README.md`, `tests/probes/check-sections.sh`
 - **Date:** 2026-10-09
+
+### PD-70 — A fifth command, /rahal:plan-tickets, that only reads
+- **Decision:** `/rahal:plan-tickets` suggests a pick order, lanes, stack candidates and cross-owner blockers for your open tickets in one project. Its only tools are Linear `list_issues` and `get_issue` and `gh --version`, `gh auth status` and `gh pr list`, pinned as one line in its `SKILL.md`. Extends PD-05's command list.
+- **Why:** you asked for a way to plan what to pick, what can run in parallel and who to work with, without anything changing in Linear or GitHub.
+- **Cost if wrong:** a sixth name to learn; the name was chosen over `/rahal:queue` and `/rahal:next`.
+- **Where:** `plugins/rahal/skills/plan-tickets/SKILL.md`, `scripts/required-headings.txt`
+- **Date:** 2026-10-12
+
+### PD-71 — No argument; it asks from the projects that hold your open tickets
+- **Decision:** the command takes no argument. Every run lists only the projects holding your open tickets, each with its count, and waits for a pick.
+- **Why:** you chose to be asked every time; projects with none of your tickets would give an empty queue.
+- **Cost if wrong:** one round trip per run.
+- **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
+- **Date:** 2026-10-12
+
+### PD-72 — Its step 0 variations live in its own SKILL.md
+- **Decision:** plan-tickets runs checks 1–3 with differences written in its own `SKILL.md`: no `gh repo view`, Linear proven by listing your tickets, checks 4–5 printed as not needed. `shared/step-0-checks.md` is unchanged.
+- **Why:** step 0 is written around one ticket and one repo; editing it for a command with neither would complicate it for the other four, and track A was editing it at the same time.
+- **Cost if wrong:** a later change to step 0 must be checked against this variant by hand.
+- **Where:** `plugins/rahal/skills/plan-tickets/SKILL.md`
+- **Date:** 2026-10-12
+
+### PD-73 — Open tickets only, links only, never descriptions
+- **Decision:** the status-and-owner table comes from four `list_issues` calls, one per open status kind. Links come from `get_issue` with `fields: [id, relations]` for your open tickets and up to 25 of their blockers owned by others. No call reads a description.
+- **Why:** all 238 ORB tickets came to about 51 KB, too large to read inline, against about 5 KB for the 45 open ones. One description was about 66,000 characters, and asking for it overflowed the call and lost the ticket's links.
+- **Cost if wrong:** the "Pick order N of M" lines in descriptions are not used; in the tickets checked they repeated existing links.
+- **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
+- **Date:** 2026-10-12
+
+### PD-74 — How the pick order is built
+- **Decision:** predecessors come first, through any chain of blocking links, including through other people's tickets. Ties go by: On Hold last, then waits on someone else, unblocks the most, priority, ticket number. Tickets that can't be placed go under "Can't order" with the reason.
+- **Why:** tickets carry no estimates or due dates, and many have no priority, so links and how much each ticket unblocks are the only real signals. You chose "unblocks" ahead of priority.
+- **Cost if wrong:** a high-priority ticket nobody waits on can sit below one that unblocks others.
+- **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
+- **Date:** 2026-10-12
+
+### PD-75 — ORB's status meanings
+- **Decision:** QA Staging and QA UAT count as merged and do not block; Code Review and Rework block; On Hold is parked and ordered last; Duplicate is closed. A status not in the table is read by its kind and named in Data gaps.
+- **Why:** Linear's status kinds put QA, Rework and Code Review all under "started" and On Hold under "unstarted", which would sink tickets behind merged work and rank parked tickets first.
+- **Cost if wrong:** a ticket that fails QA and goes back is treated as unblocking its dependents until its status changes.
+- **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
+- **Date:** 2026-10-12
+
+### PD-76 — Stacking uses start-work's rule and hands off to it
+- **Decision:** a ticket can stack when each blocker has exactly one open PR in the ticket's repo and those PRs form one chain; the candidate tells you to run `/rahal:start-work` and answer **Stack** at its "Wait or stack?" question. It is never the default, and every entry gives the waiting recommendation first. plan-tickets merges after start-work's stack support.
+- **Why:** only 3 of about 240 code PRs ever had a non-`main` base, so stacking is an option, not a habit; using start-work's rule keeps the two commands from disagreeing.
+- **Cost if wrong:** if start-work's question is reworded, the hand-off line goes stale; it is pinned so the gate shows where to change it.
+- **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`, `scripts/required-headings.txt`
+- **Date:** 2026-10-12
+
+### PD-77 — Parallel work is shown as lanes
+- **Decision:** your tickets are grouped into lanes joined by predecessor chains, with each startable ticket marked. Every queue says which files a ticket touches is unknown until start-work. Backend lanes get the `openapi/admin.json` conflict caveat. Tickets related across lanes are named.
+- **Why:** lanes show what can run side by side beyond today; the caveats cover what Linear links can't.
+- **Cost if wrong:** two lanes may still touch the same files.
+- **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
+- **Date:** 2026-10-12
+
+### PD-78 — Other people's tickets: matched by id, suggestions in text
+- **Decision:** owners are matched by `assigneeId`. Each blocker owned by someone else gets one suggestion, most specific first: can't help yet, help review its PR, ask about timing and pair, pick it up if unowned, or take it on together. Nothing is reassigned, commented or messaged.
+- **Why:** `assignee` is a name for some people and an email for others; you asked that a teammate's blocker suggest working on it together.
+- **Cost if wrong:** a suggestion may not fit the team's situation; it is text only.
+- **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
+- **Date:** 2026-10-12
+
+### PD-79 — Nothing is saved unless you choose; the output and the gh line are tested
+- **Decision:** the queue is shown in chat and saved only on request, whole or by lanes, with an existing file asking replace or keep both. A saved file is checked by `check-output.sh queue`. The shipped `gh pr list` line is run by a probe against a stand-in `gh`.
+- **Why:** a queue is a suggestion; the probe follows PD-45 without needing GitHub.
+- **Cost if wrong:** the probe can't catch a misspelled JSON field; a manual live check in the testing doc covers that.
+- **Where:** `plugins/rahal/shared/templates/ticket-queue.md`, `scripts/check-output.sh`, `tests/probes/pr-list.sh`
+- **Date:** 2026-10-12
