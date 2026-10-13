@@ -45,6 +45,7 @@ case "$kind" in
   queue)
     for h in '**Lanes saved:**' '## At a glance' '## What the order rests on' '## Finish first' '## Pick order' '## Lanes' \
              '## Stack candidates' '## Blocking you' '## Waiting on you' "## Can't order" '## Data gaps'; do need "$h"; done
+    grep -qE '^## Pick order' "$file" || fail "queue lacks a line starting with: ## Pick order"
     # every numbered entry under "## Pick order" names a ticket and gives its reason after " — "
     bad="$(awk '/^## / { s = (index($0, "## Pick order") == 1) } s && /^[0-9]+\. / && !/^[0-9]+\. ORB-[0-9]+ .+ — .+/' "$file")"
     [ -z "$bad" ] || fail "queue pick-order entry lacks ORB-<n> or a reason: $bad" ;;
