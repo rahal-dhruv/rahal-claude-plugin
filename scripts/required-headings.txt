@@ -157,3 +157,5 @@ plugins/rahal/skills/plan-tickets/references/queue-steps.md|  Run `/rahal:start-
 plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 10. Other people's tickets
 plugins/rahal/skills/plan-tickets/references/queue-steps.md|These are suggestions in text only. Never reassign, comment on or change any ticket or PR, and never message anyone.
 plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 11. Show the queue and ask to save
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|A ticket marked "links unknown" never earns `can start now` or `(start now)`: its blockers were not read.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|- A failed call, or GitHub skipped at step 0: that repo's PRs are unknown, not absent. For its tickets, write "PRs not read" wherever "no open PR" would go (Finish first, Blocking you); Stack candidates says "None: PRs not read (<reason>)."; Blocking-you rule 3 becomes "PRs not read: ask <owner> where it stands."; skip the Code Review and QA checks in the next bullet for that repo; and Data gaps names the repo.

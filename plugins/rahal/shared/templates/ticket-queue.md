@@ -37,7 +37,7 @@ Which files each ticket touches is unknown until `/rahal:start-work` reads the c
 
 ## Blocking you
 
-- **ORB-<n>** <title> — <owner | unassigned> · <status> · <project, when not this one> · <PR #<k> | no open PR> · holds up your ORB-<n>. <Suggestion.>
+- **ORB-<n>** <title> — <owner | unassigned> · <status> · <project, when not this one> · <PR #<k> | no open PR | PRs not read> · holds up your ORB-<n>. <Suggestion.>
 
 ## Waiting on you
 

@@ -68,7 +68,7 @@ GH_CONFIG_DIR="<github.gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo na
 - Drop the `GH_CONFIG_DIR="…"` prefix when `github.gh_config_dir` is empty.
 - A PR belongs to every `ORB-<n>` whose `orb-<n>` appears in its title or `headRefName`, ignoring case, matched as a whole number: `orb-10` does not match `orb-103`. Never use Linear's `gitBranchName` or attachments for this.
 - Exactly 100 PRs back: "PR list may be cut off at 100" in Data gaps.
-- A failed call, or GitHub skipped at step 0: no PRs for that repo. Finish first shows "PRs not read", Stack candidates says "None: PRs not read (<reason>).", and Data gaps names it.
+- A failed call, or GitHub skipped at step 0: that repo's PRs are unknown, not absent. For its tickets, write "PRs not read" wherever "no open PR" would go (Finish first, Blocking you); Stack candidates says "None: PRs not read (<reason>)."; Blocking-you rule 3 becomes "PRs not read: ask <owner> where it stands."; skip the Code Review and QA checks in the next bullet for that repo; and Data gaps names the repo.
 - A Code Review ticket with no open PR: "ORB-x is in Code Review but has no open PR (merged or closed? its status may be stale)" in Data gaps. A QA ticket whose PR is still open: "ORB-x is in QA but PR #<k> is still open: check it merged" in Data gaps; it still counts as merged.
 
 ## 7. Order the tickets
@@ -85,6 +85,8 @@ GH_CONFIG_DIR="<github.gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo na
 
 **Can start now:** every direct `blockedBy` ticket of T is closed or in QA. Only this earns the reason `can start now` and a lane's `(start now)`. Example: ORB-207, blocked by your in-progress ORB-206, waits on nobody else but can't start now.
 
+A ticket marked "links unknown" never earns `can start now` or `(start now)`: its blockers were not read.
+
 **Place the tickets one at a time:**
 1. The candidates are the Pick order tickets whose predecessors are all placed.
 2. Place the candidate that comes first by these keys, in order:
@@ -97,6 +99,7 @@ GH_CONFIG_DIR="<github.gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo na
 
 **Each entry** is `<n>. ORB-<id> <title> — <reasons joined by " · ">`. Drop the title's leading emoji and keep its `[Backend]`-style tag. The reasons, in this order, each only when true:
 - `(On Hold)`, `(Backlog)` or `(Triage)`;
+- `links unknown`, when step 4 could not read its links;
 - `can start now`;
 - `after your ORB-x (step k)`, or `after your ORB-x (in progress)`, `(in review)`, `(in rework)`;
 - `waits on <owner>'s ORB-x (<status>[, #<k>])`, `waits on your ORB-x in <project> (<status>)`, or `waits on unassigned ORB-x (<status>)`;
