@@ -106,9 +106,9 @@ reflector/README.md|- **Never writes personal data** (paths, accounts, emails, p
 .claude/agents/reflector.md|Never write an absolute local path, an account name, an email address or a local port into any file. Use placeholders such as `<workspace>` or `<account>`. `scripts/check.sh` fails on local paths (including the Git Bash `/c/…` form), email addresses and account names in committed files, but cannot recognise every port: leave ports out entirely.
 docs/testing-and-release.md|| wrong `gh_config_dir` | step 0 names the account conflict and asks fix now / continue without that step / stop, before any review (whether it should stop outright is an open approval) |
 docs/checks.md|| `review` | the six exact headings `## 1. What the ticket is trying to solve`, `## 2. What the PR does`, `## 3. Issues at a glance`, `## 4. Issues in detail`, `## 5. Already raised by other reviewers`, `## 6. Considered and set aside`, and a `Verdict:` line; no `suggestion` block inside a drafted comment (`<details>`) |
-docs/checks.md|Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Nine extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections`, `fresh-clone` and `version-bump` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
+docs/checks.md|Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Ten extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections`, `fresh-clone` and `version-bump` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
 docs/checks.md|A change to plugin Markdown starts in `scripts/`: pin the new exact line in `required-headings.txt`, or the removed wording in `forbidden-text.txt`, or add a fixture; run `check.sh` and watch it fail; then edit. A pinned line inside a list or code block keeps its indentation. A new bash block gets a probe; a gh-only command is pinned instead, because no probe can reach GitHub (PD-57). Example: the one-pass review began as pinned lines and forbidden strings that failed until the reviewer agent, `review-model.md`, the template header and step 0 said the same thing.
-docs/commands.md|Four skills in `plugins/rahal/skills/`, invoked as `/rahal:<name>`. Each `SKILL.md` sets `disable-model-invocation: true`, so only a person can start one; Claude cannot, which is why every dry run needs someone typing. `start-work`, `review-pr` and `pr-followup` read `shared/step-0-checks.md` first and find the ticket folder through it; `init` runs the step 0 checks as its last step and has no ticket folder.
+docs/commands.md|Five skills in `plugins/rahal/skills/`, invoked as `/rahal:<name>`. Each `SKILL.md` sets `disable-model-invocation: true`, so only a person can start one; Claude cannot, which is why every dry run needs someone typing. `start-work`, `review-pr` and `pr-followup` read `shared/step-0-checks.md` first and find the ticket folder through it; `init` runs the step 0 checks as its last step and has no ticket folder. `plan-tickets` runs checks 1–3 its own way (`## Step 0 for this command` in its `SKILL.md`) and has no ticket folder.
 docs/commands.md|- **Known gaps:** reviews and conversation comments are read without `--paginate` (only inline comments use it), so past 30 of either the rest are silently skipped. A ticket folder without a `ticket-<date>.md` gets "no saved copy to compare" instead of a ticket check.
 docs/checks.md|12. **Executable scripts:** every tracked `*.sh` is recorded as `100755`; a Windows checkout with `core.filemode=false` would otherwise commit scripts non-executable and break the gate on macOS and Linux.
 docs/checks.md|| `fresh-clone` | a clone made with Git for Windows' default `core.autocrlf=true` gets LF line endings (`.gitattributes`) and passes `check.sh`'s file and line sections |
@@ -221,3 +221,51 @@ plugins/rahal/skills/review-pr/references/review-steps.md|- Draft one comment pe
 plugins/rahal/skills/review-pr/references/review-steps.md|- An inline comment's line must be inside the diff. Get the hunk ranges with:
 plugins/rahal/skills/review-pr/references/review-steps.md|  An anchor outside every `+start,count` range becomes a conversation comment that names the file and line.
 plugins/rahal/shared/templates/reply.md|Never a `suggestion` block or proposed code: a reply says what changed and how it was proved, or gives the evidence for keeping the code.
+plugins/rahal/shared/templates/ticket-queue.md|A suggestion only: nothing in Linear or GitHub was changed.
+plugins/rahal/shared/templates/ticket-queue.md|## At a glance
+plugins/rahal/shared/templates/ticket-queue.md|## What the order rests on
+plugins/rahal/shared/templates/ticket-queue.md|## Finish first
+plugins/rahal/shared/templates/ticket-queue.md|## Pick order
+plugins/rahal/shared/templates/ticket-queue.md|## Lanes
+plugins/rahal/shared/templates/ticket-queue.md|## Stack candidates
+plugins/rahal/shared/templates/ticket-queue.md|## Blocking you
+plugins/rahal/shared/templates/ticket-queue.md|## Waiting on you
+plugins/rahal/shared/templates/ticket-queue.md|## Can't order
+plugins/rahal/shared/templates/ticket-queue.md|## Data gaps
+plugins/rahal/skills/plan-tickets/SKILL.md|Plugin root: `${CLAUDE_PLUGIN_ROOT}`. If that appears unexpanded, the plugin root is two folders above this skill's base directory.
+plugins/rahal/skills/plan-tickets/SKILL.md|This command only reads. Its only tools are Linear's `list_issues` and `get_issue`, and `gh --version`, `gh auth status` and `gh pr list`; its only write is the file you choose to save.
+plugins/rahal/skills/plan-tickets/SKILL.md|## Step 0 for this command
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|Every Linear call passes `fields`: a `get_issue` without them returned about 69,000 characters. Never ask for `description`: one ticket's is about 66,000 characters and overflows the call, losing its links with it.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## Statuses
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|- **Blocking:** open, and not QA Staging or QA UAT.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 1. Your tickets
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 2. Ask which project
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 3. The open-ticket table
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 4. Your tickets' links
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 5. One step out
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 6. Open PRs
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|GH_CONFIG_DIR="<github.gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo name> --state open --limit 100 --json number,title,headRefName,baseRefName,isDraft,reviewDecision,mergeStateStatus,url
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|- Drop the `GH_CONFIG_DIR="…"` prefix when `github.gh_config_dir` is empty.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 7. Order the tickets
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 8. Lanes
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 9. Stack candidates
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|  Run `/rahal:start-work ORB-217` and answer **Stack** when it asks *Wait or stack?*.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 10. Other people's tickets
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|These are suggestions in text only. Never reassign, comment on or change any ticket or PR, and never message anyone.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|## 11. Show the queue and ask to save
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|A ticket marked "links unknown" never earns `can start now` or `(start now)`: its blockers were not read.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|- A failed call, or GitHub skipped at step 0: that repo's PRs are unknown, not absent. For its tickets, write "PRs not read" wherever "no open PR" would go (Finish first, Blocking you); Stack candidates says "None: PRs not read (<reason>)."; Blocking-you rule 3 becomes "PRs not read: ask <owner> where it stands."; skip the Code Review and QA checks in the next bullet for that repo; and Data gaps names the repo.
+README.md|## /rahal:plan-tickets
+docs/commands.md|## /rahal:plan-tickets (no arguments)
+docs/decisions.md|### PD-70 — A fifth command, /rahal:plan-tickets, that only reads
+docs/decisions.md|### PD-79 — Nothing is saved unless you choose; the output and the gh line are tested
+docs/index.md|| [commands.md](commands.md) | The five commands: arguments, phases and stops, outputs, resume rules, known gaps. |
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|If any of the four calls fails or stops before its last page, stop and say which kind could not be read: without the full table, a missing ticket can't be told apart from a closed one.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|A non-ORB blocker that was not read (past the 25th, or a failed read) has an unknown status: count it as blocking, so the tickets it blocks never earn `can start now`.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|| On Hold | `unstarted` | open and parked: marked `(On Hold)`; placed after the other tickets ready at the same time (step 7, key 1) |
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|An On Hold ticket never earns `can start now` or `(start now)` either: it is parked.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|  - **All lanes:** set `**Lanes saved:** all`.
+plugins/rahal/skills/plan-tickets/references/queue-steps.md|- those PRs form one chain: each PR except the bottom one is based on another's `headRefName`.
+plugins/rahal/skills/plan-tickets/SKILL.md|- **Check 2, GitHub:** items 1 and 2 only. Skip item 3 (`gh repo view`): a failing `gh pr list` in step 6 shows the same problem. Item 4 is for PR commands. Print it as `✓ GitHub      gh signed in as <account>`.
+plugins/rahal/skills/plan-tickets/SKILL.md|- **Check 3, Linear:** load `<linear.tools>list_issues` and `<linear.tools>get_issue`; item 2 still finds renamed tools, but don't offer to record a new prefix: say that `/rahal:init` records it. In place of items 4 and 5, step 1 of `queue-steps.md` is the proof, and its line reads `✓ Linear      read your <n> ORB tickets`. The team is ORB, from the profile.
+plugins/rahal/shared/templates/ticket-queue.md|<A section with nothing to list says "None.">

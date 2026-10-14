@@ -31,12 +31,13 @@ Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 acc
 | `followup` | `## Comments at a glance`, `## Detailed fixes`, `Which do you accept?`; per entry, from 1 up (item 0 exempt): each glance entry holds `In plain words:` and `Example:`, and each `### n.` fix holds ` · comment ` in its heading, the labels Before this PR, Now, What they raised, Fix we should apply and Dry run, and a reply draft with no `#<n>`, `/pull/<n>` or `suggestion` block (a reviewer's own suggestion quoted elsewhere in the block is fine) |
 | `reply` | no `#<n>` or `/pull/<n>`; no `suggestion` block; a commit SHA or the word `Evidence` |
 | `config` | every key present; required values real (not empty, `""`, `''`, a comment, or an unfilled `<placeholder>`) |
+| `queue` | `**Lanes saved:**` and `## At a glance`, `## What the order rests on`, `## Finish first`, `## Pick order`, `## Lanes`, `## Stack candidates`, `## Blocking you`, `## Waiting on you`, `## Can't order`, `## Data gaps`; every numbered `## Pick order` line is `<n>. ORB-<id> <title> — <reason>` |
 
-`scripts/test-check-output.sh` proves it: each `tests/fixtures/good-<kind>.md` passes and each `bad-<kind>.md` and `bad-<kind>-<reason>.md` fails. Known gaps: a plan with no Details links passes; a heading with trailing spaces fails; the reply check, and the follow-up's reply-draft check, miss "PR 145".
+`scripts/test-check-output.sh` proves it: each `tests/fixtures/good-<kind>.md` passes and each `bad-<kind>.md` and `bad-<kind>-<reason>.md` fails. Known gaps: a plan with no Details links passes; a heading with trailing spaces fails; the reply check, and the follow-up's reply-draft check, miss "PR 145"; a queue entry whose title itself contains " — " passes without a reason; a demoted heading such as `### Lanes` passes the heading check (except Pick order, which must start its line); an indented or `2)` pick-order entry is not checked for a reason.
 
 ## Probes (`tests/probes/`, run by `scripts/test-probes.sh`)
 
-Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Nine extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections`, `fresh-clone` and `version-bump` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
+Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Ten extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections`, `fresh-clone` and `version-bump` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
 
 | Probe | Proves |
 | --- | --- |
@@ -50,6 +51,7 @@ Each probe works in throwaway git repos under a folder whose name has a space, a
 | `overlap-prs` | the open-PR overlap list (with a stand-in `gh`) names exactly the PRs that change a path the ticket names, matching whole paths, spaces included |
 | `stacked-rules` | for a PR stacked on a blocker's branch, the follow-up's second rules diff shows a rule added to `AGENTS.md` on `main` that the blocker never merged |
 | `pr-checkout` | the follow-up checkout reaches the PR head even when the branch tracks its blocker's branch, and when the switch fails it leaves the other branch in place and prints a `STOP` line naming both |
+| `pr-list` | plan-tickets' `gh pr list` line reaches a stand-in `gh` with the config folder whole (its path has a space), `--repo`, `--state open`, `--limit 100` and every JSON field the steps use |
 | `review-clone` | the reviewer's scratch clone reviews only the PR's files when the local `main` is stale and when the PR is stacked on another PR's branch, and leaves the user's repo untouched |
 | `reflector-hook` | the hook spawns once per new context file, never for a reflector run, with hooks off |
 | `version-bump` | `check.sh` section 13 fails on an edited or a new plugin file without a version bump, and passes once the version changes |

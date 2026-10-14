@@ -6,10 +6,11 @@
 - review it against the ticket and `AGENTS.md`;
 - ship it;
 - handle reviewers' comments.
+- plan which of your tickets to pick next, what can run in parallel, and what could start early on a stacked PR.
 
 Every command stops at the points where you decide, and nothing reaches GitHub unless your choices allow it.
 
-Commands: `/rahal:init` · `/rahal:start-work <ticket>` · `/rahal:review-pr <PR>` · `/rahal:pr-followup <PR>`. Orbit (`ORB-`) tickets only for now.
+Commands: `/rahal:init` · `/rahal:start-work <ticket>` · `/rahal:review-pr <PR>` · `/rahal:pr-followup <PR>` · `/rahal:plan-tickets`. Orbit (`ORB-`) tickets only for now.
 
 ## Install
 
@@ -54,6 +55,7 @@ The review model is not asked here. Each review suggests one with a reason, and 
     orb-183-visa-destinations/      one folder per ticket, yours only
       ticket-2026-10-07.md  brief.md  plan.md  ledger.md  pr-body.md
       review-2026-10-07.md  followup-2026-10-08.md  reply-2026-10-08-amr-2417.md
+    ticket-queue/                   saved ticket queues, only when you ask
   docs/                             optional notes on what was built
 ```
 
@@ -138,6 +140,25 @@ Which do you accept? e.g. "0, 1, 2"
 4. updates the PR body and drafts one reply per comment.
 
 Pushing, posting and re-requesting review follow your choices.
+
+## /rahal:plan-tickets
+
+`/rahal:plan-tickets` asks which project to look at (it lists only those holding your open tickets), then reads your tickets' blocking links in Linear and the open PRs on GitHub. It changes nothing in either. In chat you get:
+
+```
+Pick order
+  1. ORB-901 Add the visa product list — can start now · unblocks 2 (your ORB-902, Lee's ORB-910) · High
+  2. ORB-904 Add the nationality filter — can start now · Medium
+  3. ORB-902 Add visa product activation — after your ORB-901 (step 1)
+  4. ORB-903 Serve the visa product page — waits on Sam's ORB-905 (Code Review, #12)
+Lanes             A: ORB-901 (start now) → ORB-902 · B: ORB-904 (start now) · C: ORB-903
+Stack candidates  ORB-903 can stack on #12 (feat/orb-905-visa-product-reads). Stack if you can't wait:
+                  run /rahal:start-work ORB-903 and answer Stack when it asks "Wait or stack?".
+Blocking you      ORB-905 — Sam · Code Review · PR #12 · holds up your ORB-903: offer to help review it, or stack on it (see Stack candidates).
+Save this ticket queue? all lanes · lane A only (recommended) · lanes … · don't save
+```
+
+The order rests on blocking links, then how many tickets each one unblocks, then priority and ticket number. The queue says so, because tickets carry no estimates or due dates. QA Staging and QA UAT count as merged. Nothing is saved unless you choose; a save goes to `work/ticket-queue/<project>-<date>.md`.
 
 ## Troubleshooting
 

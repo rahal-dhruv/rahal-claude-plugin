@@ -59,3 +59,7 @@ plugins/rahal/shared/stack-notice.md
 tests/probes/overlap-prs.sh
 tests/probes/pr-checkout.sh
 tests/probes/stacked-rules.sh
+plugins/rahal/shared/templates/ticket-queue.md
+plugins/rahal/skills/plan-tickets/SKILL.md
+plugins/rahal/skills/plan-tickets/references/queue-steps.md
+tests/probes/pr-list.sh

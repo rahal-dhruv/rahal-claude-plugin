@@ -4,7 +4,7 @@ Agent-facing documentation of what is built in this repo. Read this file first, 
 
 | File | One-line description |
 | --- | --- |
-| [commands.md](commands.md) | The four commands: arguments, phases and stops, outputs, resume rules, known gaps. |
+| [commands.md](commands.md) | The five commands: arguments, phases and stops, outputs, resume rules, known gaps. |
 | [shared-rules.md](shared-rules.md) | Step 0, approval gates, evidence, the review model and single review pass, config keys, templates. |
 | [checks.md](checks.md) | `check.sh` sections, `check-output.sh` kinds, fixtures, probes, the test-first practice. |
 | [testing-and-release.md](testing-and-release.md) | Loading the plugin, dry runs, proving a run used the plugin, Windows traps, release steps. |

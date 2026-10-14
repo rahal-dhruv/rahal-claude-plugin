@@ -4,7 +4,7 @@ This file is the contract for anyone, person or agent, changing this repo. `CLAU
 
 ## 1. What this repo is
 
-The `rahal` Claude Code plugin for the Orbit team: `/rahal:init`, `/rahal:start-work`, `/rahal:review-pr` and `/rahal:pr-followup`. Orbit (`ORB-`) tickets only for now.
+The `rahal` Claude Code plugin for the Orbit team: `/rahal:init`, `/rahal:start-work`, `/rahal:review-pr`, `/rahal:pr-followup` and `/rahal:plan-tickets`. Orbit (`ORB-`) tickets only for now.
 
 | Folder | What it is |
 | --- | --- |
@@ -39,7 +39,7 @@ scripts/test-probes.sh
 
 ## 4. Git and releases
 
-- Commits: `type(scope): lowercase imperative title`, at most 72 characters, title only, no co-author line. The scope is a command (`init`, `start-work`, `review-pr`, `pr-followup`) or an area (`shared`, `agents`, `checks`, `probes`, `docs`, `reflector`).
+- Commits: `type(scope): lowercase imperative title`, at most 72 characters, title only, no co-author line. The scope is a command (`init`, `start-work`, `review-pr`, `pr-followup`, `plan-tickets`) or an area (`shared`, `agents`, `checks`, `probes`, `docs`, `reflector`).
 - Work on a branch and open a pull request into `main`. Nobody pushes to `main`.
 - A branch that changes `plugins/rahal/` bumps the patch `version` in `plugins/rahal/.claude-plugin/plugin.json` (`check.sh` section 13): sessions load a copy cached per version, so an unbumped change never reaches them. The maintainer merges, gives the later of two branches that chose the same number the next one, and tags with `claude plugin tag plugins/rahal`.
 

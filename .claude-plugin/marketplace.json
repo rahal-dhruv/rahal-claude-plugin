@@ -1,12 +1,12 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "rahal-claude-plugin",
-  "description": "Rahal Orbit team workflow for Claude Code: start a Linear ticket, review a PR, handle PR review comments.",
+  "description": "Rahal Orbit team workflow for Claude Code: start a Linear ticket, review a PR, handle PR review comments, plan your ticket queue.",
   "owner": { "name": "Rahal Orbit team" },
   "plugins": [
     {
       "name": "rahal",
-      "description": "Ticket-to-PR workflow for Orbit: /rahal:init, /rahal:start-work, /rahal:review-pr, /rahal:pr-followup.",
+      "description": "Ticket-to-PR workflow for Orbit: /rahal:init, /rahal:start-work, /rahal:review-pr, /rahal:pr-followup, /rahal:plan-tickets.",
       "source": "./plugins/rahal",
       "category": "development"
     }

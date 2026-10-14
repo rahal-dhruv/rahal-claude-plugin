@@ -12,6 +12,7 @@ Files in `plugins/rahal/shared/`, read by every command. Referenced as `${CLAUDE
 - **Check 3 Linear:** loads `<linear.tools>get_issue` and friends; when they are missing or `tools` is empty, searches ToolSearch for `linear get_issue` and offers to record a new prefix; refuses non-`ORB-` tickets.
 - **Check 4 Git:** remote prefix, commit email, fetch; the "behind" count only when a local default branch exists (a docs clone often has none); a clean tree for phases that commit.
 - **Check 5 Toolchain:** Node against `.nvmrc`, pnpm, Docker, port clashes, on Windows the Node folder and `NODE_OPTIONS='<e2e_node_options>' node -e 1`; for review phases, the `code-review` skill.
+- **plan-tickets:** runs checks 1–3 its own way, written in its `SKILL.md`: no `gh repo view` (its `gh pr list` shows the same failure), Linear proven by listing your tickets, and checks 4–5 printed as not needed.
 - **A failed check:** say what is wrong, what it would break and the fixing command, then ask fix now / continue without that step / stop. (Open approval: whether a wrong account should stop outright.)
 - **Known gaps:** check 2 does not fetch the PR title that check 3 needs; the `repo` scope test false-fails for fine-grained tokens; one `git show origin/main:…` line in `phase-2-execute.md` lacks `MSYS_NO_PATHCONV=1`.
 
@@ -65,3 +66,4 @@ Known gap: the front matter is not strict YAML (`remote_prefix: git@<alias>:` is
 | `review-report.md` | every review | `check-output.sh review` |
 | `followup-plan.md` | pr-followup phase one | `check-output.sh followup` |
 | `reply.md` | pr-followup phase two | `check-output.sh reply` |
+| `ticket-queue.md` | plan-tickets, only when you choose to save | `check-output.sh queue` |

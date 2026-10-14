@@ -32,6 +32,8 @@ A plugin command opens with the "Step 0 — checks" block, whose header line nam
 | `/rahal:start-work <ticket>` | `brief.md` and `plan.md` pass `check-output.sh`; it stops at decision 1 |
 | `/rahal:review-pr <open PR>` | the reviewer's first line says `code-review: ran at high on <sha>`; findings cite only the PR's files; the checkout is unchanged |
 | `/rahal:pr-followup <PR>` | `followup-<date>.md` passes `check-output.sh followup`; answered threads are skipped |
+| `/rahal:plan-tickets` | it lists only the projects holding your open tickets and waits; the queue shows in chat; nothing is written until you answer the save question; a saved file passes `check-output.sh queue` |
+| one live `gh pr list --repo DigitalZoneApp/rahal-orbit-backend --state open --limit 1 --json number,title,headRefName,baseRefName,isDraft,reviewDecision,mergeStateStatus,url` | every JSON field plan-tickets asks for exists; the `pr-list` probe's stand-in `gh` accepts any field name |
 
 ## Windows traps
 

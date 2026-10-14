@@ -4,7 +4,7 @@
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 FAILS=0
-for kind in brief plan ledger review followup reply config; do
+for kind in brief plan ledger review followup reply config queue; do
   if "$ROOT/scripts/check-output.sh" "$kind" "$ROOT/tests/fixtures/good-$kind.md" >/dev/null 2>&1; then
     echo "ok   good-$kind accepted"
   else
