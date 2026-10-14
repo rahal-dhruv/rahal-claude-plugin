@@ -394,7 +394,7 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Where:** `plugins/rahal/skills/start-work/references/phase-1-understand.md`, `plugins/rahal/skills/review-pr/references/review-steps.md`
 - **Date:** 2026-10-11
 
-### PD-57 — gh-only commands are pinned; git and shell logic gets probes
+### PD-57 — gh-only commands are pinned; git and shell logic gets probes (refined by PD-80)
 - **Decision:** a new or changed bash block with git or shell logic gets a probe, proven once on a broken copy. A gh-only command (a lookup, `gh pr create`, a `--jq` read) is pinned word for word in `scripts/required-headings.txt`. Shell logic around gh output, such as the open-PR overlap filter, is probed with a stand-in `gh`. Refines PD-45.
 - **Why:** a probe cannot reach GitHub, and jq is not installed on every contributor's machine, so a stand-in `gh` would only re-check the same text a pin checks. The maintainer chose pins for gh lines on 2026-10-11.
 - **Cost if wrong:** a wrong `--jq` filter or gh field shows up only in a dry run against a real PR.
@@ -525,3 +525,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** the probe can't catch a misspelled JSON field; a manual live check in the testing doc covers that.
 - **Where:** `plugins/rahal/shared/templates/ticket-queue.md`, `scripts/check-output.sh`, `tests/probes/pr-list.sh`
 - **Date:** 2026-10-12
+
+### PD-80 — A gh line with arguments that could break in the shell also gets a probe
+- **Decision:** a gh-only line stays pinned word for word (PD-57); when its arguments could break in the shell, such as a config folder path with spaces or a quoted search, it also gets a probe with a stand-in `gh` that checks every argument arrives whole. plan-tickets' `pr-list` probe is the first.
+- **Why:** a pinned line proves only that the text did not change, not that the shell hands `gh` the path in one piece; the maintainer kept the `pr-list` probe on that ground.
+- **Cost if wrong:** one more small probe per such line to maintain.
+- **Where:** `AGENTS.md`, `docs/checks.md`, `tests/probes/pr-list.sh`
+- **Date:** 2026-10-14
