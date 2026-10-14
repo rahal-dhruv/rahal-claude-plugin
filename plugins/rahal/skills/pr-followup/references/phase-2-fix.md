@@ -8,15 +8,21 @@ Checks 1–5, and check out the PR branch:
 
 ```bash
 git -C <repo> status --porcelain=v1          # must be empty
-git -C <repo> switch <headRefName> 2>/dev/null || git -C <repo> switch -c <headRefName> --track origin/<headRefName>
-git -C <repo> pull --ff-only
+git -C <repo> fetch origin --quiet
+git -C <repo> switch <headRefName> || git -C <repo> switch -c <headRefName> --track origin/<headRefName>
+[ "$(git -C <repo> branch --show-current)" = "<headRefName>" ] && git -C <repo> merge --ff-only "origin/<headRefName>"
+[ "$(git -C <repo> branch --show-current)" = "<headRefName>" ] && [ "$(git -C <repo> rev-parse HEAD)" = "<headRefOid>" ] || echo "STOP: the checkout is $(git -C <repo> branch --show-current) at $(git -C <repo> rev-parse --short HEAD), not <headRefName> at <headRefOid>"   # stop and say so
 ```
+
+The fast-forward names `origin/<headRefName>`, never the branch's upstream: a branch made from a blocker's branch can track it, and following the upstream once moved another ticket's branch onto this PR's commit. A `STOP` line means stop and name both branches; never commit or merge on another branch.
 
 Commits follow `choices.commit_when` (for `standing_yes_per_ticket`, ask once for this follow-up).
 
 ## 2. Branch update
 
-Only if item 0 was accepted:
+Only if item 0 was accepted.
+
+When item 0 is a retarget (the blocker has merged), `<base>` from this step on, the review range included, is `<default>`; the PR itself is retargeted in step 8, before the push.
 
 ```bash
 git -C <repo> merge --no-ff --no-commit origin/<base>
@@ -27,7 +33,9 @@ git -C <repo> diff --name-only --diff-filter=U
 - A conflict in a generated file only (`openapi/*.json`, `src/generated/`): take either side with `git -C <repo> checkout --ours <file>`; it is regenerated below, never hand-merged.
 - Any other conflicting file: stop and ask. `git -C <repo> merge --abort` undoes the merge.
 - Then, in the repo: `pnpm install --frozen-lockfile`, `pnpm db:generate && pnpm openapi`, `git add` what they regenerated, then `pnpm typecheck && pnpm lint`.
-- Commit: `git -C <repo> commit -m "chore(ORB-<n>): merge main into the <branch words> branch"`.
+- Then `git -C <repo> diff origin/<base> -- openapi/` must show only this ticket's own changes. A path or schema removed, or one that another ticket adds, means a stale document: stop and say so.
+- The regenerated files stay in this merge commit. The backend's pre-commit hook runs `pnpm openapi && git add openapi/` whenever a merged-in controller or DTO is staged, so a separate commit would need `--no-verify`.
+- Commit: `git -C <repo> commit -m "chore(ORB-<n>): merge <main | orb-<blocker n>> into the <branch words> branch"`: `main`, or for a stacked PR the blocker's ticket id, e.g. `chore(ORB-196): merge orb-194 into the visa provider admin routes branch`.
 - Then `pnpm db:migrate` with the dev database URL.
 - Never rebase, never force push, and never rename the PR's migration folders.
 
@@ -53,7 +61,8 @@ Update the ticket folder's `pr-body.md`; if absent, start from `GH_CONFIG_DIR="<
 - the reviewed SHA and the gate counts;
 - the changed test-case lines;
 - new measurements;
-- a line saying `main` was merged in (with the merge SHA);
+- a line naming the base branch that was merged in (with the merge SHA);
+- for a stacked PR, the notice from `${CLAUDE_PLUGIN_ROOT}/shared/stack-notice.md` at the top, filled in; once the PR is retargeted to `<default>`, remove it;
 - anything the fixes made untrue.
 
 ## 7. Replies
@@ -69,7 +78,9 @@ Standalone, never mentioning other PRs.
 Each step follows `choices`; with `ask`, ask per step.
 
 ```bash
+GH_CONFIG_DIR="<gh_config_dir>" gh pr edit <n> --repo DigitalZoneApp/<repo name> --base <default>
 git -C <repo> merge-base --is-ancestor origin/<headRefName> HEAD && export PATH="<bash_node_path>:$PATH" && git -C <repo> push origin <headRefName>
+GH_CONFIG_DIR="<gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo name> --base <headRefName> --state open --json number,headRefName
 GH_CONFIG_DIR="<gh_config_dir>" gh pr edit <n> --repo DigitalZoneApp/<repo name> --body-file "<work>/<slug>/pr-body.md"
 MSYS_NO_PATHCONV=1 GH_CONFIG_DIR="<gh_config_dir>" gh api -X POST repos/DigitalZoneApp/<repo name>/pulls/<n>/comments/<comment id>/replies -F body=@"<reply file>"
 MSYS_NO_PATHCONV=1 GH_CONFIG_DIR="<gh_config_dir>" gh api -X POST repos/DigitalZoneApp/<repo name>/pulls/<n>/requested_reviewers -f "reviewers[]=<login>"
@@ -77,7 +88,9 @@ GH_CONFIG_DIR="<gh_config_dir>" gh pr view <n> --repo DigitalZoneApp/<repo name>
 ```
 
 - A conversation comment (not inline) is answered with `GH_CONFIG_DIR="<gh_config_dir>" gh pr comment <n> --repo DigitalZoneApp/<repo name> --body-file "<reply file>"`.
+- Retarget: only when item 0 was a retarget, before the push. It always asks first (`approval-gates.md` → Fixed for everyone).
 - Push: never with `--force`.
+- Stacked on this PR: after the push, each open PR whose base is `<headRefName>` is reported in chat and in the ledger as "#<m> (`<its branch>`) needs `git merge origin/<headRefName>`". Never update those branches from this run.
 - PR description: replace it with the updated `pr-body.md`. This always asks first, whatever the other choices (`approval-gates.md` → Fixed for everyone).
 - Reply: post in the comment's thread, only after the push that contains the commit it cites. If the push was declined, keep the replies as drafts and say so.
 - Re-request review from the reviewer whose comments were handled.

@@ -36,11 +36,11 @@ A check passes only when its output was seen passing; a test run's `Test Files` 
 
 ## Stack notice (`stack-notice.md`)
 
-The paragraph that opens a stacked PR's body: merge the blocker alone, let GitHub move this PR to `main`, merge `origin/main` in, run `pnpm openapi`, never "merge stack" (it rebases and drops the merge commit with the regenerated API documents). start-work fills in the blocker's PR and branch, and drops it once the blocker merges.
+The paragraph that opens a stacked PR's body: merge the blocker alone, let GitHub move this PR to `main`, merge `origin/main` in, run `pnpm openapi`, never "merge stack" (it rebases and drops the merge commit with the regenerated API documents). start-work fills in the blocker's PR and branch, and drops it once the blocker merges. `pr-followup` phase two adds it to a stacked PR's body and removes it once the PR is retargeted.
 
 ## Profile (`profiles/orbit.md`)
 
-Team facts: Linear workspace and team key, GitHub org, the three repos and their default branches (`rahal-orbit-docs` uses `docs-main`), pnpm only, the gates, the shared dev database warning for stacked branches (answer no to `db:migrate:dev`'s reset offer), building supertest requests when sent (never an array built up front), branch and commit practice (commitlint refuses any capital letter after the scope), the `AGENTS.md` rules that bind every ticket.
+Team facts: Linear workspace and team key, GitHub org, the three repos and their default branches (`rahal-orbit-docs` uses `docs-main`), pnpm only, the gates, the shared dev database warning for stacked branches (answer no to `db:migrate:dev`'s reset offer), building supertest requests when sent (never an array built up front), branch and commit practice (commitlint refuses any capital letter after the scope; a stacked PR is updated from its blocker's branch, titled `merge orb-<blocker n> into …`), the `AGENTS.md` rules that bind every ticket.
 
 ## Config keys (`.claude/rahal.local.md`, written by init)
 

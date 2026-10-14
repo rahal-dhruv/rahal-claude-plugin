@@ -1,6 +1,6 @@
 ---
 name: pr-followup
-description: "Handle reviewers' comments on an Orbit pull request in two phases: (1) rebuild the context from GitHub, Linear and the repo, verify each comment, and write a fix plan with the comments at a glance and a detailed fix for each, then stop for you to accept items; (2) update the branch from main if accepted, fix test-first, run the gate and an internal review, and draft the replies. Usage: /rahal:pr-followup <PR link or number> [model=<name>]"
+description: "Handle reviewers' comments on an Orbit pull request in two phases: (1) rebuild the context from GitHub, Linear and the repo, verify each comment, and write a fix plan with the comments at a glance and a detailed fix for each, then stop for you to accept items; (2) update the branch from its base (main, or the blocker's branch for a stacked PR) if accepted, fix test-first, run the gate and an internal review, and draft the replies. Usage: /rahal:pr-followup <PR link or number> [model=<name>]"
 argument-hint: "<PR link or number> [model=<name>]"
 disable-model-invocation: true
 ---

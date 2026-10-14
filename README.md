@@ -119,15 +119,20 @@ It asks which model to review with, suggesting one from the PR's size and risk. 
 
 ```
 Comments at a glance
-  1. Amr — search can't find a destination by its label. Recommend: fix (blocking).
+  1. Amr — search can't find a destination by its name. Recommend: fix (blocking).
+     In plain words: an operator who types part of a country's name finds nothing and thinks it was never set up.
+     Example: someone searches "emir" → sees an empty list today → would see United Arab Emirates after.
   2. Muntadher — % and _ act as wildcards. Recommend: fix (not blocking); departs from the ticket.
+     In plain words: a search for an underscore matches every destination instead of none.
+     Example: someone searches "_" → sees all 40 destinations today → would see none after.
   0. Branch update — merge main first; only openapi/admin.json conflicts (generated).
-Detailed fixes   … one block per comment: how it was verified, the test-first fix, a reply draft …
+Detailed fixes   … one block per comment: before this PR, now, what they raised, how it was checked,
+                 the test-first fix, a dry run with real values, a reply draft …
 Which do you accept? e.g. "0, 1, 2"
 ```
 
 **Phase two** does only what you accepted:
-1. merges `main` into the branch;
+1. merges the base branch into the branch: `main`, or the blocker's branch for a PR stacked on another ticket's PR;
 2. fixes each comment test-first in its own commit;
 3. runs the gate and an internal review;
 4. updates the PR body and drafts one reply per comment.

@@ -32,3 +32,18 @@ For Prisma dev commands, `export DATABASE_URL|the dev database URL line lives on
 --json headRefOid,mergeable,mergeStateStatus,statusCheckRollup|read reviewRequests back too, so an unrequested review shows
 Load SQL through `pg` against the dev database with bound parameters.|measure SQL on real rows inside a transaction that ends in ROLLBACK
 git diff <base>..<head>|<base> is a branch name that may have no local copy; diff the base and head SHAs
+pull --ff-only|git pull follows the checkout's upstream and once moved another ticket's branch; fast-forward from origin/<headRefName> by name and compare HEAD with headRefOid
+commit -m "chore(ORB-<n>): merge main into|a stacked PR merges its blocker's branch; the title names main or the blocker's ticket id (PD-61)
+<Branch: N behind main;|a stacked PR is behind its base, not main
+The branch also merges `main` in|a stacked PR merges its base branch; name the branch that was merged
+a line saying `main` was merged in|a stacked PR merges its base branch; name the branch that was merged
+- `git merge origin/main`; regenerate|a stacked PR merges origin/<base>, its blocker's branch
+0. Branch update — <merge main first;|a stacked PR merges origin/<base>, its blocker's branch
+**What they ask:**|the follow-up block says Before this PR, Now and What they raised (PD-65)
+**How I verified it:**|the follow-up block says How checked, as the review report does (PD-65)
+**Fix plan:**|the follow-up block says Fix we should apply, next to a Dry run (PD-65)
+Say whether it changed after the PR opened|compare the ticket text with the saved ticket-<date>.md; updatedAt moves on every comment
+amended <time>: <what changed>|compare the ticket text with the saved ticket-<date>.md; updatedAt moves on every comment
+A `suggestion` block only when the line is inside the diff's hunks|drafted comments state the issue plus an example only; the author chooses the fix (PD-67)
+A `suggestion` block only on a line inside the diff|drafted comments state the issue plus an example only; the author chooses the fix (PD-67)
+must be a plain comment with a diff block instead|drafted comments state the issue plus an example only; the author chooses the fix (PD-67)

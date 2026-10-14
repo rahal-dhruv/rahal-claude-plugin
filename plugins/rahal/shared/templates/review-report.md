@@ -34,7 +34,7 @@ Verdict: <ready to merge | ready with fixes | not ready> — <n> blocking, <n> s
 
 <details><summary>Draft GitHub comment</summary>
 
-<Standalone text. A `suggestion` block only when the line is inside the diff's hunks. No mention of other PRs.>
+<Standalone text: the issue plus one concrete example; the author chooses the fix. No `suggestion` block or proposed fix, no @-mention, no should or must, and no other PR or commit.>
 
 </details>
 

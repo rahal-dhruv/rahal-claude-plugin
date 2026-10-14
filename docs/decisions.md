@@ -400,3 +400,59 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** a wrong `--jq` filter or gh field shows up only in a dry run against a real PR.
 - **Where:** `AGENTS.md`, `scripts/required-headings.txt`, `tests/probes/overlap-prs.sh`
 - **Date:** 2026-10-11
+
+### PD-60 — The follow-up checkout fast-forwards from the PR's branch by name
+- **Decision:** phase two fetches, switches to `<headRefName>`, fast-forwards only from `origin/<headRefName>` and only while that branch is checked out, then stops unless `HEAD` equals `headRefOid`, naming both branches. `pull --ff-only` is forbidden text.
+- **Why:** `git pull` follows the checkout's upstream. On 2026-10-10 a follow-up on a stacked PR moved the blocker's branch onto the stacked PR's commit; a branch made from a blocker's branch can also track it and never reach its own head.
+- **Cost if wrong:** a local branch holding unpushed commits stops the run instead of continuing; the user pushes or resets it first.
+- **Where:** `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `tests/probes/pr-checkout.sh`, `scripts/forbidden-text.txt`
+- **Date:** 2026-10-11
+
+### PD-61 — A stacked PR's follow-up reads main's rules and names its blocker
+- **Decision:** when a PR's base is not the default branch, phase one finds the blocker's PR by its head branch, states "stacked on #<n> (<state>, head <sha7>)", and diffs `AGENTS.md` and the PR template from the stack's merge-base with `origin/<default>` as well as with `origin/<base>`. The merge commit, PR body and reply name the real base; its title is `chore(ORB-<n>): merge orb-<blocker n> into the <branch words> branch`.
+- **Why:** the standard lives on the default branch, which the blocker's branch may not have merged; the full base branch name made the title 98 characters for ORB-196, over the 72-character limit (the maintainer's choice, decision 4 of the feature batch).
+- **Cost if wrong:** a rule added to `main` after the stack branched off is missed until the blocker merges; a title with the blocker's id hides which branch was merged until the PR body is read.
+- **Where:** `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `plugins/rahal/shared/templates/followup-plan.md`, `plugins/rahal/shared/profiles/orbit.md`, `tests/probes/stacked-rules.sh`
+- **Date:** 2026-10-11
+
+### PD-62 — A PR whose blocker merged is retargeted before its branch update
+- **Decision:** when the blocker's PR is merged but this PR's base is still the blocker's branch, item 0 becomes "retarget to the default branch, then merge it". The local merge uses `origin/<default>`; `gh pr edit --base <default>` runs in the remote steps before the push and always asks. Every branch update then checks that `git diff origin/<base> -- openapi/` shows only this ticket's own changes.
+- **Why:** GitHub retargets a stacked PR only when the merged branch is deleted, and merging the old base then brings nothing; a regenerated document that lost or gained another ticket's paths is the symptom of the "merge stack" loss.
+- **Cost if wrong:** one extra question per retarget; a ticket that legitimately removes a path explains it at the stop.
+- **Where:** `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `plugins/rahal/shared/templates/followup-plan.md`
+- **Date:** 2026-10-11
+
+### PD-63 — Regenerated API documents stay in the merge commit
+- **Decision:** PD-27 stands: the branch update regenerates `openapi/*.json` and commits it inside the titled merge commit, not in a commit of its own. Protection against a rebase dropping them comes from the stack notice and the `openapi/` diff check (PD-62).
+- **Why:** measured on 2026-10-11 with the backend's lefthook 2.1.14 and its exact `openapi` job (a stand-in generator in place of `pnpm openapi`): a merge that brings in a controller stages it, the job runs during the merge commit, and `git add openapi/` folds the regenerated file in even when the old version was staged. A separate commit would need `--no-verify` (the maintainer's choice, decision 3 of the feature batch).
+- **Cost if wrong:** a rebase of the stacked PR, such as GitHub's "merge stack", drops the regenerated lines with the merge commit; the stack notice forbids that button.
+- **Where:** `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`, `tests/probes/merge-step.sh`
+- **Date:** 2026-10-11
+
+### PD-64 — A stacked PR's body warns against "merge stack"
+- **Decision:** one shared text, `shared/stack-notice.md`, goes at the top of a stacked PR's body: merge the blocker alone, let GitHub retarget, merge `origin/main` in and run `pnpm openapi`, never use "merge stack". `pr-followup` phase two adds it to the PR body and removes it once the PR is retargeted.
+- **Why:** GitHub's "merge stack" rebased a stacked PR and dropped the merge commit holding its regenerated `openapi/admin.json`; that commit cannot be split off (PD-63), so the warning has to reach whoever presses the button.
+- **Cost if wrong:** one paragraph of PR body to read and delete; a reviewer who ignores it still loses the regenerated lines.
+- **Where:** `plugins/rahal/shared/stack-notice.md`, `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`
+- **Date:** 2026-10-11
+
+### PD-65 — The follow-up explains each comment with before, now and a dry run
+- **Decision:** each glance entry adds `In plain words:` and `Example:` (someone does X → sees Y today → would see Z after). Each fix block gives Before this PR (the code on `origin/<base>`), Now (the code at the PR head), What they raised, How checked, Ticket, Fix we should apply, Dry run, Alternative and Reply draft, sharing labels with the review report. `check-output.sh followup` checks every entry and block from 1 up, and that no reply draft names another PR.
+- **Why:** the old four-string check passed a report whose second comment had no explanation, and a reader could not tell what the reviewer reacted to without opening the diff. Before means the base and the fix has its own field (the maintainer's choice, decision 5 of the feature batch).
+- **Cost if wrong:** a longer report per comment; a one-line nit still needs a dry run to pass the check.
+- **Where:** `plugins/rahal/shared/templates/followup-plan.md`, `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `scripts/check-output.sh`, `tests/fixtures/good-followup.md`
+- **Date:** 2026-10-12
+
+### PD-66 — The follow-up compares the ticket's text, not its update time
+- **Decision:** phase one compares the ticket's description word for word with the latest `ticket-<date>.md` in the ticket folder and reports what changed; without that file it says the text could not be compared. It never judges by `updatedAt`.
+- **Why:** `updatedAt` moves whenever anyone comments on the ticket, our own runs included, so "changed after the PR opened" was true for every ticket.
+- **Cost if wrong:** a ticket folder made before start-work saved the ticket gets no ticket check until a copy exists.
+- **Where:** `plugins/rahal/skills/pr-followup/references/phase-1-analyse.md`, `plugins/rahal/shared/templates/followup-plan.md`
+- **Date:** 2026-10-12
+
+### PD-67 — Drafted comments state the issue plus an example only
+- **Decision:** every comment the plugin drafts on a teammate's PR states the issue plus one concrete example, and the author chooses the fix: no `suggestion` block, no proposed fix, no @-mention, no should or must, no other PR or commit. An anchor outside the diff becomes a conversation comment naming the file and line. Follow-up replies never carry a `suggestion` block or proposed code either. `check-output.sh` refuses a `suggestion` block in a review's drafted comments, in a reply, and in a follow-up's reply drafts; a reviewer's own suggestion quoted under What they raised is allowed.
+- **Why:** comment style is a team convention once the plugin is shared, and the maintainer chose this style for everyone (decision 8 of the feature batch), closing the reflector approval of 2026-10-09.
+- **Cost if wrong:** a one-line fix the author could have applied with a click now needs typing; reviewers who want to propose code write it by hand.
+- **Where:** `plugins/rahal/shared/templates/review-report.md`, `plugins/rahal/skills/review-pr/references/review-steps.md`, `plugins/rahal/shared/templates/reply.md`, `plugins/rahal/shared/templates/followup-plan.md`, `scripts/check-output.sh`
+- **Date:** 2026-10-12

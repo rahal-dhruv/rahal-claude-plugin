@@ -63,15 +63,15 @@ Follow `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md`:
 
 ## 7. Draft and post comments
 
-- Draft one comment per issue the user may post, inside its `<details>` block. Each stands on its own and never mentions other PRs.
-- A `suggestion` block only on a line inside the diff. Get the hunk ranges with:
+- Draft one comment per issue the user may post, inside its `<details>` block. Each stands on its own and states the issue plus one concrete example; the author chooses the fix. Never a `suggestion` block or a proposed fix, an @-mention, should or must, or another PR or commit.
+- An inline comment's line must be inside the diff. Get the hunk ranges with:
 
 ```bash
 MSYS_NO_PATHCONV=1 GH_CONFIG_DIR="<gh_config_dir>" gh api repos/DigitalZoneApp/<repo name>/pulls/<n>/files --paginate \
   --jq '.[] | "\(.filename) \(.patch | [scan("@@ -[0-9,]+ \\+([0-9]+),?([0-9]*)")] )"'
 ```
 
-  An anchor outside every `+start,count` range must be a plain comment with a diff block instead.
+  An anchor outside every `+start,count` range becomes a conversation comment that names the file and line.
 - Posting follows `choices.post_comments`: with `ask`, show the drafts and post only those the user names. Post an inline comment with:
 
 ```bash

@@ -16,7 +16,19 @@ BASE="$(git -C <repo> merge-base origin/<base> origin/pr-<n>)"
 MSYS_NO_PATHCONV=1 git -C <repo> diff "$BASE" origin/<base> -- AGENTS.md .github/pull_request_template.md
 ```
 
-- The ticket from the PR title: `get_issue` and `list_comments`. Say whether it changed after the PR opened, and what changed.
+When `<base>` is not `<default>`, the repo's default branch (`main` in the code repos), the PR is stacked on a blocker's branch:
+
+```bash
+GH_CONFIG_DIR="<gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo name> --head <base> --state all --json number,state,headRefOid --jq '.[0]'
+MAIN_BASE="$(git -C <repo> merge-base origin/<default> origin/pr-<n>)"
+MSYS_NO_PATHCONV=1 git -C <repo> diff "$MAIN_BASE" origin/<default> -- AGENTS.md .github/pull_request_template.md
+```
+
+- The first line finds the blocker's PR, whose head is this PR's base. Say "stacked on #<blocker PR> (<open | merged | closed>, head <sha7>)" in chat and in the follow-up's header; no result means the base has no PR, so say that instead.
+- The standard lives on `<default>`, so a rule added there since the stack branched off binds this PR too, even though the blocker's branch has not merged it yet. The second diff shows those rules.
+- The blocker's PR is merged but this PR's base is still its branch: GitHub retargets a PR only when the merged branch is deleted. Item 0 becomes "retarget to `<default>`, then merge `origin/<default>`", and §4 uses `<default>` in place of `<base>`.
+
+- The ticket from the PR title: `get_issue` and `list_comments`. Compare its description, word for word, with the latest `ticket-<date>.md` in the ticket folder, which start-work saves, and say what changed. Never judge by `updatedAt`: it moves whenever anyone comments, us included. With no saved copy, say the text could not be compared.
 - A rule added to `AGENTS.md` or the template since `$BASE` binds this PR. For example, a rule to measure a dependency's behaviour means the PR body needs that measurement.
 
 ## 3. Collect the comments
@@ -49,14 +61,16 @@ Name which conflicts are generated files (`openapi/*.json`), which are regenerat
 
 ## 5. Verify each comment
 
-- Read the cited code at the PR head (`git show origin/pr-<n>:<path>`).
+- Read the cited code at the PR head (`MSYS_NO_PATHCONV=1 git -C <repo> show origin/pr-<n>:<path>`) for **Now**, and on the base (`origin/<base>:<path>`) for **Before this PR**; a path missing on the base means the code did not exist before this PR.
 - When the comment is about behaviour, measure it: a scratchpad script against the installed package or the dev database, with the command and result recorded.
 - Say whether the fix departs from the ticket text. If it does, the fix plan says how to handle it: ask the ticket owner to amend the ticket, or list it as a departure in the PR body.
 
 ## 6. Write the fix plan and stop
 
 - Write `<workspace_root>/<work_folder>/<slug>/followup-<date>.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/followup-plan.md`:
-  - "Comments at a glance" in plain words, each with an everyday example and a recommendation;
-  - item 0, the branch update, when the branch is behind;
-  - "Detailed fixes": each with how it was verified, the ticket alignment, a test-first fix plan with its commit title, an alternative push-back where reasonable, and a reply draft.
+  - "Comments at a glance": one line per comment with its recommendation, then `In plain words:` (why it matters, with no code terms) and `Example:` (someone does X → sees Y today → would see Z after);
+  - item 0, the branch update, when the branch is behind or its blocker has merged;
+  - "Detailed fixes": each with Before this PR, Now, What they raised, How checked, Ticket, Fix we should apply (test first, with its commit title), a Dry run with real values now and after the fix, an Alternative where reasonable, and a Reply draft;
+  - a step that breaks code on purpose to prove a test is labelled temporary ("Temporary: break <what> so the test fails on purpose; restore it byte for byte; never commit") and never stands in for the fix, which is named on its own;
+  - each Reply draft stands alone and never names another PR or issue by number (`${CLAUDE_PLUGIN_ROOT}/shared/templates/reply.md`).
 - Show it in chat and end with "Which do you accept?". Stop.

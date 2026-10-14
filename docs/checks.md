@@ -27,16 +27,16 @@ Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 acc
 | `brief` | `## What it asks for`, `## Where it sits`, `## What I checked`, `## The plan at a glance`, `## Decision 1 of` |
 | `plan` | `## Tasks at a glance`, `## Global Constraints`, `## Decisions`, `## Review Focus`, `## Pre-flight`, `### Task 1:`, `## Self-check`; a `**Base:**` line naming a branch in backticks; every `[Details →](#…)` anchor matches a heading |
 | `ledger` | first line `# Ledger — plan: `, then `## Rulings`, `## Tasks`, `## Environment`, `## Review`, `## Remote steps` |
-| `review` | the six exact headings `## 1. What the ticket is trying to solve`, `## 2. What the PR does`, `## 3. Issues at a glance`, `## 4. Issues in detail`, `## 5. Already raised by other reviewers`, `## 6. Considered and set aside`, and a `Verdict:` line |
-| `followup` | `## Comments at a glance`, `## Detailed fixes`, `Which do you accept?`, and ` · comment ` in fix headings |
-| `reply` | no `#<n>` or `/pull/<n>`; a commit SHA or the word `Evidence` |
+| `review` | the six exact headings `## 1. What the ticket is trying to solve`, `## 2. What the PR does`, `## 3. Issues at a glance`, `## 4. Issues in detail`, `## 5. Already raised by other reviewers`, `## 6. Considered and set aside`, and a `Verdict:` line; no `suggestion` block inside a drafted comment (`<details>`) |
+| `followup` | `## Comments at a glance`, `## Detailed fixes`, `Which do you accept?`; per entry, from 1 up (item 0 exempt): each glance entry holds `In plain words:` and `Example:`, and each `### n.` fix holds ` · comment ` in its heading, the labels Before this PR, Now, What they raised, Fix we should apply and Dry run, and a reply draft with no `#<n>`, `/pull/<n>` or `suggestion` block (a reviewer's own suggestion quoted elsewhere in the block is fine) |
+| `reply` | no `#<n>` or `/pull/<n>`; no `suggestion` block; a commit SHA or the word `Evidence` |
 | `config` | every key present; required values real (not empty, `""`, `''`, a comment, or an unfilled `<placeholder>`) |
 
-`scripts/test-check-output.sh` proves it: each `tests/fixtures/good-<kind>.md` passes and each `bad-<kind>.md` and `bad-<kind>-<reason>.md` fails. Known gaps: a plan with no Details links passes; a heading with trailing spaces fails; the reply check misses "PR 145".
+`scripts/test-check-output.sh` proves it: each `tests/fixtures/good-<kind>.md` passes and each `bad-<kind>.md` and `bad-<kind>-<reason>.md` fails. Known gaps: a plan with no Details links passes; a heading with trailing spaces fails; the reply check, and the follow-up's reply-draft check, miss "PR 145".
 
 ## Probes (`tests/probes/`, run by `scripts/test-probes.sh`)
 
-Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Seven extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections`, `fresh-clone` and `version-bump` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
+Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Nine extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections`, `fresh-clone` and `version-bump` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
 
 | Probe | Proves |
 | --- | --- |
@@ -48,6 +48,8 @@ Each probe works in throwaway git repos under a folder whose name has a space, a
 | `code-checks` | start-work's code checks find a path the blocker added on `origin/<base>`, show its content, and list the blocker's commit as drift |
 | `stack-start` | the plan's Pre-flight starts the branch at `origin/<base>` with no upstream, so a pull cannot follow the blocker's branch |
 | `overlap-prs` | the open-PR overlap list (with a stand-in `gh`) names exactly the PRs that change a path the ticket names, matching whole paths, spaces included |
+| `stacked-rules` | for a PR stacked on a blocker's branch, the follow-up's second rules diff shows a rule added to `AGENTS.md` on `main` that the blocker never merged |
+| `pr-checkout` | the follow-up checkout reaches the PR head even when the branch tracks its blocker's branch, and when the switch fails it leaves the other branch in place and prints a `STOP` line naming both |
 | `review-clone` | the reviewer's scratch clone reviews only the PR's files when the local `main` is stale and when the PR is stacked on another PR's branch, and leaves the user's repo untouched |
 | `reflector-hook` | the hook spawns once per new context file, never for a reflector run, with hooks off |
 | `version-bump` | `check.sh` section 13 fails on an edited or a new plugin file without a version bump, and passes once the version changes |
