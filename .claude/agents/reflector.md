@@ -17,7 +17,7 @@ Read `.claude/reflector-context.json` first. If it is missing or is not valid JS
 
 ## 3. Ground-truth check
 
-Compare `git_status_diff` (this repo's `git status --porcelain=v1`) with `files_modified`. A file listed in `files_modified` but absent from the diff is an implicit `partial_completion` signal: the session claimed a change that is not there. The reverse is not a signal: an unlisted modified file may be an earlier turn's uncommitted work, or one of your own earlier edits under `reflector/` or `docs/`. Both empty is normal.
+Compare `files_modified` with what git shows. A claimed file is present when it appears in `git_status_diff` (this repo's `git status --porcelain=v1`) or in `git show --name-only --format= <sha>` for a SHA listed in `commits`. A claimed file in neither place is an implicit `partial_completion` signal: the session claimed a change that is not there. A SHA in `commits` that `git show` cannot find is also a `partial_completion` signal. A claimed file that `git check-ignore -q <path>` reports as ignored is not a signal, because ignored files appear in neither place. The reverse is not a signal: an unlisted modified file may be an earlier turn's uncommitted work, or one of your own earlier edits under `reflector/` or `docs/`. Both empty is normal.
 
 ## 4. Friction vocabulary
 

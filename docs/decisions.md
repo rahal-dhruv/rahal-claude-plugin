@@ -345,6 +345,13 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Where:** `.gitignore`, `.claude/agents/reflector.md`, `reflector/README.md`, `tests/probes/check-sections.sh`
 - **Date:** 2026-10-09
 
+### PD-50 — The ground-truth check also reads the turn's commits
+- **Decision:** the context file may list `commits`, the SHAs the turn created. A claimed file counts as present when it is in `git_status_diff`, in one of those commits, or git-ignored; a listed SHA that does not exist is a signal.
+- **Why:** a turn that commits its work leaves `git status` empty, so every committed file looked like a false claim (commit 3f091a7: 10 files); ignored files never appear in either place.
+- **Cost if wrong:** a session that leaves out `commits` gets the old false signals; a claimed change to an ignored file is never checked; a clean merge commit lists no files in `git show`, so files brought in by a merge are still flagged.
+- **Where:** `.claude/agents/reflector.md`, `reflector/README.md`, `scripts/required-headings.txt`
+- **Date:** 2026-10-11
+
 ### PD-51 — Every change to the plugin bumps its version
 - **Decision:** a branch that changes anything under `plugins/rahal/` bumps `version` in `plugin.json`; `check.sh` section 13 fails otherwise, comparing with where the branch left `main`. Of two branches that chose the same number, the later merge takes the next.
 - **Why:** sessions load a copy cached per version at install, so the one-pass review (PD-35) never reached real runs while the version stayed 0.1.0; every run on 2026-10-09 to 10-11 still reviewed twice.
