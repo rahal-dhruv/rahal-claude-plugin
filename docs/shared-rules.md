@@ -21,17 +21,26 @@ Files in `plugins/rahal/shared/`, read by every command. Referenced as `${CLAUDE
 - **Follows the user's choices:** commit (`commit_when`, `commit_size`, `attribution`), push, open PR (`open_pr`, `pr_state`), post comments (`post_comments`), re-request review (`re_request_review`). With `post_comments: auto`, a reply citing a commit is posted only once that commit is pushed.
 - **Fixed for everyone:** stops between phases; no force push, `--no-verify`, `gh auth switch` or `git config`; never edit the ticket or `scope/`; comments written to the ticket folder before posting; CI read once; any remote action without its own choice (replacing a PR description) asks every time; a headless run prints its question and stops.
 
+## Instructions (`instructions.md`)
+
+- **Syntax:** `<link> [model=<name>] ["<instruction>"]` for start-work, review-pr and pr-followup; `["<instruction>"]` for plan-tickets. Unquoted text after the link is read as the instruction too, and the run says so.
+- **Read as:** right after step 0, one line per action with its tier and the step it touches; each line is checked again when the run reaches that step.
+- **Three tiers:** never overridden (the fixed rules and stops in `approval-gates.md`, `evidence.md`, step 0, each template's headings, lines and drafting rules, the repo's `AGENTS.md`, the account, ports and gh folder, plan-tickets' read-only rule); overridden for one run after a question (`choices.*`, the profile's practice, a decided plan decision, a departure from the ticket); applied without asking (wording, length, focus, extra checks, and an answer to a question the command would ask, whose facts are still printed before `Answered by your instruction: …`). What an instruction leaves out of an output is named there.
+- **Conflicts:** asked one at a time as Now / You asked / It would / Options / Recommend. A never-overridden rule offers only "do the rest without it" or "stop"; a saved choice also offers "save as my choice", which writes `choices` in `.claude/rahal.local.md`.
+- **Recorded:** on the `Instruction:` line (`none` when none) of `brief.md`, `plan.md`, `followup-<date>.md`, `review-<date>.md` and a saved queue, all checked by `check-output.sh`; `Model:` beside it in `plan.md` and `followup-<date>.md`; each conflict's answer under the plan's Decided (start-work phase one), in `ledger.md` (later, and pr-followup), or as `· ruled: …` on the line (review-pr, plan-tickets).
+- **Re-runs:** no instruction keeps the recorded one; a different one asks add / replace / ignore; `"none"` clears it. start-work keeps it for the whole ticket, pr-followup carries it into the next round, and review-pr and plan-tickets start fresh.
+
 ## Evidence (`evidence.md`)
 
 A check passes only when its output was seen passing; a test run's `Test Files` and `Errors` lines count, not only its `Tests` line; environmental failures are labelled and never looped; library behaviour is measured; every helper citation is re-opened; process claims are checked against repo history; the standard is read from `origin/<default>`; a test must be seen failing first.
 
 ## The review (`review-model.md`, `agents/rahal-reviewer.md`)
 
-- **The model:** skipped when the run has `model=<name>` or `choices.review_model` holds one; otherwise suggested from the change's size and risk and asked. "Always <model>" saves it.
+- **The model:** skipped when `model=<name>` was given now or is recorded as `Model:` in `plan.md` or the latest `followup-*.md`, or `choices.review_model` holds one; otherwise suggested from the change's size and risk and asked. "Always <model>" saves it.
 - **One pass:** the main session starts `rahal:rahal-reviewer` once with the chosen `model`. The agent:
   1. builds a scratch clone of the repo with `git clone --shared --no-checkout`, checks out the head as `review-target`, sets the default branch to the fetched `origin/<base>` (the PR's `baseRefName` or the plan's `**Base:**` branch), and removes the remote, because `code-review` compares against the local default branch: a stale local `main` makes it report other people's merged files, and a stacked change's blocker commits would be reviewed too;
   2. runs `code-review` there through the Skill tool with exactly `high review-target` (never `--fix` or `--comment`); `code-review` starts its own helper agent, which runs on the same model;
-  3. checks the ticket, `AGENTS.md`, correctness beyond `code-review`, test strength, Review Focus and the PR body;
+  3. checks the ticket, `AGENTS.md`, correctness beyond `code-review`, test strength, Review Focus, the instruction's focus and extra checks, and the PR body;
   4. returns one merged list, first line `code-review: ran at high on <sha>` or `code-review: not run — <reason>`.
 - **Not run** means the report covers ticket checks only, never "clean".
 
@@ -52,7 +61,7 @@ Team facts: Linear workspace and team key, GitHub org, the three repos and their
 | `linear.tools` | step 0 check 3 |
 | `toolchain.bash_node_path`, `e2e_node_options`, `docker_ports`, `dev_database_url_port` | step 0 check 5 and "How to run commands" (the dev database URL), `start-work` phase two, `pr-followup` phase two |
 | `workspace_extras.*` | init's summary; `docs_folder` gates the docs step in phase two |
-| `choices.*` | `approval-gates.md`, `review-model.md` |
+| `choices.*` | `approval-gates.md`, `review-model.md`, `instructions.md` ("save as my choice") |
 
 Known gap: the front matter is not strict YAML (`remote_prefix: git@<alias>:` is unquoted); nothing parses it as YAML today.
 
@@ -60,10 +69,10 @@ Known gap: the front matter is not strict YAML (`remote_prefix: git@<alias>:` is
 
 | Template | Written by | Checked by |
 | --- | --- | --- |
-| `brief.md` | start-work phase one | `check-output.sh brief` |
-| `plan.md` | start-work phase one | `check-output.sh plan` (also its Details anchors and the `**Base:**` line) |
+| `brief.md` | start-work phase one | `check-output.sh brief` (also its `Instruction:` line) |
+| `plan.md` | start-work phase one | `check-output.sh plan` (also its Details anchors, the `**Base:**` line and the `Instruction:` line) |
 | `ledger.md` | start-work phase two, pr-followup phase two | `check-output.sh ledger` |
-| `review-report.md` | every review | `check-output.sh review` |
-| `followup-plan.md` | pr-followup phase one | `check-output.sh followup` |
+| `review-report.md` | every review | `check-output.sh review` (also its `Instruction:` line) |
+| `followup-plan.md` | pr-followup phase one | `check-output.sh followup` (also its `Instruction:` line) |
 | `reply.md` | pr-followup phase two | `check-output.sh reply` |
-| `ticket-queue.md` | plan-tickets, only when you choose to save | `check-output.sh queue` |
+| `ticket-queue.md` | plan-tickets, only when you choose to save | `check-output.sh queue` (also its `Instruction:` line) |

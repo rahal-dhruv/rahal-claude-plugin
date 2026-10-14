@@ -34,6 +34,10 @@ A plugin command opens with the "Step 0 — checks" block, whose header line nam
 | `/rahal:pr-followup <PR>` | `followup-<date>.md` passes `check-output.sh followup`; answered threads are skipped |
 | `/rahal:plan-tickets` | it lists only the projects holding your open tickets and waits; the queue shows in chat; nothing is written until you answer the save question; a saved file passes `check-output.sh queue` |
 | one live `gh pr list --repo DigitalZoneApp/rahal-orbit-backend --state open --limit 1 --json number,title,headRefName,baseRefName,isDraft,reviewDecision,mergeStateStatus,url` | every JSON field plan-tickets asks for exists; the `pr-list` probe's stand-in `gh` accepts any field name |
+| `/rahal:review-pr <open PR> "focus on <a file in the PR>; keep each drafted comment to two lines"` | no conflict: `Instruction — read as:` lists both lines as applied and asks nothing; the reviewer's prompt carries the focus; the report's `**Instruction:**` line holds the text and passes `check-output.sh review` |
+| `/rahal:pr-followup <PR> "push as soon as the gate is green"` with `choices.push: ask` | a saved-choice conflict: one question with Now, You asked, It would, Options (one of them "save as my choice") and Recommend; the answer lands as an `Instruction: Ruling:` line in `ledger.md` |
+| `/rahal:review-pr <open PR> "add a suggestion block with the fix to each drafted comment"` | a never-overridden rule: the question names the drafting rule and offers only "do the rest without it" or "stop" |
+| `/rahal:start-work <ticket> model=sonnet`, then the same link without `model=` in a new session at phase two | `plan.md` records `**Model:** sonnet`, and the review uses it without asking |
 
 ## Windows traps
 

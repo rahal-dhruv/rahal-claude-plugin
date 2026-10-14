@@ -24,14 +24,16 @@ Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 acc
 
 | Kind | Demands |
 | --- | --- |
-| `brief` | `## What it asks for`, `## Where it sits`, `## What I checked`, `## The plan at a glance`, `## Decision 1 of` |
-| `plan` | `## Tasks at a glance`, `## Global Constraints`, `## Decisions`, `## Review Focus`, `## Pre-flight`, `### Task 1:`, `## Self-check`; a `**Base:**` line naming a branch in backticks; every `[Details →](#…)` anchor matches a heading |
+| `brief` | `## What it asks for`, `## Where it sits`, `## What I checked`, `## The plan at a glance`, `## Decision 1 of`; an `Instruction:` line |
+| `plan` | `## Tasks at a glance`, `## Global Constraints`, `## Decisions`, `## Review Focus`, `## Pre-flight`, `### Task 1:`, `## Self-check`; a `**Base:**` line naming a branch in backticks; an `Instruction:` line; every `[Details →](#…)` anchor matches a heading |
 | `ledger` | first line `# Ledger — plan: `, then `## Rulings`, `## Tasks`, `## Environment`, `## Review`, `## Remote steps` |
-| `review` | the six exact headings `## 1. What the ticket is trying to solve`, `## 2. What the PR does`, `## 3. Issues at a glance`, `## 4. Issues in detail`, `## 5. Already raised by other reviewers`, `## 6. Considered and set aside`, and a `Verdict:` line; no `suggestion` block inside a drafted comment (`<details>`) |
-| `followup` | `## Comments at a glance`, `## Detailed fixes`, `Which do you accept?`; per entry, from 1 up (item 0 exempt): each glance entry holds `In plain words:` and `Example:`, and each `### n.` fix holds ` · comment ` in its heading, the labels Before this PR, Now, What they raised, Fix we should apply and Dry run, and a reply draft with no `#<n>`, `/pull/<n>` or `suggestion` block (a reviewer's own suggestion quoted elsewhere in the block is fine) |
+| `review` | the six exact headings `## 1. What the ticket is trying to solve`, `## 2. What the PR does`, `## 3. Issues at a glance`, `## 4. Issues in detail`, `## 5. Already raised by other reviewers`, `## 6. Considered and set aside`, and a `Verdict:` line; an `Instruction:` line; no `suggestion` block inside a drafted comment (`<details>`) |
+| `followup` | `## Comments at a glance`, `## Detailed fixes`, `Which do you accept?`; an `Instruction:` line; per entry, from 1 up (item 0 exempt): each glance entry holds `In plain words:` and `Example:`, and each `### n.` fix holds ` · comment ` in its heading, the labels Before this PR, Now, What they raised, Fix we should apply and Dry run, and a reply draft with no `#<n>`, `/pull/<n>` or `suggestion` block (a reviewer's own suggestion quoted elsewhere in the block is fine) |
 | `reply` | no `#<n>` or `/pull/<n>`; no `suggestion` block; a commit SHA or the word `Evidence` |
 | `config` | every key present; required values real (not empty, `""`, `''`, a comment, or an unfilled `<placeholder>`) |
-| `queue` | `**Lanes saved:**` and `## At a glance`, `## What the order rests on`, `## Finish first`, `## Pick order`, `## Lanes`, `## Stack candidates`, `## Blocking you`, `## Waiting on you`, `## Can't order`, `## Data gaps`; every numbered `## Pick order` line is `<n>. ORB-<id> <title> — <reason>` |
+| `queue` | `**Lanes saved:**` and `## At a glance`, `## What the order rests on`, `## Finish first`, `## Pick order`, `## Lanes`, `## Stack candidates`, `## Blocking you`, `## Waiting on you`, `## Can't order`, `## Data gaps`; an `Instruction:` line; every numbered `## Pick order` line is `<n>. ORB-<id> <title> — <reason>` |
+
+An `Instruction:` line is a line starting `Instruction:` or `**Instruction:**` followed by the instruction as typed or `none`; an unfilled `<placeholder>` fails.
 
 `scripts/test-check-output.sh` proves it: each `tests/fixtures/good-<kind>.md` passes and each `bad-<kind>.md` and `bad-<kind>-<reason>.md` fails. Known gaps: a plan with no Details links passes; a heading with trailing spaces fails; the reply check, and the follow-up's reply-draft check, miss "PR 145"; a queue entry whose title itself contains " — " passes without a reason; a demoted heading such as `### Lanes` passes the heading check (except Pick order, which must start its line); an indented or `2)` pick-order entry is not checked for a reason.
 

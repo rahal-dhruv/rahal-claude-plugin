@@ -532,3 +532,59 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** one more small probe per such line to maintain.
 - **Where:** `AGENTS.md`, `docs/checks.md`, `tests/probes/pr-list.sh`
 - **Date:** 2026-10-14
+
+### PD-81 — The instruction is a quoted string after the link
+- **Decision:** start-work, review-pr and pr-followup take `<link> [model=<name>] ["<instruction>"]`, and plan-tickets takes `["<instruction>"]`. Text after the link that is neither `model=` nor quoted is read as the instruction too, and the run says so. Each `argument-hint` is a YAML single-quoted string.
+- **Why:** the quotes mark where the instruction starts and ends, so a `model=` or a `#169` inside it is not taken for an argument, and reading unquoted text anyway keeps a forgotten quote from costing a re-run. The maintainer chose this over "everything after the link" and `note="…"`. `claude plugin validate --strict` fails the hint written in double quotes ("YAML frontmatter failed to parse") and passes it in single quotes.
+- **Cost if wrong:** an instruction that itself holds a double quote is cut short; the read-as list shows where.
+- **Where:** `plugins/rahal/shared/instructions.md`, `plugins/rahal/skills/start-work/SKILL.md`, `plugins/rahal/skills/review-pr/SKILL.md`, `plugins/rahal/skills/pr-followup/SKILL.md`, `plugins/rahal/skills/plan-tickets/SKILL.md`
+- **Date:** 2026-10-14
+
+### PD-82 — Three tiers decide what an instruction can change
+- **Decision:** one shared file, `shared/instructions.md`. Never overridden: the fixed rules and stops in `approval-gates.md`, `evidence.md`, step 0, each template's headings, lines and drafting rules, the repo's `AGENTS.md`, the account, ports and gh folder, and plan-tickets' read-only rule. Overridden for one run after a question: `choices.*`, the profile's practice, a decided plan decision, a departure from the ticket. Applied without asking: wording, length, focus and extra checks. When unsure, the stricter tier wins. A line that no step does is reported as ignored, never turned into a new step. The reviewer agent receives the focus and extra checks, which add to its checks and never loosen one.
+- **Why:** the maintainer asked that each round adapt to its own requirements and that the run ask only when a conflict arises; the tiers keep the safety rules and the checked outputs out of an instruction's reach.
+- **Cost if wrong:** a line put in too loose a tier is applied without a question; the read-as list shows each line's tier before anything runs.
+- **Where:** `plugins/rahal/shared/instructions.md`, `plugins/rahal/shared/review-model.md`, `plugins/rahal/agents/rahal-reviewer.md`
+- **Date:** 2026-10-14
+
+### PD-83 — A conflict is one question: Now, You asked, It would, Options, Recommend
+- **Decision:** conflicts are asked one at a time in that shape: at the start when they can be known then, otherwise at the step they touch. A never-overridden rule offers only "do the rest without it" or "stop" and names the rule. A saved choice also offers "save as my choice", which writes `choices` in `.claude/rahal.local.md` after a yes.
+- **Why:** the maintainer asked to be shown the current situation, what the request would do, and options, and only when a conflict arises.
+- **Cost if wrong:** a conflict that shows only at its step interrupts a long phase; a headless run prints it and stops.
+- **Where:** `plugins/rahal/shared/instructions.md`
+- **Date:** 2026-10-14
+
+### PD-84 — An instruction can answer a command's question; the facts are still shown
+- **Decision:** an instruction may answer a question the command would ask, such as the project, "Wait or stack?", the review model or an open plan decision. The run prints the facts the question would show, then `Answered by your instruction: <answer>`, and carries on. The fixed stops (after planning, after the fix plan, before fixing review findings) are not such questions.
+- **Why:** the maintainer's choice; `model=` already answered the review-model question this way, and the stop after planning still lets the person change the answer before any code runs.
+- **Cost if wrong:** a stack answered in advance writes the plan on the blocker's branch; the brief stop shows it before execution.
+- **Where:** `plugins/rahal/shared/instructions.md`, `plugins/rahal/skills/start-work/references/phase-1-understand.md`, `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
+- **Date:** 2026-10-14
+
+### PD-85 — Every output records the instruction on a checked `Instruction:` line
+- **Decision:** `brief.md`, `plan.md`, `followup-<date>.md`, `review-<date>.md` and a saved ticket queue carry an `Instruction:` line holding the instruction as typed or `none`. `check-output.sh` kinds `brief`, `plan`, `review`, `followup` and `queue` fail without it or with an unfilled placeholder. A conflict's answer goes under the plan's Decided in start-work phase one, then into `ledger.md` as `Instruction: Ruling: …`, or as `· ruled: …` on the line in review-pr and plan-tickets, which keep no ledger.
+- **Why:** an instruction followed once is lost when the run resumes. The plan named the plan and follow-up files; `AGENTS.md` §3 ties every template change to its check, so the brief, review and queue lines are checked too.
+- **Cost if wrong:** one more header line in every output.
+- **Where:** `plugins/rahal/shared/templates/brief.md`, `plugins/rahal/shared/templates/plan.md`, `plugins/rahal/shared/templates/followup-plan.md`, `plugins/rahal/shared/templates/review-report.md`, `plugins/rahal/shared/templates/ticket-queue.md`, `plugins/rahal/shared/templates/ledger.md`, `scripts/check-output.sh`
+- **Date:** 2026-10-14
+
+### PD-86 — Re-runs keep the recorded instruction; a new follow-up round carries it over
+- **Decision:** a run with no instruction keeps the recorded one; a different one shows both and asks add, replace or ignore; `"none"` clears it without asking. start-work reads the plan's line in every phase. pr-followup reads the latest `followup-*.md`'s line, in a new round too, and says it was carried over. review-pr and plan-tickets start fresh on every run.
+- **Why:** the maintainer chose carrying over into the next round over starting fresh or asking each time. review-pr and plan-tickets have no resume or rounds, and the ticket folder's `review-*.md` files also come from start-work's and pr-followup's internal reviews, so reading one back would mix commands. `"none"` is the one way to drop a carried instruction without a question.
+- **Cost if wrong:** a stale carried instruction ("merge the blocker branch first" after the blocker merged) reaches the next round; its read-as line names it, and the re-check at its step asks.
+- **Where:** `plugins/rahal/shared/instructions.md`, `plugins/rahal/skills/start-work/SKILL.md`, `plugins/rahal/skills/pr-followup/SKILL.md`
+- **Date:** 2026-10-14
+
+### PD-87 — `model=` is recorded as `Model:`, so a resumed run stops asking
+- **Decision:** `model=<name>` is recorded as `Model:` beside the Instruction line in `plan.md` and `followup-<date>.md` (`ask` when none was given). `review-model.md` skips the question when a model is given now or recorded for the ticket; a new `model=` replaces the recorded one. The old wording "(that run only)" is forbidden.
+- **Why:** start-work asked for the model again when phase two resumed in a new session.
+- **Cost if wrong:** a model chosen in phase one is reused much later; a new `model=` changes it.
+- **Where:** `plugins/rahal/shared/review-model.md`, `plugins/rahal/shared/templates/plan.md`, `plugins/rahal/shared/templates/followup-plan.md`, `scripts/forbidden-text.txt`
+- **Date:** 2026-10-14
+
+### PD-88 — plan-tickets takes an instruction too
+- **Decision:** `/rahal:plan-tickets ["<instruction>"]`. An instruction can name the project, which answers step 2's question with the list still shown, and narrow or focus the queue; the tickets it leaves out are named in Data gaps. The command's read-only rule is never overridden. The old sentence "plan-tickets takes no arguments" is forbidden.
+- **Why:** the maintainer's choice: planning a queue has per-run needs too, such as "only the Visas project; skip On Hold".
+- **Cost if wrong:** a filter hides a ticket the person needed; Data gaps names every ticket left out.
+- **Where:** `plugins/rahal/skills/plan-tickets/SKILL.md`, `plugins/rahal/skills/plan-tickets/references/queue-steps.md`, `plugins/rahal/shared/templates/ticket-queue.md`
+- **Date:** 2026-10-14

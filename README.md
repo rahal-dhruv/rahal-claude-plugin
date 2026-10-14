@@ -160,6 +160,30 @@ Save this ticket queue? all lanes · lane A only (recommended) · lanes … · d
 
 The order rests on blocking links, then how many tickets each one unblocks, then priority and ticket number. The queue says so, because tickets carry no estimates or due dates. QA Staging and QA UAT count as merged. Nothing is saved unless you choose; a save goes to `work/ticket-queue/<project>-<date>.md`.
 
+## Adding an instruction
+
+Each round can have needs no fixed template foresees. Add them in double quotes after the link (for `plan-tickets`, on their own):
+
+```
+/rahal:pr-followup <PR link> model=opus "merge the blocker branch first; keep replies under 3 lines"
+/rahal:review-pr <PR link> "focus on the search query; keep each drafted comment to two lines"
+/rahal:plan-tickets "only the Visas project; skip On Hold"
+```
+
+Right after the step 0 checks, the run shows how it read your instruction, one line per request:
+
+```
+Instruction — read as:
+  1. keep replies under 3 lines — wording, applied · phase two, step 7
+  2. merge the blocker branch first — team practice (orbit.md → Branch practice), asked below · phase two, step 2
+```
+
+- **Applied without asking:** wording, length, focus, extra checks, and answers to a question the command would ask (it still shows that question's facts).
+- **Asked first:** anything against one of your saved choices, the team's practice, a decision already made in the plan, or the ticket. You see what happens now, what your instruction would do, the options and a recommendation; for a saved choice you can also save the new answer.
+- **Never changed:** the stops between phases, the evidence rules, step 0, the output templates, the repo's `AGENTS.md`, and your account, ports and gh folder (`/rahal:init` changes those). You can go on without that part, or stop.
+
+The instruction is saved in `plan.md` or the follow-up file, so a resumed run and the next follow-up round keep it. Give a new one to add to it or replace it, or `"none"` to clear it. `model=` is saved the same way, so a resumed start-work no longer asks for the model again.
+
 ## Troubleshooting
 
 - **"Linear tools not available"**: connect Linear in claude.ai → Settings → Connectors, or authorise it with `/mcp`, then re-run `/rahal:init`.
