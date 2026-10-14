@@ -68,6 +68,7 @@ Written by the session to `.claude/reflector-context.json` before its final mess
   "files_accessed": { "code": ["plugins/rahal/agents/rahal-reviewer.md"], "docs": ["docs/checks.md"] },
   "files_modified": ["tests/probes/review-clone.sh", "scripts/required-files.txt"],
   "git_status_diff": "M  scripts/required-files.txt\n?? tests/probes/review-clone.sh",
+  "commits": [],
   "friction_signals": [ { "type": "re_prompt", "detail": "Had to ask twice for the gate commands." } ],
   "outcome": "success",
   "notes": "Anything a future session should know."
@@ -75,6 +76,8 @@ Written by the session to `.claude/reflector-context.json` before its final mess
 ```
 
 `git_status_diff` is the verbatim `git status --porcelain=v1` of this repo, or `""` when clean. `friction_signals[].type` is one of `re_prompt`, `context_injection`, `wrong_file_accessed`, `partial_completion`, `explicit_correction`. `outcome` is `success`, `partial` or `failed`.
+
+`commits` is optional and holds the SHAs of the commits this turn created; leave it out or use `[]` when the turn committed nothing.
 
 ## Why outputs land in `reflector/` and `docs/`
 
