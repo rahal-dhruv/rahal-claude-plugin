@@ -145,4 +145,22 @@ fi
 nonexec="$(git -C "$ROOT" ls-files -s -- '*.sh' 2>/dev/null | awk '$1 != "100755" { print $4 }')"
 for f in $nonexec; do fail "$f is not recorded as executable (git update-index --chmod=+x $f)"; done
 
+# 13. A change to the plugin bumps its version: sessions load a copy cached per version, so a change
+#     that keeps the old number never reaches them (committed, uncommitted and new files all count)
+base=""
+for ref in main origin/main; do
+  git -C "$ROOT" rev-parse -q --verify "$ref^{commit}" >/dev/null 2>&1 && { base="$ref"; break; }
+done
+if [ -n "$base" ] && mb="$(git -C "$ROOT" merge-base "$base" HEAD 2>/dev/null)"; then
+  if ! git -C "$ROOT" diff --quiet "$mb" -- plugins/rahal \
+     || [ -n "$(git -C "$ROOT" ls-files --others --exclude-standard -- plugins/rahal)" ]; then
+    # Read the change as a diff, not with `git show <rev>:<path>`: Git Bash needs MSYS_NO_PATHCONV for
+    # that form, which also stops it converting the -C path, so git would read nothing.
+    if ! git -C "$ROOT" diff "$mb" -- plugins/rahal/.claude-plugin/plugin.json | grep -q '^+ *"version":'; then
+      now_v="$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' "$PLUGIN/.claude-plugin/plugin.json")"
+      fail "plugins/rahal/ changed since $base without a version bump (still $now_v in plugins/rahal/.claude-plugin/plugin.json)"
+    fi
+  fi
+fi
+
 if [ "$FAILS" -eq 0 ]; then echo "check: all clear"; else echo "check: $FAILS problem(s)"; exit 1; fi

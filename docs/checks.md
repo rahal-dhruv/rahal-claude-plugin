@@ -16,6 +16,7 @@ The gate is `scripts/check.sh`, `scripts/test-check-output.sh` and `scripts/test
 10. **Decision log:** each `### PD-nn` in `docs/decisions.md` has Decision, Why, Cost if wrong and Where; no id repeats; every backticked Where path exists.
 11. **Opt-in reflector:** a `.claude/settings.json` that names `post-task.sh` fails.
 12. **Executable scripts:** every tracked `*.sh` is recorded as `100755`; a Windows checkout with `core.filemode=false` would otherwise commit scripts non-executable and break the gate on macOS and Linux.
+13. **Version bump:** when anything under `plugins/rahal/` differs from where the branch left `main` (committed, uncommitted or a new file), the `version` in `plugin.json` must differ too, because sessions load a copy cached per version. Skipped when there is neither `main` nor `origin/main`.
 
 Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 accepts a blank first line; section 7 scans nothing outside a git checkout, has no pattern for the maintainer's first name, and knows only the maintainer's two remapped ports (any other port passes).
 
@@ -35,7 +36,7 @@ Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 acc
 
 ## Probes (`tests/probes/`, run by `scripts/test-probes.sh`)
 
-Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Four extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections` and `fresh-clone` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
+Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Four extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections`, `fresh-clone` and `version-bump` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
 
 | Probe | Proves |
 | --- | --- |
@@ -46,6 +47,7 @@ Each probe works in throwaway git repos under a folder whose name has a space, a
 | `pr-fetch` | the PR fetch follows a force-pushed head (`+` refspec), in both files that carry it |
 | `review-clone` | the reviewer's scratch clone reviews only the PR's files when the local `main` is stale, and leaves the user's repo untouched |
 | `reflector-hook` | the hook spawns once per new context file, never for a reflector run, with hooks off |
+| `version-bump` | `check.sh` section 13 fails on an edited or a new plugin file without a version bump, and passes once the version changes |
 
 ## The test-first practice for Markdown
 

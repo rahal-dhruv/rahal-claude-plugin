@@ -43,6 +43,6 @@ A plugin command opens with the "Step 0 — checks" block. Its session transcrip
 ## Release
 
 1. The maintainer merges the pull request into `main`.
-2. Bump `version` in `plugins/rahal/.claude-plugin/plugin.json`.
+2. The branch already bumped `version` in `plugins/rahal/.claude-plugin/plugin.json` (`check.sh` section 13); if two merged branches chose the same number, give the later one the next.
 3. `claude plugin tag plugins/rahal` creates the `rahal--v<version>` tag; push `main` and the tag.
 4. Teammates install from the marketplace address in `README.md`'s Install section (with an SSH alias if they use several GitHub accounts), then `/plugin install rahal@rahal-claude-plugin`.

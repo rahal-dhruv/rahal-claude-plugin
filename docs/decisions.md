@@ -344,3 +344,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** one contributor's lessons and escalations no longer reach others; an escalation that needs the maintainer travels in a pull request instead.
 - **Where:** `.gitignore`, `.claude/agents/reflector.md`, `reflector/README.md`, `tests/probes/check-sections.sh`
 - **Date:** 2026-10-09
+
+### PD-51 — Every change to the plugin bumps its version
+- **Decision:** a branch that changes anything under `plugins/rahal/` bumps `version` in `plugin.json`; `check.sh` section 13 fails otherwise, comparing with where the branch left `main`. Of two branches that chose the same number, the later merge takes the next.
+- **Why:** sessions load a copy cached per version at install, so the one-pass review (PD-35) never reached real runs while the version stayed 0.1.0; every run on 2026-10-09 to 10-11 still reviewed twice.
+- **Cost if wrong:** a version-number conflict when two branches merge, settled by hand at merge.
+- **Where:** `scripts/check.sh`, `tests/probes/version-bump.sh`, `AGENTS.md`
+- **Date:** 2026-10-11

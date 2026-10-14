@@ -41,7 +41,7 @@ scripts/test-probes.sh
 
 - Commits: `type(scope): lowercase imperative title`, at most 72 characters, title only, no co-author line. The scope is a command (`init`, `start-work`, `review-pr`, `pr-followup`) or an area (`shared`, `agents`, `checks`, `probes`, `docs`, `reflector`).
 - Work on a branch and open a pull request into `main`. Nobody pushes to `main`.
-- The maintainer merges, bumps `version` in `plugins/rahal/.claude-plugin/plugin.json`, and tags with `claude plugin tag plugins/rahal`.
+- A branch that changes `plugins/rahal/` bumps the patch `version` in `plugins/rahal/.claude-plugin/plugin.json` (`check.sh` section 13): sessions load a copy cached per version, so an unbumped change never reaches them. The maintainer merges, gives the later of two branches that chose the same number the next one, and tags with `claude plugin tag plugins/rahal`.
 
 ## 5. Docs
 
