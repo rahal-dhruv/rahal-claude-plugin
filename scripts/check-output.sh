@@ -17,12 +17,15 @@ key() {
   esac
 }
 keyline() { grep -qE "^[[:space:]]*$1:" "$file" || fail "$kind lacks the key: $1"; }
+# instr: a line starting "Instruction:" (bold or not) holds the instruction as typed or "none", never a <placeholder>
+instr() { grep -qE '^(\*\*)?Instruction:(\*\*)?[[:space:]]+[^<[:space:]]' "$file" || fail "$kind lacks an Instruction: line (the instruction as typed, or none)"; }
 
 case "$kind" in
   brief)
-    for h in '## What it asks for' '## Where it sits' '## What I checked' '## The plan at a glance' '## Decision 1 of'; do need "$h"; done ;;
+    for h in '## What it asks for' '## Where it sits' '## What I checked' '## The plan at a glance' '## Decision 1 of'; do need "$h"; done; instr ;;
   plan)
     for h in '## Tasks at a glance' '## Global Constraints' '## Decisions' '## Review Focus' '## Pre-flight' '### Task 1:' '## Self-check'; do need "$h"; done
+    instr
     grep -qE '^\*\*Base:\*\* `[^`<]+`' "$file" || fail "plan lacks a **Base:** line naming its base branch"
     slugs="$(grep -E '^#{1,6} ' "$file" | sed -E 's/^#+ +//' | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9 _-]//g; s/ /-/g')"
     for anchor in $(grep -oE '\[Details →\]\(#[^)]+\)' "$file" | sed -E 's/.*\(#([^)]+)\)/\1/'); do
@@ -34,12 +37,14 @@ case "$kind" in
   review)
     for h in '## 1. What the ticket is trying to solve' '## 2. What the PR does' '## 3. Issues at a glance' \
              '## 4. Issues in detail' '## 5. Already raised by other reviewers' '## 6. Considered and set aside' 'Verdict:'; do need "$h"; done
+    instr
     # a drafted comment (inside <details>) states the issue plus an example; the author chooses the fix
     if awk '/<details>/ { d = 1 } /<\/details>/ { d = 0 } d && /^[[:space:]]*```+[[:space:]]*suggestion/ { f = 1 } END { exit !f }' "$file"; then
       fail "review drafts a suggestion block; a drafted comment states the issue plus an example only"
     fi ;;
   followup)
     for h in '## Comments at a glance' '## Detailed fixes' 'Which do you accept?' ' · comment '; do need "$h"; done
+    instr
     # Each glance entry from 1 up has "In plain words:" and "Example:". Each "### n." fix from 1 up has its
     # comment id and the five labels, and its reply draft names no other PR or issue. Item 0 is exempt.
     probs="$(awk '
@@ -74,6 +79,7 @@ EOF
   queue)
     for h in '**Lanes saved:**' '## At a glance' '## What the order rests on' '## Finish first' '## Pick order' '## Lanes' \
              '## Stack candidates' '## Blocking you' '## Waiting on you' "## Can't order" '## Data gaps'; do need "$h"; done
+    instr
     grep -qE '^## Pick order' "$file" || fail "queue lacks a line starting with: ## Pick order"
     # every numbered entry under "## Pick order" names a ticket and gives its reason after " — "
     bad="$(awk '/^## / { s = (index($0, "## Pick order") == 1) } s && /^[0-9]+\. / && !/^[0-9]+\. ORB-[0-9]+ .+ — .+/' "$file")"

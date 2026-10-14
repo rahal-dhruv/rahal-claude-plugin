@@ -5,6 +5,7 @@
 **Tech stack:** <from the profile and the ticket>
 **Ticket:** <link> · **Brief:** `work/<slug>/brief.md` · **Branch:** `feat/<slug>`
 **Base:** `<main, or the blocker's branch>` · <stacked only: stacked on #<blocker PR> (ORB-<blocker n>)>
+**Instruction:** <"the instruction as typed" | none> · **Model:** <the model= name | ask>
 
 ## Tasks at a glance
 

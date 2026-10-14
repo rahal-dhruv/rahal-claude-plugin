@@ -1,6 +1,7 @@
 # ORB-<n> — <ticket title>
 
 <status> · <assignee> · <project> › <milestone> · <ticket link>
+**Instruction:** <"the instruction as typed" | none>
 
 ## What it asks for
 

@@ -2,7 +2,7 @@
 
 ## Rulings
 
-- <Pre-flight | Task n | Final>: Ruling: <what was decided> — <why> — cost if wrong: <…>
+- <Pre-flight | Task n | Final | Instruction>: Ruling: <what was decided> — <why> — cost if wrong: <…>
 
 ## Tasks
 

@@ -1,6 +1,7 @@
 # PR #1 follow-up — 2 comments to handle
 
 Base: main · Branch: 2 behind main; trial merge conflicts: openapi/admin.json · Ticket: unchanged · New rules since the branch on main: none
+Instruction: "merge the blocker branch first; keep replies under 3 lines" · Model: opus
 
 ## Comments at a glance
 

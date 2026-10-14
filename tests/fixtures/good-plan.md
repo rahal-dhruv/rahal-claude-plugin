@@ -2,6 +2,7 @@
 
 **Ticket:** https://linear.app/digitalzone/issue/ORB-1 · **Brief:** `work/orb-1-example/brief.md` · **Branch:** `feat/orb-1-example`
 **Base:** `orb-103-car-rental-search-route` · stacked on #146 (ORB-103)
+**Instruction:** "keep the PR body under 40 lines" · **Model:** opus
 
 ## Tasks at a glance
 

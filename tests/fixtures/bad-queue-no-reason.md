@@ -1,6 +1,7 @@
 # Ticket queue — Visas — 2026-10-12
 
 **For:** Alex · **Lanes saved:** all · **Read:** 4 of your open tickets, 1 linked ticket, open PRs in backend and dashboard at 10:40
+**Instruction:** "only the Visas project"
 
 A suggestion only: nothing in Linear or GitHub was changed.
 

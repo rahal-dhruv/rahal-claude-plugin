@@ -1,6 +1,7 @@
 # Ticket queue — <project> — <YYYY-MM-DD>
 
 **For:** <your name> · **Lanes saved:** <all | A | A, C | not saved> · **Read:** <n> of your open tickets, <m> linked tickets, open PRs in backend and dashboard at <HH:MM>
+**Instruction:** <"the instruction as typed" | none> <· ruled: <line> — <answer>, for each conflict answered>
 
 A suggestion only: nothing in Linear or GitHub was changed.
 

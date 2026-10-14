@@ -1,6 +1,7 @@
 # ORB-1 — Example ticket
 
 Todo · someone · Project › Milestone · https://linear.app/digitalzone/issue/ORB-1
+**Instruction:** none
 
 ## What it asks for
 
