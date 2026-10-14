@@ -9,3 +9,4 @@
 - Before calling a git or process step "how we do it", check the repo's history (`git log origin/<default> --merges`, the order migrations landed in), not only `AGENTS.md`.
 - Read the default branch, `AGENTS.md`, `CODEOWNERS` and the PR template from `origin/<default>` after a fresh `git fetch`, never from a stale local checkout.
 - A test that passed before the code existed proves nothing: watch it fail first. When the code was already right, prove the test by breaking the code once (a mutation) and watching it fail.
+- A test run's summary is not the whole result: a test file can fail in a hook, or vitest can report Errors, while every test passes. Read the `Test Files` and `Errors` lines, and the full log whenever either shows a failure.

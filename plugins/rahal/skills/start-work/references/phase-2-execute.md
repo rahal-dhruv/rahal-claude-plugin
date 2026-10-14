@@ -2,14 +2,14 @@
 
 ## 1. Step 0 and the commit gate
 
-- Run checks 1–5.
+- Run checks 1–5, and re-check a stacked base (step 0 → The ticket folder, item 5).
 - Read `choices.commit_when`. For `standing_yes_per_ticket`, ask once: "Commit as I go for ORB-<n>? (never a push)". For `ask_each`, ask before every commit. For `never`, leave changes uncommitted and say so at each task's end.
 
 ## 2. Pre-flight and the ledger
 
 - Run the plan's Pre-flight block, adapted to the config:
   - `ORBIT_POSTGRES_PORT=<docker_ports.postgres> ORBIT_REDIS_PORT=<docker_ports.redis> docker compose up --wait` from the backend folder.
-  - For Prisma dev commands, `export DATABASE_URL="$(grep '^DATABASE_URL=' .env | cut -d= -f2- | sed 's#:5432/#:<dev_database_url_port>/#')"` when the port differs. Never edit `.env`.
+  - Prisma dev commands run with the dev database URL (step 0 → How to run commands).
   - `pnpm db:migrate`.
 - Create `<work>/<slug>/ledger.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/ledger.md`. Record every ruling, task completion, environmental problem, review finding and remote step there as it happens. It is what a later session resumes from.
 
@@ -35,7 +35,11 @@ Run `NODE_OPTIONS='<e2e_node_options>' pnpm check` in the background, and watch 
 
 ## 6. Guard checks
 
-For each key guard (a live-row filter, a unique-violation-to-409 mapping, a permission on a route, a size limit, a magic-number check, an object delete), break it once and record which case fails. Use a scratchpad runner:
+For each key guard (a live-row filter, a unique-violation-to-409 mapping, a permission on a route, a size limit, a magic-number check, an object delete), break it once and record which case fails.
+
+For an `ORDER BY`, delete the clause and run the suite. If it stays green, say so and name the order no test covers: Postgres often returns rows in the order they were stored, and cuid ids sort by creation time, so seeded rows can pass by luck.
+
+Use a scratchpad runner:
 
 ```bash
 #!/usr/bin/env bash
@@ -53,7 +57,7 @@ run() {
   if [ -z "$diff" ]; then echo "MUTATION NOT APPLIED" >> "$OUT"; else
     NODE_OPTIONS='<e2e_node_options>' pnpm test:e2e <e2e file> > "$SP/mut-$name.log" 2>&1
     echo "exit=$?" >> "$OUT"
-    grep -E '^ +(×)|^ +Tests ' "$SP/mut-$name.log" >> "$OUT"
+    grep -E '^ *(×|FAIL )|^ +(Test Files|Tests|Errors) |[Uu]nhandled' "$SP/mut-$name.log" >> "$OUT"; echo "log: $SP/mut-$name.log" >> "$OUT"
   fi
   cp "$SP/orig-$name" "$file"; echo >> "$OUT"
 }
@@ -62,6 +66,7 @@ if [ "$(git status --porcelain=v1)" = "$BEFORE" ]; then echo "tree: as before" >
   { echo "TREE CHANGED"; git status --porcelain=v1; } >> "$OUT"; fi
 ```
 
+- Write each mutation against the file as it is now, after prettier formatted it, never against the plan's code: once prettier wraps a line, a pattern copied from the plan no longer matches, and the record says `MUTATION NOT APPLIED`.
 - Run it in the background and read `mutations.md`. It must end with `tree: as before`. Anything else: restore each file from its `orig-<name>` copy before going on.
 - It never uses `git checkout` or `git stash`, so it is safe whatever the commit choice: uncommitted task changes and new files are restored exactly.
 - Where the suite deliberately has no permanent case (a row lock the ticket proves "once in the pull request"), write a one-off proof script. Run it once as written and once with the mutation, and record both outputs.
@@ -73,6 +78,7 @@ Re-run the measurements from phase one against the final code, and record the co
 ## 8. The PR body
 
 Build `<work>/<slug>/pr-body.md` from `git show origin/main:.github/pull_request_template.md`, keeping its sections. Fill in:
+- a stacked base (the plan's `**Base:**` line names a PR): the notice in `${CLAUDE_PLUGIN_ROOT}/shared/stack-notice.md` at the very top, with the blocker's PR number and branch filled in;
 - the ticket id;
 - **What:** the change; the existing definitions reused, by file and name; departures from the ticket with reasons; additions beyond the ticket's symbols; deployment notes (for example a storage bucket policy that must change);
 - **Not in this pull request:** the ticket's Deferred list, then findings left unchanged;
@@ -87,7 +93,7 @@ Follow anything the workspace's `CLAUDE.md` asks for at the end of a task (for e
 ## 10. Review
 
 1. The review model, per `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md`. `model=<name>` in the arguments answers it.
-2. The reviewer agent, once, on the branch: base `$(git merge-base origin/main HEAD)`, head `HEAD`'s SHA. It runs `code-review` itself, as `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md` says.
+2. The reviewer agent, once, on the branch: base `$(git merge-base origin/<base> HEAD)`, head `HEAD`'s SHA, and the base branch `<base>` for its review clone. It runs `code-review` itself, as `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md` says.
 3. Verify every finding (`shared/evidence.md`).
 4. Write `<work>/<slug>/review-<date>.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/review-report.md`.
 5. Show "Issues at a glance" and "Issues in detail", then stop. Ask which to fix.

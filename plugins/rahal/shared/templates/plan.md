@@ -4,6 +4,7 @@
 **Approach:** <2–3 sentences>
 **Tech stack:** <from the profile and the ticket>
 **Ticket:** <link> · **Brief:** `work/<slug>/brief.md` · **Branch:** `feat/<slug>`
+**Base:** `<main, or the blocker's branch>` · <stacked only: stacked on #<blocker PR> (ORB-<blocker n>)>
 
 ## Tasks at a glance
 
@@ -30,8 +31,8 @@
 ## Pre-flight
 
 ```bash
-git -C <repo> fetch origin && git -C <repo> switch main && git -C <repo> merge --ff-only origin/main
-git -C <repo> switch -c feat/<slug>
+git -C <repo> fetch origin
+git -C <repo> switch -c feat/<slug> --no-track origin/<base>
 pnpm install --frozen-lockfile && pnpm db:generate
 <docker compose up --wait with the configured ports; pnpm db:migrate with the dev database port>
 ```

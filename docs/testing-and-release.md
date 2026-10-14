@@ -15,7 +15,7 @@
 
 ## Proving a run used the plugin
 
-A plugin command opens with the "Step 0 — checks" block. Its session transcript (`~/.claude/projects/<encoded workspace>/<session>.jsonl`) contains `<command-name>/rahal:<command></command-name>`. A slash command typed into a session without the plugin is just text, and a "result" from it is not a plugin result.
+A plugin command opens with the "Step 0 — checks" block, whose header line names the version and the plugin root the run loaded; a root inside `plugins/cache/` is the copy cached at install. Its session transcript (`~/.claude/projects/<encoded workspace>/<session>.jsonl`) contains `<command-name>/rahal:<command></command-name>`. A slash command typed into a session without the plugin is just text, and a "result" from it is not a plugin result.
 
 ## Headless runs
 

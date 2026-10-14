@@ -4,8 +4,9 @@ Files in `plugins/rahal/shared/`, read by every command. Referenced as `${CLAUDE
 
 ## Step 0 (`step-0-checks.md`)
 
-- **How to run commands:** Git Bash commands that run `node`, `pnpm`, `claude` or a git hook start with `export PATH="<bash_node_path>:$PATH";`; every `gh` command starts with `GH_CONFIG_DIR="<gh_config_dir>"` when set, and every `gh pr`/`gh repo` command carries `--repo DigitalZoneApp/<repo name>`; `git show <rev>:<path>` and `gh api <path>` start with `MSYS_NO_PATHCONV=1`; every path is quoted.
-- **The ticket folder:** outputs live in `<workspace_root>/<work_folder>/<slug>/`, slug `orb-<n>-<two to four words>`. An existing `orb-<n>-*` folder is reused before a new one is made; the branch comes from `plan.md`'s `**Branch:**` line, the PR's `headRefName`, or `feat/<slug>`.
+- **Header line:** `Step 0 — checks · rahal <version> from <plugin root>`, the version read from the loaded copy's `.claude-plugin/plugin.json`, so a run on a stale cached copy shows it.
+- **How to run commands:** Git Bash commands that run `node`, `pnpm`, `claude` or a git hook start with `export PATH="<bash_node_path>:$PATH";`; every `gh` command starts with `GH_CONFIG_DIR="<gh_config_dir>"` when set, and every `gh pr`/`gh repo` command carries `--repo DigitalZoneApp/<repo name>`; `git show <rev>:<path>` and `gh api <path>` start with `MSYS_NO_PATHCONV=1`; every path is quoted; `pnpm` runs from inside the repo in a subshell, `(cd <repo> && pnpm …)`, because corepack reads pnpm's version from the repo's `package.json`; Prisma dev commands get `DATABASE_URL` rewritten to `<dev_database_url_port>` (the one copy of that line; start-work and pr-followup phase two point here).
+- **The ticket folder:** outputs live in `<workspace_root>/<work_folder>/<slug>/`, slug `orb-<n>-<two to four words>`. An existing `orb-<n>-*` folder is reused before a new one is made; the branch comes from `plan.md`'s `**Branch:**` line, the PR's `headRefName`, or `feat/<slug>`; the base from the PR's `baseRefName` in a PR command (GitHub retargets a stacked PR once its blocker merges), from `plan.md`'s `**Base:**` line in start-work, or `main`. A stacked base is re-checked with `gh pr view` when phase two or three starts: merged into `main` switches the Base line and the Pre-flight start to `main` (a ledger ruling; the stack notice leaves `pr-body.md`) and offers to merge `origin/main` into a branch that already exists, then regenerate and re-run the gate; merged into another branch, or closed without merging, stops and asks. The standard always comes from `origin/main`.
 - **Check 1 Config:** `.claude/rahal.local.md` in the start folder or a parent; `profile: orbit`.
 - **Check 2 GitHub:** `gh` installed; the active account equals `github.account`; it can read the repo; a merged PR asks "continue anyway?".
 - **Check 3 Linear:** loads `<linear.tools>get_issue` and friends; when they are missing or `tools` is empty, searches ToolSearch for `linear get_issue` and offers to record a new prefix; refuses non-`ORB-` tickets.
@@ -21,21 +22,25 @@ Files in `plugins/rahal/shared/`, read by every command. Referenced as `${CLAUDE
 
 ## Evidence (`evidence.md`)
 
-A check passes only when its output was seen passing; environmental failures are labelled and never looped; library behaviour is measured; every helper citation is re-opened; process claims are checked against repo history; the standard is read from `origin/<default>`; a test must be seen failing first.
+A check passes only when its output was seen passing; a test run's `Test Files` and `Errors` lines count, not only its `Tests` line; environmental failures are labelled and never looped; library behaviour is measured; every helper citation is re-opened; process claims are checked against repo history; the standard is read from `origin/<default>`; a test must be seen failing first.
 
 ## The review (`review-model.md`, `agents/rahal-reviewer.md`)
 
 - **The model:** skipped when the run has `model=<name>` or `choices.review_model` holds one; otherwise suggested from the change's size and risk and asked. "Always <model>" saves it.
 - **One pass:** the main session starts `rahal:rahal-reviewer` once with the chosen `model`. The agent:
-  1. builds a scratch clone of the repo with `git clone --shared --no-checkout`, checks out the head as `review-target`, sets `<base>` to the fetched `origin/<base>`, and removes the remote, because `code-review` compares against the local default branch, and a stale local `main` makes it report other people's merged files;
+  1. builds a scratch clone of the repo with `git clone --shared --no-checkout`, checks out the head as `review-target`, sets the default branch to the fetched `origin/<base>` (the PR's `baseRefName` or the plan's `**Base:**` branch), and removes the remote, because `code-review` compares against the local default branch: a stale local `main` makes it report other people's merged files, and a stacked change's blocker commits would be reviewed too;
   2. runs `code-review` there through the Skill tool with exactly `high review-target` (never `--fix` or `--comment`); `code-review` starts its own helper agent, which runs on the same model;
   3. checks the ticket, `AGENTS.md`, correctness beyond `code-review`, test strength, Review Focus and the PR body;
   4. returns one merged list, first line `code-review: ran at high on <sha>` or `code-review: not run — <reason>`.
 - **Not run** means the report covers ticket checks only, never "clean".
 
+## Stack notice (`stack-notice.md`)
+
+The paragraph that opens a stacked PR's body: merge the blocker alone, let GitHub move this PR to `main`, merge `origin/main` in, run `pnpm openapi`, never "merge stack" (it rebases and drops the merge commit with the regenerated API documents). start-work fills in the blocker's PR and branch, and drops it once the blocker merges.
+
 ## Profile (`profiles/orbit.md`)
 
-Team facts: Linear workspace and team key, GitHub org, the three repos and their default branches (`rahal-orbit-docs` uses `docs-main`), pnpm only, the gates, branch and commit practice, the `AGENTS.md` rules that bind every ticket.
+Team facts: Linear workspace and team key, GitHub org, the three repos and their default branches (`rahal-orbit-docs` uses `docs-main`), pnpm only, the gates, the shared dev database warning for stacked branches (answer no to `db:migrate:dev`'s reset offer), building supertest requests when sent (never an array built up front), branch and commit practice (commitlint refuses any capital letter after the scope), the `AGENTS.md` rules that bind every ticket.
 
 ## Config keys (`.claude/rahal.local.md`, written by init)
 
@@ -44,7 +49,7 @@ Team facts: Linear workspace and team key, GitHub org, the three repos and their
 | `profile`, `workspace_root`, `repos.*`, `work_folder` | step 0 check 1, the ticket folder |
 | `github.account`, `gh_config_dir`, `remote_prefix`, `commit_email` | step 0 checks 2 and 4, every `gh` and push command |
 | `linear.tools` | step 0 check 3 |
-| `toolchain.bash_node_path`, `e2e_node_options`, `docker_ports`, `dev_database_url_port` | step 0 check 5, `start-work` phase two, `pr-followup` phase two |
+| `toolchain.bash_node_path`, `e2e_node_options`, `docker_ports`, `dev_database_url_port` | step 0 check 5 and "How to run commands" (the dev database URL), `start-work` phase two, `pr-followup` phase two |
 | `workspace_extras.*` | init's summary; `docs_folder` gates the docs step in phase two |
 | `choices.*` | `approval-gates.md`, `review-model.md` |
 
@@ -55,7 +60,7 @@ Known gap: the front matter is not strict YAML (`remote_prefix: git@<alias>:` is
 | Template | Written by | Checked by |
 | --- | --- | --- |
 | `brief.md` | start-work phase one | `check-output.sh brief` |
-| `plan.md` | start-work phase one | `check-output.sh plan` (also its Details anchors) |
+| `plan.md` | start-work phase one | `check-output.sh plan` (also its Details anchors and the `**Base:**` line) |
 | `ledger.md` | start-work phase two, pr-followup phase two | `check-output.sh ledger` |
 | `review-report.md` | every review | `check-output.sh review` |
 | `followup-plan.md` | pr-followup phase one | `check-output.sh followup` |

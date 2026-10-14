@@ -25,7 +25,7 @@ Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 acc
 | Kind | Demands |
 | --- | --- |
 | `brief` | `## What it asks for`, `## Where it sits`, `## What I checked`, `## The plan at a glance`, `## Decision 1 of` |
-| `plan` | `## Tasks at a glance`, `## Global Constraints`, `## Decisions`, `## Review Focus`, `## Pre-flight`, `### Task 1:`, `## Self-check`; every `[Details →](#…)` anchor matches a heading |
+| `plan` | `## Tasks at a glance`, `## Global Constraints`, `## Decisions`, `## Review Focus`, `## Pre-flight`, `### Task 1:`, `## Self-check`; a `**Base:**` line naming a branch in backticks; every `[Details →](#…)` anchor matches a heading |
 | `ledger` | first line `# Ledger — plan: `, then `## Rulings`, `## Tasks`, `## Environment`, `## Review`, `## Remote steps` |
 | `review` | the six exact headings `## 1. What the ticket is trying to solve`, `## 2. What the PR does`, `## 3. Issues at a glance`, `## 4. Issues in detail`, `## 5. Already raised by other reviewers`, `## 6. Considered and set aside`, and a `Verdict:` line |
 | `followup` | `## Comments at a glance`, `## Detailed fixes`, `Which do you accept?`, and ` · comment ` in fix headings |
@@ -36,19 +36,22 @@ Known gaps: section 5 misses a list-form `tools:` and `MultiEdit`; section 4 acc
 
 ## Probes (`tests/probes/`, run by `scripts/test-probes.sh`)
 
-Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Four extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections`, `fresh-clone` and `version-bump` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
+Each probe works in throwaway git repos under a folder whose name has a space, and prints `<name>: all clear` or `FAIL …`. Seven extract a bash block from the shipped Markdown and take an optional path to a Markdown file; `reflector-hook` takes an optional path to a hook script; `check-sections`, `fresh-clone` and `version-bump` take none and test `check.sh` itself. The optional path lets a probe be run once against a deliberately broken copy to prove it bites.
 
 | Probe | Proves |
 | --- | --- |
 | `check-sections` | `check.sh` sections 7 and 9–11 fail on planted problems and stop failing once fixed |
 | `fresh-clone` | a clone made with Git for Windows' default `core.autocrlf=true` gets LF line endings (`.gitattributes`) and passes `check.sh`'s file and line sections |
-| `guard-runner` | the guard runner restores uncommitted and untracked files exactly |
+| `guard-runner` | the guard runner restores uncommitted and untracked files exactly, and each run's record keeps vitest's `FAIL`, `Test Files` and `Errors` lines and names its full log |
 | `merge-step` | the main merge stays open (`--no-commit`) instead of committing with Git's message |
 | `pr-fetch` | the PR fetch follows a force-pushed head (`+` refspec), in both files that carry it |
-| `review-clone` | the reviewer's scratch clone reviews only the PR's files when the local `main` is stale, and leaves the user's repo untouched |
+| `code-checks` | start-work's code checks find a path the blocker added on `origin/<base>`, show its content, and list the blocker's commit as drift |
+| `stack-start` | the plan's Pre-flight starts the branch at `origin/<base>` with no upstream, so a pull cannot follow the blocker's branch |
+| `overlap-prs` | the open-PR overlap list (with a stand-in `gh`) names exactly the PRs that change a path the ticket names, matching whole paths, spaces included |
+| `review-clone` | the reviewer's scratch clone reviews only the PR's files when the local `main` is stale and when the PR is stacked on another PR's branch, and leaves the user's repo untouched |
 | `reflector-hook` | the hook spawns once per new context file, never for a reflector run, with hooks off |
 | `version-bump` | `check.sh` section 13 fails on an edited or a new plugin file without a version bump, and passes once the version changes |
 
 ## The test-first practice for Markdown
 
-A change to plugin Markdown starts in `scripts/`: pin the new exact line in `required-headings.txt`, or the removed wording in `forbidden-text.txt`, or add a fixture; run `check.sh` and watch it fail; then edit. A pinned line inside a list or code block keeps its indentation. A new bash block gets a probe. Example: the one-pass review began as pinned lines and forbidden strings that failed until the reviewer agent, `review-model.md`, the template header and step 0 said the same thing.
+A change to plugin Markdown starts in `scripts/`: pin the new exact line in `required-headings.txt`, or the removed wording in `forbidden-text.txt`, or add a fixture; run `check.sh` and watch it fail; then edit. A pinned line inside a list or code block keeps its indentation. A new bash block gets a probe; a gh-only command is pinned instead, because no probe can reach GitHub (PD-57). Example: the one-pass review began as pinned lines and forbidden strings that failed until the reviewer agent, `review-model.md`, the template header and step 0 said the same thing.

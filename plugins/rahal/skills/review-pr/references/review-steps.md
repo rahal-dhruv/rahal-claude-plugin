@@ -13,7 +13,7 @@ A merged PR: ask whether to continue (step 0 check 2).
 
 ## 2. The ticket
 
-Take `ORB-<n>` from the PR title or branch. `get_issue` with relations, and `list_comments`. Note whether the ticket was updated after the PR opened (`updatedAt`): a reviewer may have amended it. The output folder is the ticket folder (step 0 → The ticket folder).
+Take `ORB-<n>` from the PR title or branch. `get_issue` with relations, and `list_comments`. When the ticket folder (step 0 → The ticket folder) holds a `ticket-<date>.md`, compare the description with the latest one and say what changed: a reviewer may have amended the ticket. `updatedAt` alone proves nothing, because any comment, ours included, moves it; with no saved copy, say the change cannot be checked. The output folder is the ticket folder.
 
 ## 3. Read the code at the PR head
 
@@ -30,7 +30,7 @@ MSYS_NO_PATHCONV=1 git -C <repo> show origin/pr-<n>:<path>
 ```
 
 - To run something at the head, use `git -C <repo> worktree add --detach "<scratchpad>/pr-<n>" origin/pr-<n>` and remove it afterwards with `git -C <repo> worktree remove --force "<scratchpad>/pr-<n>"`.
-- Read the standard on `origin/<base>`: `AGENTS.md`, `CODEOWNERS`, `.github/pull_request_template.md`.
+- Read the standard on `origin/<default>`, even for a PR stacked on another branch: `AGENTS.md`, `CODEOWNERS`, `.github/pull_request_template.md`.
 - List CODEOWNERS files the PR touches.
 
 ## 4. Existing comments
@@ -50,7 +50,7 @@ These go in section 5 of the report and are not repeated as new issues.
 
 Follow `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md`:
 1. Ask the model (unless `model=<name>` or a standing choice).
-2. Run the reviewer agent once, with the ticket, base `$BASE`, head `origin/pr-<n>`'s SHA, the repo folder and its default branch name, the scratchpad folder, `AGENTS.md`, and the existing comments. It runs `code-review` itself; there is no separate `code-review` run.
+2. Run the reviewer agent once, with the ticket, base `$BASE`, head `origin/pr-<n>`'s SHA, the repo folder, its default branch name and the PR's base branch (`baseRefName`), the scratchpad folder, `AGENTS.md`, and the existing comments. It runs `code-review` itself; there is no separate `code-review` run.
 
 ## 6. Verify and write the report
 

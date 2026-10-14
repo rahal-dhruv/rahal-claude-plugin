@@ -11,15 +11,16 @@
 
 ## Where it sits
 
-- Blocked by: <ticket — status; merged?>
+- Blocked by: <ticket — status; merged? its open PR, if any>
+- Base: <`main`, or stacked on #<blocker PR> (`<blocker branch>`)>
 - Unblocks: <tickets — what each reuses from this one>
-- Shares files with: <tickets — which files, e.g. `openapi/admin.json`>
+- Shares files with: <tickets — which files, e.g. `openapi/admin.json`>; open PRs: <#n (branch): path, or none>
 - Size: <as the ticket states>
 
 ## What I checked
 
 - main: <how far local main is behind>; <commits since the ticket's base commit that touch its files, or "none">
-- Files and symbols the ticket names: <all exist on origin/main, or which are missing>
+- Files and symbols the ticket names: <all exist on origin/<base>, or which are missing>
 - Library behaviour measured: <command → result>, or "nothing the ticket relies on needed measuring"
 - Drift: <each place the ticket and the code disagree>, or "none"
 

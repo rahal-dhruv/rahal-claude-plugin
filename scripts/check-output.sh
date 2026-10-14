@@ -23,6 +23,7 @@ case "$kind" in
     for h in '## What it asks for' '## Where it sits' '## What I checked' '## The plan at a glance' '## Decision 1 of'; do need "$h"; done ;;
   plan)
     for h in '## Tasks at a glance' '## Global Constraints' '## Decisions' '## Review Focus' '## Pre-flight' '### Task 1:' '## Self-check'; do need "$h"; done
+    grep -qE '^\*\*Base:\*\* `[^`<]+`' "$file" || fail "plan lacks a **Base:** line naming its base branch"
     slugs="$(grep -E '^#{1,6} ' "$file" | sed -E 's/^#+ +//' | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9 _-]//g; s/ /-/g')"
     for anchor in $(grep -oE '\[Details →\]\(#[^)]+\)' "$file" | sed -E 's/.*\(#([^)]+)\)/\1/'); do
       printf '%s\n' "$slugs" | grep -qxF -- "$anchor" || fail "plan link #$anchor has no matching heading"

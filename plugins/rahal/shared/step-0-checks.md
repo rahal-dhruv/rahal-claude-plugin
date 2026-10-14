@@ -1,9 +1,9 @@
 # Step 0 — access checks
 
-Run these first in every command and print one line per check:
+Run these first in every command and print the header line, then one line per check:
 
 ```
-Step 0 — checks
+Step 0 — checks · rahal <version> from <plugin root>
 ✓ Config      workspace <root>, profile orbit
 ✓ GitHub      gh signed in as <account>, can read DigitalZoneApp/<repo>
 ✓ Linear      read ORB-<n> ("<title>", <status>)
@@ -13,6 +13,8 @@ Step 0 — checks
 
 `✓` passed · `✗` failed · `–` not run. The calling command names the checks it needs.
 
+The header line names the plugin copy this run loaded: `<plugin root>` is the root the command's `SKILL.md` gave, and `<version>` is the `version` in `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`. A root inside Claude Code's `plugins/cache/` folder is the copy cached at install: it changes only after a version bump and `claude plugin update`, so an older version there means this run uses an older plugin.
+
 ## How to run commands
 
 - Check 1 reads `.claude/rahal.local.md`; use its values in every command below.
@@ -20,6 +22,8 @@ Step 0 — checks
   `export PATH="<toolchain.bash_node_path>:$PATH";` when that value is set.
 - Start every `gh` command with `GH_CONFIG_DIR="<github.gh_config_dir>"` when that value is set, and give every `gh pr` and `gh repo` command `--repo DigitalZoneApp/<repo name>`: the workspace root is not a repo, and inside another repo `gh` would act on that repo's PR.
 - In Git Bash, start `git show <rev>:<path>` and `gh api <path>` with `MSYS_NO_PATHCONV=1`, or the path is rewritten.
+- Run `pnpm` from inside the repo, in the same command: `(cd <repo> && pnpm …)`. Corepack takes pnpm's version from the repo's `package.json`, so from the workspace folder another version runs; the parentheses keep the session's own folder unchanged.
+- Prisma commands on the dev database (`pnpm db:migrate`, `pnpm db:migrate:dev`) run with `DATABASE_URL` on port `<dev_database_url_port>` when `.env` names another: `export DATABASE_URL="$(grep '^DATABASE_URL=' .env | cut -d= -f2- | sed 's#:5432/#:<dev_database_url_port>/#')"` in the same command, inside the backend. Never edit `.env`.
 - Quote every path: a workspace path may contain spaces.
 - `<repo>` below means `"<workspace_root>/<repos.backend>"` (or the dashboard or docs folder the command targets).
 
@@ -29,6 +33,11 @@ A ticket's outputs live in `<workspace_root>/<work_folder>/<slug>/`. The slug is
 1. List `"<workspace_root>/<work_folder>"/orb-<n>-*/`. One folder: use it; its name is the slug. Several: ask which.
 2. None: make the slug from the ticket title. Create the folder when the first file is written.
 3. The branch is the `**Branch:**` line of that folder's `plan.md` when it has one; for a PR, the PR's `headRefName`; otherwise `feat/<slug>`.
+4. The base: for a PR command (`review-pr`, `pr-followup`), the PR's `baseRefName`, because GitHub moves a stacked PR to `main` once its blocker merges; in `start-work`, the branch in the first backticks of `plan.md`'s `**Base:**` line (`orb-103-car-rental-search-route` in ``**Base:** `orb-103-car-rental-search-route` · stacked on #146 (ORB-103)``); otherwise `main`. The standard (`AGENTS.md`, `CODEOWNERS`, the PR template) always comes from `origin/main`, whatever the base.
+5. A stacked base is re-checked when phase two or phase three starts: `GH_CONFIG_DIR="<gh_config_dir>" gh pr view <blocker PR> --repo DigitalZoneApp/<repo name> --json state,mergedAt,baseRefName`.
+   - Merged into `main`: say so ("#146 (ORB-103) merged on <date>; ORB-<n> now starts from main"). Set the Base line, and the start point in the plan's Pre-flight, to `main`; record the change as a `Ruling:` in `ledger.md`; and remove the stack notice from `pr-body.md` if it has one. When the branch already exists and lacks that merge (`git -C <repo> merge-base --is-ancestor origin/main HEAD` fails), offer to merge `origin/main` into it the profile's way (Branch practice; a generated file is regenerated, never hand-merged), then run `pnpm db:generate && pnpm openapi` and the gate again, before any review or push.
+   - Merged into another branch (the blocker was itself stacked), or closed without merging: stop and ask.
+   - Open: keep the base.
 
 ## Check 1 — Config
 
@@ -57,7 +66,7 @@ A ticket's outputs live in `<workspace_root>/<work_folder>/<slug>/`. The slug is
 For each repo the command touches:
 1. `git -C <repo> remote get-url origin` must start with `github.remote_prefix`. Otherwise: "The remote does not use your configured address, so pushes may sign in as another account." Show the fix: `git -C <repo> remote set-url origin <remote_prefix>DigitalZoneApp/<repo name>.git`.
 2. `git -C <repo> config user.email` must equal `github.commit_email`. Otherwise report it. The fix is the user's own git identity setup; never run `git config`.
-3. `git -C <repo> fetch origin --quiet`. When a local `<default>` branch exists (`git -C <repo> rev-parse -q --verify refs/heads/<default>`), report how far it is behind with `git -C <repo> rev-list --left-right --count <default>...origin/<default>`. When it does not (a docs clone often has only feature branches), say "no local <default> branch; commands read origin/<default>". Either way this is information, not a failure: every command reads code from `origin/<default>`.
+3. `git -C <repo> fetch origin --quiet`. When a local `<default>` branch exists (`git -C <repo> rev-parse -q --verify refs/heads/<default>`), report how far it is behind with `git -C <repo> rev-list --left-right --count <default>...origin/<default>`. When it does not (a docs clone often has only feature branches), say "no local <default> branch; commands read origin/<default>". Either way this is information, not a failure: every command reads code from `origin/<default>`, or from `origin/<base>` for a stacked ticket.
 4. Phases that commit: `git -C <repo> status --porcelain=v1` must print nothing. Otherwise list the files.
 
 ## Check 5 — Toolchain

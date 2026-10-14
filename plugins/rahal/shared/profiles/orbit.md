@@ -21,7 +21,9 @@ The same for every Orbit engineer. Personal values live in `.claude/rahal.local.
 - Gate in both code repos: `pnpm check`. The backend's needs Docker and regenerates `openapi/*.json`.
 - Backend commands: `pnpm typecheck`, `pnpm lint`, `pnpm format`, `pnpm test`, `pnpm test:e2e <file>`, `pnpm test:contract`, `pnpm db:generate`, `pnpm db:migrate`, `pnpm db:migrate:dev --name <verb>_<object>`, `pnpm openapi`.
 - Local services: `docker compose up --wait` from the backend. `ORBIT_POSTGRES_PORT` and `ORBIT_REDIS_PORT` move the ports.
+- A stacked branch and its blocker's branch share one dev database (port `<dev_database_url_port>`). Once the stacked branch has applied its own migration, `pnpm db:migrate:dev` on the blocker's branch finds that migration missing from its folder and offers to reset the database: answer no. A reset deletes every table and row in it, the stacked branch's included.
 - The e2e suite starts its own containers (testcontainers). Its global setup spawns `pnpm`, which needs a shim on Windows (`toolchain.e2e_node_options`).
+- In e2e tests, build each supertest request when it is sent, through a factory such as `() => request(server).post(…)`, never as an array of requests built up front: supertest opens a listener per request on demand and closes it when the first one finishes, so the others fail with `ECONNREFUSED`. A `Promise.all` of requests started in the same instant is fine.
 
 ## The standard
 
@@ -31,7 +33,7 @@ The same for every Orbit engineer. Personal values live in `.claude/rahal.local.
 ## Branch practice
 
 - Branch: `feat/orb-<n>-<two to four words>`, e.g. `feat/orb-183-visa-destinations`.
-- Commit: `type(ORB-<n>): lowercase imperative title`. Accurate type (`feat`, `test`, `fix`, `refactor`, `docs`, `chore`), ≤72 characters, title only. commitlint enforces the shape.
+- Commit: `type(ORB-<n>): lowercase imperative title`. Accurate type (`feat`, `test`, `fix`, `refactor`, `docs`, `chore`), ≤72 characters, title only. commitlint enforces the shape, and it refuses any capital letter after the scope, camelCase names (`visaProduct`) and acronyms (`DTO`) included: write them in lower case or in words.
 - PR title: `feat(ORB-<n>): <ticket title as a lowercase imperative>`.
 - A PR branch behind `main` is updated by merging `origin/main` into it: `chore(ORB-<n>): merge main into the <branch words> branch`, e.g. `chore(ORB-183): merge main into the visa destinations branch`. Never rebase a pushed branch and never force push.
 - A PR's migration folders keep their names when `main` lands later-timestamped ones. Recreate one only when its ticket says so.

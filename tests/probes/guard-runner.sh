@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Runs the guard-check runner from phase-2-execute.md §6 against a repo whose task change is
 # uncommitted and partly untracked. Passes when every file is restored exactly, every mutation
-# was seen, and the runner reports the tree as before.
+# was seen, the runner reports the tree as before, and each run's record keeps vitest's failed-file
+# and Errors lines (a hook error can fail a file while every test passes) and names its full log.
 set -u
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 MD="${1:-$ROOT/plugins/rahal/skills/start-work/references/phase-2-execute.md}"
@@ -12,7 +13,7 @@ printf 'export const isLive = (row) => {\n  return true;\n};\n' > src/svc.ts
 git add -A && git -c commit.gpgsign=false commit -qm base
 printf 'export const isLive = (row) => {\n  return row.deletedAt === null;\n};\n' > src/svc.ts
 printf 'export const live = (r) => r.deletedAt === null;\n' > src/new-helper.ts
-fake_e2e() { echo '   × keeps deleted rows out'; echo '      Tests  1 failed'; return 1; }
+fake_e2e() { echo '   × keeps deleted rows out'; echo ' FAIL  test/svc.e2e-spec.ts > afterAll'; echo ' Test Files  1 failed (1)'; echo '      Tests  1 failed'; echo '     Errors  1 error'; return 1; }
 export -f fake_e2e
 awk '/^## 6\. Guard checks/{s=1} s&&/^```bash$/{p=1;next} p&&/^```$/{exit} p' "$MD" \
   | sed -e "s#\"<repo>\"#<repo>#g" -e "s#<repo>#\"$T/repo\"#g" -e "s#<scratchpad>#$T/scratch#g" \
@@ -28,4 +29,7 @@ grep -q 'r.deletedAt === null' src/new-helper.ts || { echo "FAIL new-helper.ts w
 grep -q 'MUTATION NOT APPLIED' "$T/scratch/mutations.md" 2>/dev/null && { echo "FAIL a mutation went unseen"; FAILS=$((FAILS + 1)); }
 [ "$(grep -c '^exit=' "$T/scratch/mutations.md" 2>/dev/null)" = 2 ] || { echo "FAIL expected 2 e2e runs"; FAILS=$((FAILS + 1)); }
 grep -q '^tree: as before$' "$T/scratch/mutations.md" 2>/dev/null || { echo "FAIL the runner did not report the tree as before"; FAILS=$((FAILS + 1)); }
+grep -q '^ *Errors  1 error$' "$T/scratch/mutations.md" 2>/dev/null || { echo "FAIL the runner dropped vitest's Errors line"; FAILS=$((FAILS + 1)); }
+grep -q '^ *Test Files  1 failed' "$T/scratch/mutations.md" 2>/dev/null || { echo "FAIL the runner dropped the failed test file count"; FAILS=$((FAILS + 1)); }
+[ "$(grep -c '^log: ' "$T/scratch/mutations.md" 2>/dev/null)" = 2 ] || { echo "FAIL each run must name its full log"; FAILS=$((FAILS + 1)); }
 if [ "$FAILS" -eq 0 ]; then echo "guard-runner: all clear"; else echo "guard-runner: $FAILS problem(s)"; exit 1; fi

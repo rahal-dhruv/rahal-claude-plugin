@@ -21,3 +21,14 @@ then `code-review` at effort `high` on the range|one review pass: the reviewer a
 Run `code-review` at `high` on the full PR URL|one review pass: the reviewer agent runs code-review itself
 two-pass|one review pass: the reviewer agent runs code-review itself
 two passes|one review pass: the reviewer agent runs code-review itself
+gh pr create --repo DigitalZoneApp/<repo name> --base main|a stacked PR targets the blocker's branch: use --base <base>
+git merge-base origin/main HEAD|the review range starts at the ticket's base: origin/<base>
+git -C <repo> switch main && git -C <repo> merge --ff-only origin/main|the branch starts from origin/<base> with --no-track
+branch --force <base>|the clone's default branch is set to origin/<base>, so code-review diffs a stacked change against its own base
+the default branch name (`<base>`)|<base> is the PR's or the plan's base; the default branch is <default>
+Note whether the ticket was updated after the PR opened (`updatedAt`)|updatedAt moves on any comment; compare the description with the saved ticket-<date>.md
+^ +Tests ' "$SP/mut-$name.log"|keep vitest's Test Files and Errors lines: a hook error fails a file while every test passes
+For Prisma dev commands, `export DATABASE_URL|the dev database URL line lives once, in step 0 → How to run commands
+--json headRefOid,mergeable,mergeStateStatus,statusCheckRollup|read reviewRequests back too, so an unrequested review shows
+Load SQL through `pg` against the dev database with bound parameters.|measure SQL on real rows inside a transaction that ends in ROLLBACK
+git diff <base>..<head>|<base> is a branch name that may have no local copy; diff the base and head SHAs

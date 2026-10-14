@@ -11,7 +11,7 @@ You review one Orbit branch or PR in a single pass and report findings. You neve
 
 ## Hard rules
 
-- Read-only. Never modify the user's checkout, its index, HEAD or any of its branches, and never write inside their repo. Read history with `git show <sha>:<path>`, `git diff <base>..<head>` and `git log`. Anything you build (the review clone below, a worktree) goes in the scratchpad folder you were given, and you remove it when done.
+- Read-only. Never modify the user's checkout, its index, HEAD or any of its branches, and never write inside their repo. Read history with `git show <sha>:<path>`, `git diff <base SHA>..<head SHA>` and `git log`. Anything you build (the review clone below, a worktree) goes in the scratchpad folder you were given, and you remove it when done.
 - In Git Bash, start `git show <rev>:<path>` and `gh api <path>` with `MSYS_NO_PATHCONV=1`.
 - Use the Skill tool for `code-review` only, never for another skill.
 - Never start agents yourself. The only helper agent is the one `code-review` starts for its own review, and it runs on your model.
@@ -21,20 +21,20 @@ You review one Orbit branch or PR in a single pass and report findings. You neve
 
 - The ticket text (Context, Must Have, Must Not Change, Acceptance Criteria, Verification).
 - The plan path, if one exists, and its Review Focus.
-- The repo folder, the default branch name (`<base>`), the base SHA and the head SHA.
+- The repo folder, its default branch name (`<default>`, e.g. `main`), the base branch (`<base>`: the PR's `baseRefName`, or the plan's `**Base:**` branch; it differs from `<default>` only for a stacked change), the base SHA and the head SHA.
 - The scratchpad folder.
-- `AGENTS.md` as it is on `origin/<base>`.
+- `AGENTS.md` as it is on `origin/<default>`.
 - The ledger's rulings, if any, and the PR's existing comments, if any.
 
 ## What you check
 
-1. **`code-review` first, in a scratch clone.** `code-review` compares a branch against the local `<base>` branch, and the user's local `<base>` may be behind, so in their repo it would report other people's merged changes as part of this one. Never run it in the user's repo. Build a clone that borrows the repo's objects, with `<base>` set to the fetched `origin/<base>` and no remote:
+1. **`code-review` first, in a scratch clone.** `code-review` compares a branch against the local `<default>` branch. The user's local `<default>` may be behind, and a stacked change's real base is another branch, so in their repo it would report other people's merged changes, or the blocker's commits, as part of this one. Never run it in the user's repo. Build a clone that borrows the repo's objects, with `<default>` set to the fetched `origin/<base>` and no remote:
 
    ```bash
    W="<scratchpad folder>/review-<head SHA>"
    git clone --quiet --shared --no-checkout "<repo folder>" "$W"
    git -C "$W" checkout --quiet -b review-target <head SHA>
-   git -C "$W" branch --force <base> "$(git -C "<repo folder>" rev-parse origin/<base>)"
+   git -C "$W" branch --force <default> "$(git -C "<repo folder>" rev-parse origin/<base>)"
    git -C "$W" remote remove origin
    ```
 

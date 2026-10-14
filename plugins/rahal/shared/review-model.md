@@ -29,8 +29,8 @@ The user decides. "Always <model>" writes `choices.review_model: <model>` into `
 1. Run the reviewer agent, once: the Agent tool with `subagent_type: "rahal:rahal-reviewer"` and `model: <chosen model>`. In that one pass it runs `code-review` at effort `high` on the chosen model, then checks the change against the ticket. There is no second review run in this session. Its prompt holds:
    - the ticket text;
    - the plan path, if any;
-   - the repo folder and its default branch name;
-   - the base and head SHAs (fetch first, so `origin/<default>` and the head are current);
+   - the repo folder, its default branch name and the base branch (the PR's `baseRefName`, or the plan's `**Base:**` branch);
+   - the base and head SHAs (fetch first, so `origin/<base>` and the head are current);
    - this session's scratchpad folder (the agent builds its review clone there);
    - `AGENTS.md` read from `origin/<default>`;
    - the plan's Review Focus, if any;

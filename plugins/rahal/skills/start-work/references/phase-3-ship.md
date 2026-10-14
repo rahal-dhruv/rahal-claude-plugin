@@ -4,9 +4,11 @@ Each step follows `choices` in `.claude/rahal.local.md`. With `ask`, ask before 
 
 `<branch>` below is the `**Branch:**` line of the ticket folder's `plan.md` (step 0 → The ticket folder), e.g. `feat/orb-183-visa-destinations`.
 
+`<base>` is the ticket's base (step 0 → The ticket folder, item 4): `main`, or the blocker's branch while the PR it stacks on is open.
+
 ## 0. Step 0
 
-Run checks 1, 2, 4 and 5 of `${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` first: this phase may start in a new session, where the gh account, the remote or the tree may have changed. Any ✗ stops before the push.
+Run checks 1, 2, 4 and 5 of `${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` first, and re-check a stacked base (The ticket folder, item 5): this phase may start in a new session, where the gh account, the remote, the tree or the blocker's PR may have changed. Any ✗ stops before the push.
 
 ## 1. Push
 
@@ -23,7 +25,7 @@ export PATH="<bash_node_path>:$PATH"; git -C <repo> push -u origin <branch>
 ## 2. Open the PR
 
 ```bash
-GH_CONFIG_DIR="<gh_config_dir>" gh pr create --repo DigitalZoneApp/<repo name> --base main \
+GH_CONFIG_DIR="<gh_config_dir>" gh pr create --repo DigitalZoneApp/<repo name> --base <base> \
   --head <branch> --title "feat(ORB-<n>): <ticket title as a lowercase imperative>" \
   --body-file "<workspace_root>/<work_folder>/<slug>/pr-body.md" [--draft]
 ```
@@ -34,8 +36,8 @@ Use `--draft` when `pr_state: draft`. Record the URL in the ledger.
 
 ```bash
 GH_CONFIG_DIR="<gh_config_dir>" gh pr view <n> --repo DigitalZoneApp/<repo name> \
-  --json headRefOid,mergeable,mergeStateStatus,statusCheckRollup \
-  --jq '"head=\(.headRefOid[0:7]) mergeable=\(.mergeable)", (.statusCheckRollup[]? | "  \(.name // .context): \(.status // .state) \(.conclusion // "")")'
+  --json headRefOid,mergeable,mergeStateStatus,reviewRequests,statusCheckRollup \
+  --jq '"head=\(.headRefOid[0:7]) mergeable=\(.mergeable)", "reviewers=\([.reviewRequests[]? | .login // .slug // .name] | join(", "))", (.statusCheckRollup[]? | "  \(.name // .context): \(.status // .state) \(.conclusion // "")")'
 ```
 
-Report what it shows, once. Never poll.
+Report what it shows, once, including who is asked to review. An empty `reviewers=` means nobody is: say so, so the user can request reviewers on GitHub; the plugin never requests them itself. Never poll.

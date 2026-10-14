@@ -53,3 +53,7 @@ docs/decisions.md
 .gitattributes
 tests/probes/fresh-clone.sh
 tests/probes/version-bump.sh
+tests/probes/code-checks.sh
+tests/probes/stack-start.sh
+plugins/rahal/shared/stack-notice.md
+tests/probes/overlap-prs.sh

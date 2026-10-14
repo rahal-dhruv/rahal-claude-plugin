@@ -247,7 +247,7 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Where:** `plugins/rahal/agents/rahal-reviewer.md`, `plugins/rahal/shared/review-model.md`
 - **Date:** 2026-10-09
 
-### PD-36 — code-review runs in a scratch clone
+### PD-36 — code-review runs in a scratch clone (its base: superseded by PD-54)
 - **Decision:** the reviewer builds a `git clone --shared` scratch clone with the head as `review-target`, `<base>` set to the fetched `origin/<base>`, and no remote, and runs `code-review` there.
 - **Why:** `code-review` compares against the local default branch; with a stale local `main` it reported other people's merged files as the PR's. Without a remote it also needs no `gh`.
 - **Cost if wrong:** a few seconds and a little disk per review; the clone is removed after.
@@ -357,4 +357,46 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Why:** sessions load a copy cached per version at install, so the one-pass review (PD-35) never reached real runs while the version stayed 0.1.0; every run on 2026-10-09 to 10-11 still reviewed twice.
 - **Cost if wrong:** a version-number conflict when two branches merge, settled by hand at merge.
 - **Where:** `scripts/check.sh`, `tests/probes/version-bump.sh`, `AGENTS.md`
+- **Date:** 2026-10-11
+
+### PD-52 — Step 0 names the plugin copy and version
+- **Decision:** the step 0 header reads `Step 0 — checks · rahal <version> from <plugin root>`, with the version read from the loaded copy's `plugin.json`.
+- **Why:** desktop sessions ran a copy cached at install for three days after newer commits landed, and nothing on screen showed it.
+- **Cost if wrong:** one longer line at the top of every run.
+- **Where:** `plugins/rahal/shared/step-0-checks.md`
+- **Date:** 2026-10-11
+
+### PD-53 — start-work can stack a ticket on an unmerged blocker's PR
+- **Decision:** when a blocker is not merged, phase one looks up its open PR. If the unmerged blockers form one chain of open PRs, it prints the facts and asks "Wait or stack?" with no default answer. Wait stops with nothing written; stack records `**Base:** `<blocker branch>` · stacked on #<PR> (ORB-<n>)` in `plan.md`. Every plan writes its Base line, and `check-output.sh plan` requires it. Two independent open PRs, or an open PR beside a blocker with none, stop with stacking not offered. Phases two and three re-read a stacked PR first: merged into `main` switches the Base line and the Pre-flight start to `main`, says so, and offers to merge `origin/main` into a branch that already exists; merged into another branch, or closed without merging, stops and asks.
+- **Why:** ORB-196 needed eight hand-written overrides to stack on an unmerged blocker. The maintainer chose to keep the choice with the user, because only 3 of about 240 team PRs were ever stacked. A branch can start from only one base, so two independent blockers cannot both be stacked on.
+- **Cost if wrong:** a ticket whose blockers merge out of order may wait longer than it needs to.
+- **Where:** `plugins/rahal/skills/start-work/references/phase-1-understand.md`, `plugins/rahal/shared/step-0-checks.md`, `plugins/rahal/shared/templates/plan.md`, `scripts/check-output.sh`
+- **Date:** 2026-10-11
+
+### PD-54 — The review clone diffs against the change's own base
+- **Decision:** the reviewer receives the default branch (`<default>`) and the base branch (`<base>`: the PR's `baseRefName`, or the plan's `**Base:**` branch), and its scratch clone sets `<default>` to the fetched `origin/<base>`. Supersedes the part of PD-36 that set the clone's base to the default branch. `AGENTS.md` still comes from `origin/<default>`.
+- **Why:** `code-review` compares against the local default branch. With that branch at `origin/main`, every stacked PR, in start-work and in review-pr alike, was also reviewed for its blocker's commits.
+- **Cost if wrong:** none for an ordinary PR, where `<base>` and `<default>` are the same branch.
+- **Where:** `plugins/rahal/agents/rahal-reviewer.md`, `plugins/rahal/shared/review-model.md`, `plugins/rahal/skills/review-pr/references/review-steps.md`, `tests/probes/review-clone.sh`
+- **Date:** 2026-10-11
+
+### PD-55 — One stack notice, warning against "merge stack"
+- **Decision:** a stacked PR's body opens with the notice in `shared/stack-notice.md`: merge the blocker alone, let GitHub move this PR to `main`, merge `origin/main` in, run `pnpm openapi`, and never use GitHub's "merge stack" button. start-work adds it, and removes it once the blocker has merged. The text lives once, so pr-followup can use the same file.
+- **Why:** "merge stack" rebased a stacked PR and dropped the merge commit holding the regenerated `openapi/admin.json`.
+- **Cost if wrong:** one paragraph at the top of a rare kind of PR.
+- **Where:** `plugins/rahal/shared/stack-notice.md`, `plugins/rahal/skills/start-work/references/phase-2-execute.md`
+- **Date:** 2026-10-11
+
+### PD-56 — The ticket is saved word for word; changes are judged by its text
+- **Decision:** start-work phase one saves `ticket-<date>.md` (id, title, status, `updatedAt`, the full description and every comment, never summarised) in the ticket folder. review-pr compares the current description with the latest saved copy, never with `updatedAt` alone.
+- **Why:** any comment, including our own, moves `updatedAt`, so "updated after the PR opened" was true on every PR we had commented on. A summary cannot show what a reviewer reworded.
+- **Cost if wrong:** one more file per ticket; a PR whose ticket was never saved can only report that the change cannot be checked.
+- **Where:** `plugins/rahal/skills/start-work/references/phase-1-understand.md`, `plugins/rahal/skills/review-pr/references/review-steps.md`
+- **Date:** 2026-10-11
+
+### PD-57 — gh-only commands are pinned; git and shell logic gets probes
+- **Decision:** a new or changed bash block with git or shell logic gets a probe, proven once on a broken copy. A gh-only command (a lookup, `gh pr create`, a `--jq` read) is pinned word for word in `scripts/required-headings.txt`. Shell logic around gh output, such as the open-PR overlap filter, is probed with a stand-in `gh`. Refines PD-45.
+- **Why:** a probe cannot reach GitHub, and jq is not installed on every contributor's machine, so a stand-in `gh` would only re-check the same text a pin checks. The maintainer chose pins for gh lines on 2026-10-11.
+- **Cost if wrong:** a wrong `--jq` filter or gh field shows up only in a dry run against a real PR.
+- **Where:** `AGENTS.md`, `scripts/required-headings.txt`, `tests/probes/overlap-prs.sh`
 - **Date:** 2026-10-11

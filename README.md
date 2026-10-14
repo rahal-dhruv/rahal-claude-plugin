@@ -52,7 +52,7 @@ The review model is not asked here. Each review suggests one with a reason, and 
   rahal-orbit-backend/  rahal-orbit-dashboard/  rahal-orbit-docs/
   work/
     orb-183-visa-destinations/      one folder per ticket, yours only
-      brief.md  plan.md  ledger.md  pr-body.md
+      ticket-2026-10-07.md  brief.md  plan.md  ledger.md  pr-body.md
       review-2026-10-07.md  followup-2026-10-08.md  reply-2026-10-08-amr-2417.md
   docs/                             optional notes on what was built
 ```
@@ -78,6 +78,8 @@ Decision 1 of 2 — the storage comment's "that prefix" goes stale. Recommend: "
 ```
 
 You answer each decision. It updates the plan, then asks "Ready to execute?".
+
+When a blocker isn't merged but has an open PR, phase one first shows that PR (branch, head, review, CI) and asks "Wait or stack?". Wait stops; you re-run once the blocker merges. Stack starts this ticket from the blocker's branch, records it as `**Base:**` in `plan.md`, and opens the PR against that branch. Two independent blockers with open PRs can't both be stacked on, so then it only offers to wait.
 
 **Phase two — execute.**
 - **Each task:** branch, test first (it watches each test fail, then pass), commits per your choices, and the ledger records every step.
