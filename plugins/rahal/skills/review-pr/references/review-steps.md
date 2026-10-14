@@ -56,6 +56,7 @@ Follow `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md`:
 
 - Re-open every citation at the head SHA. Probe, mutate in the scratchpad worktree, or dry-run where needed. Drop what does not hold.
 - Write `<workspace_root>/<work_folder>/<slug>/review-<date>.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/review-report.md`:
+  - **Header:** the `**Instruction:**` line, with `· ruled: <line> — <answer>` for each conflict answered.
   - **Section 2:** walk the PR step by step (by area or commit), each with an example. End with the line checking it against the ticket.
   - **Section 3:** plain, non-technical lines, each with an everyday example, and the verdict line.
   - **Section 4:** the full detail of each issue, including a dry run with real values.

@@ -43,6 +43,8 @@ Which project? You have open tickets in 2:
 
 Add `(no project)` as an entry when some of your open tickets have no project. Take a number or a name, ignoring case. An answer that matches no entry, or several, gets the list again. Wait for the answer; never pick for the user.
 
+An instruction that names a project answers this question (`${CLAUDE_PLUGIN_ROOT}/shared/instructions.md`): print the list all the same, then `Answered by your instruction: <project>`.
+
 ## 3. The open-ticket table
 
 Four calls, one per open kind: `list_issues(team: "ORB", state: "<kind>", limit: 250, fields: [id, status, statusType, assignee, assigneeId, project])` for `triage`, `backlog`, `unstarted` and `started`, each following `cursor`. Together they hold every open ORB ticket's status, owner and project. Titles come from step 1 and from relation entries.

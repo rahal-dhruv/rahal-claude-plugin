@@ -39,6 +39,7 @@ Keep only a PR whose title holds `ORB-<blocker n>` (not a longer number) or whos
 
   - **Wait:** stop. Nothing is written.
   - **Stack:** `<base>` is the top PR's `headRefName`. Step 6 records it in the plan's `**Base:**` line, with the PR number and the blocker's ticket id.
+  - **Answered by the instruction** (`${CLAUDE_PLUGIN_ROOT}/shared/instructions.md`): print the facts above all the same, then `Answered by your instruction: <Wait | Stack>`, and go on as for that answer.
 - **Otherwise** (two independent open PRs, or an open PR beside a blocker that has none): list each unmerged blocker with its PR and that PR's base, say "A branch can start from only one of them, so stacking is not offered. Re-run /rahal:start-work <link> once one of them merges.", and stop.
 
 ### Open PRs on the same files
@@ -103,6 +104,7 @@ Typical sources:
 - `<workspace_root>/<work_folder>/<slug>/brief.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/brief.md`.
 - `<workspace_root>/<work_folder>/<slug>/plan.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/plan.md`:
   - The `**Base:**` line holds the base from step 2: `main`, or the blocker's branch with its PR number and ticket id.
+  - The `**Instruction:**` line holds the instruction as typed, or `none`, and `**Model:**` the `model=` name, or `ask`; `brief.md` carries the same Instruction line. A conflict's answer goes under Decisions → Decided.
   - Every task carries real code, exact paths, an `Expected:` line for every command, and test-first steps.
   - Commit points follow `choices.commit_size`.
   - The Review Focus lists the five likeliest untested failures. Extra test cases beyond the ticket's list are marked keep-or-drop.
@@ -114,6 +116,7 @@ Typical sources:
 
 - Print the brief in chat (the same text as `brief.md`).
 - Then ask decision 1 of N in full; list the rest in one line each.
+- A decision the instruction answers is shown in full all the same and moved to Decided as `— by your instruction —`.
 - Stop.
 - Each answer updates `plan.md`: move the decision to "Decided" with the date, delete the rejected alternatives from the steps, and update the Tasks at a glance lines.
 - Then ask the next decision.

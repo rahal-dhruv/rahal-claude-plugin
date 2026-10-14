@@ -47,3 +47,5 @@ amended <time>: <what changed>|compare the ticket text with the saved ticket-<da
 A `suggestion` block only when the line is inside the diff's hunks|drafted comments state the issue plus an example only; the author chooses the fix (PD-67)
 A `suggestion` block only on a line inside the diff|drafted comments state the issue plus an example only; the author chooses the fix (PD-67)
 must be a plain comment with a diff block instead|drafted comments state the issue plus an example only; the author chooses the fix (PD-67)
+plan-tickets takes no arguments|plan-tickets takes an optional instruction in double quotes (PD-88)
+(that run only)|model= is recorded as Model: for the ticket, so a resumed run does not ask again (PD-87)

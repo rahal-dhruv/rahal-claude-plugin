@@ -5,7 +5,7 @@ Used before every review run: the end of `start-work` execution, `review-pr`, an
 ## How to ask
 
 Skip the question when:
-- the command was started with `model=<name>` (that run only); or
+- `model=<name>` was given now, or is recorded for this ticket as `Model:` in `plan.md` or the latest `followup-*.md` (`shared/instructions.md` → Where it is recorded); or
 - `choices.review_model` holds a model (a standing choice).
 
 Otherwise suggest one model from what the change contains, and ask:
@@ -34,6 +34,7 @@ The user decides. "Always <model>" writes `choices.review_model: <model>` into `
    - this session's scratchpad folder (the agent builds its review clone there);
    - `AGENTS.md` read from `origin/<default>`;
    - the plan's Review Focus, if any;
+   - the instruction's focus and extra checks, if any (`shared/instructions.md`);
    - the ledger's rulings, if any;
    - existing PR comments, if any.
 2. Read its first line. `code-review: not run — <reason>` means the review covers the ticket checks only: say so in the report header and never call the result clean.

@@ -69,6 +69,7 @@ Name which conflicts are generated files (`openapi/*.json`), which are regenerat
 
 - Write `<workspace_root>/<work_folder>/<slug>/followup-<date>.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/followup-plan.md`:
   - "Comments at a glance": one line per comment with its recommendation, then `In plain words:` (why it matters, with no code terms) and `Example:` (someone does X → sees Y today → would see Z after);
+  - the header's `Instruction:` and `Model:` line (`${CLAUDE_PLUGIN_ROOT}/shared/instructions.md` → Where it is recorded); each conflict's answer as an `Instruction: Ruling:` line in `ledger.md`;
   - item 0, the branch update, when the branch is behind or its blocker has merged;
   - "Detailed fixes": each with Before this PR, Now, What they raised, How checked, Ticket, Fix we should apply (test first, with its commit title), a Dry run with real values now and after the fix, an Alternative where reasonable, and a Reply draft;
   - a step that breaks code on purpose to prove a test is labelled temporary ("Temporary: break <what> so the test fails on purpose; restore it byte for byte; never commit") and never stands in for the fix, which is named on its own;

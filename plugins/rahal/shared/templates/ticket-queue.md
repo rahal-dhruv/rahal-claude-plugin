@@ -50,6 +50,6 @@ Which files each ticket touches is unknown until `/rahal:start-work` reads the c
 
 ## Data gaps
 
-- <unknown status, missing repo tag, failed read, unread blocker, PR list cut off at 100, Code Review with no open PR, QA with an open PR, PRs not read>
+- <unknown status, missing repo tag, failed read, unread blocker, PR list cut off at 100, Code Review with no open PR, QA with an open PR, PRs not read, left out by your instruction: ORB-<n> (<why>)>
 
 <A section with nothing to list says "None.">
