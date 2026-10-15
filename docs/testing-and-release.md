@@ -3,12 +3,8 @@
 ## Loading the plugin
 
 - **One terminal session:** `claude --plugin-dir "<repo>/plugins/rahal"`. Only that session sees `/rahal:` commands; desktop sessions do not.
-- **Every new session in one workspace:** a local-scope install from the repo folder:
-  ```bash
-  claude plugin marketplace add "<repo>" --scope local
-  claude plugin install rahal@rahal-claude-plugin --scope local
-  ```
-  Run these from the workspace folder. `claude plugin list` then shows "Read from: <repo>/plugins/rahal", but sessions load a copy cached at install time, not the folder. An edit reaches a session only after `version` in `plugins/rahal/.claude-plugin/plugin.json` is bumped, `claude plugin update rahal@rahal-claude-plugin --scope local` is run from the workspace folder, and a new session is opened. It is enabled in that workspace only. To try unreleased edits, use `--plugin-dir`.
+- **Every new session in one workspace:** install from the marketplace named in `README.md`'s Install section, at local scope, from the workspace folder. Sessions load a copy cached per version, so a release reaches a session only after `claude plugin update rahal@rahal-claude-plugin --scope local` and a new session. To try unreleased edits, use `--plugin-dir`.
+- **Moving from a local-folder install:** the folder marketplace and the GitHub one are both named `rahal-claude-plugin`, so run the Undo commands below first, then add the GitHub one.
 - **Undo:** `claude plugin uninstall rahal@rahal-claude-plugin --scope local`, then `claude plugin marketplace remove rahal-claude-plugin`.
 - **Size:** `claude --plugin-dir plugins/rahal plugin details rahal` prints the components and the token cost (`claude plugin details` alone takes an installed name, not a path).
 - **Never** use `claude plugin init` to explore: it writes into the user's own skills folder and loads there.
@@ -48,7 +44,9 @@ A plugin command opens with the "Step 0 — checks" block, whose header line nam
 
 ## Release
 
-1. The maintainer merges the pull request into `main`.
+1. A contributor pushes their branch and opens a pull request into `main`.
 2. The branch already bumped `version` in `plugins/rahal/.claude-plugin/plugin.json` (`check.sh` section 13); if two merged branches chose the same number, give the later one the next.
-3. `claude plugin tag plugins/rahal` creates the `rahal--v<version>` tag; push `main` and the tag.
-4. Teammates install from the marketplace address in `README.md`'s Install section (with an SSH alias if they use several GitHub accounts), then `/plugin install rahal@rahal-claude-plugin`.
+3. The maintainer merges the pull request.
+4. The maintainer brings the local `main` up to date (`git pull --ff-only origin main`), runs `claude plugin tag plugins/rahal` to create the `rahal--v<version>` tag, and pushes it: `git push origin rahal--v<version>`.
+5. Everyone runs `claude plugin update rahal@rahal-claude-plugin` at the scope they installed with, then opens a new session; step 0's first line shows the new version.
+6. Teammates install from the marketplace address in `README.md`'s Install section (with an SSH alias if they use several GitHub accounts), then `/plugin install rahal@rahal-claude-plugin`.

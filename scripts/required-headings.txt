@@ -125,7 +125,6 @@ reflector/README.md|You close your own pending approvals; to raise one with the 
 .claude/agents/reflector.md|4. Read `reflector/pending-approvals.md`; if it is missing, create it from the skeleton in §11.
 .claude/agents/reflector.md|Read the file first and do not duplicate an open entry. The person who opted in closes entries.
 .claude/agents/reflector.md|## 11. Skeletons for missing files
-docs/testing-and-release.md|  Run these from the workspace folder. `claude plugin list` then shows "Read from: <repo>/plugins/rahal", but sessions load a copy cached at install time, not the folder. An edit reaches a session only after `version` in `plugins/rahal/.claude-plugin/plugin.json` is bumped, `claude plugin update rahal@rahal-claude-plugin --scope local` is run from the workspace folder, and a new session is opened. It is enabled in that workspace only. To try unreleased edits, use `--plugin-dir`.
 AGENTS.md|- A branch that changes `plugins/rahal/` bumps the patch `version` in `plugins/rahal/.claude-plugin/plugin.json` (`check.sh` section 13): sessions load a copy cached per version, so an unbumped change never reaches them. The maintainer merges, gives the later of two branches that chose the same number the next one, and tags with `claude plugin tag plugins/rahal`.
 docs/checks.md|13. **Version bump:** when anything under `plugins/rahal/` differs from where the branch left `main` (committed, uncommitted or a new file), the `version` in `plugin.json` must differ too, because sessions load a copy cached per version. Skipped when there is neither `main` nor `origin/main`.
 docs/checks.md|| `version-bump` | `check.sh` section 13 fails on an edited or a new plugin file without a version bump, and passes once the version changes |
@@ -315,3 +314,9 @@ docs/commands.md|## /rahal:start-work `<ORB link> [model=<name>] ["<instruction>
 docs/commands.md|## /rahal:review-pr `<PR link or number> [model=<name>] ["<instruction>"]`
 docs/commands.md|## /rahal:pr-followup `<PR link or number> [model=<name>] ["<instruction>"]`
 docs/checks.md|An `Instruction:` line is a line starting `Instruction:` or `**Instruction:**` followed by the instruction as typed or `none`; an unfilled `<placeholder>` fails.
+docs/testing-and-release.md|- **Every new session in one workspace:** install from the marketplace named in `README.md`'s Install section, at local scope, from the workspace folder. Sessions load a copy cached per version, so a release reaches a session only after `claude plugin update rahal@rahal-claude-plugin --scope local` and a new session. To try unreleased edits, use `--plugin-dir`.
+docs/testing-and-release.md|- **Moving from a local-folder install:** the folder marketplace and the GitHub one are both named `rahal-claude-plugin`, so run the Undo commands below first, then add the GitHub one.
+docs/testing-and-release.md|1. A contributor pushes their branch and opens a pull request into `main`.
+docs/testing-and-release.md|3. The maintainer merges the pull request.
+docs/testing-and-release.md|4. The maintainer brings the local `main` up to date (`git pull --ff-only origin main`), runs `claude plugin tag plugins/rahal` to create the `rahal--v<version>` tag, and pushes it: `git push origin rahal--v<version>`.
+docs/testing-and-release.md|5. Everyone runs `claude plugin update rahal@rahal-claude-plugin` at the scope they installed with, then opens a new session; step 0's first line shows the new version.

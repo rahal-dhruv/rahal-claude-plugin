@@ -588,3 +588,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** a filter hides a ticket the person needed; Data gaps names every ticket left out.
 - **Where:** `plugins/rahal/skills/plan-tickets/SKILL.md`, `plugins/rahal/skills/plan-tickets/references/queue-steps.md`, `plugins/rahal/shared/templates/ticket-queue.md`
 - **Date:** 2026-10-14
+
+### PD-89 — Releases ship from the private GitHub repo
+- **Decision:** `main` and each `rahal--v<version>` tag are pushed to the private repo named in `README.md`'s Install section, and every install, the maintainer's included, comes from that marketplace; local working branches are not pushed. Contributors open pull requests into `main`; the maintainer merges, tags and pushes the tag. Unreleased edits are tried with `--plugin-dir`. Builds on PD-02 and PD-37.
+- **Why:** a local-folder install reaches only the maintainer and loads a copy cached at install time, so teammates could not get a release at all, and the maintainer's own sessions lagged without anyone seeing it.
+- **Cost if wrong:** each teammate needs an invite and a git login with access; the maintainer's install now depends on a push before a change reaches their sessions.
+- **Where:** `README.md`, `docs/testing-and-release.md`
+- **Date:** 2026-10-15
