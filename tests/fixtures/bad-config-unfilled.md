@@ -1,10 +1,5 @@
 ---
-profile: orbit
-workspace_root: <absolute workspace path, forward slashes>
-repos:
-  backend: rahal-orbit-backend
-  dashboard: rahal-orbit-dashboard
-  docs: rahal-orbit-docs
+workspace_root: <absolute workspace path, forward slashes; on Windows the drive form <drive>:/…, never Git Bash's /c/… form, which MSYS_NO_PATHCONV passes to git unconverted>
 work_folder: work
 github:
   account: <github login>
@@ -12,12 +7,26 @@ github:
   remote_prefix: <e.g. git@github.com: or git@<alias>:>
   commit_email: <git user.email inside the repos>
 linear:
-  tools: <tool name prefix ending in __>
+  tools: <tool name prefix ending in __; may be empty only while Linear is not connected, which step 0 reports>
 toolchain:
   bash_node_path: <Git Bash form of the Node folder; may be empty>
-  e2e_node_options: <--require "<shim path>"; may be empty>
-  docker_ports: { postgres: <port>, redis: <port> }
-  dev_database_url_port: <port>
+families:
+  orbit:
+    repos:
+      backend: rahal-orbit-backend
+      dashboard: rahal-orbit-dashboard
+      docs: rahal-orbit-docs
+    docker_ports: { postgres: <port>, redis: <port> }
+    dev_database_url_port: <port>
+    e2e_node_options: <--require "<shim path>"; may be empty>
+  corporate:
+    repos:
+      backend: rahal-corporate-backend
+      app: rahal-corporate-app
+      dashboard: rahal-corporate-dashboard
+    docker_ports: { postgres: <port>, redis: <port> }
+    dev_database_url_port: <port>
+    e2e_node_options: <may be empty; the corporate e2e suites need no shim>
 workspace_extras:
   docs_folder: <true | false>
   reflector: <true | false>

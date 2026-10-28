@@ -11,7 +11,7 @@ Run checks 1–4 of `${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md`. This phase 
   - **blocked by:** merged? A blocker that is not merged may have an open PR to stack on (below);
   - **blocks:** which files and symbols that ticket reuses or will change from this one;
   - **related or siblings:** which files both change (`openapi/admin.json` is the usual one).
-- Pick the target repo from the title (`[Backend]` → backend, `[Frontend]` → dashboard) or from the files the ticket names.
+- The target repo is the one step 0's Route line picked (step 0 → The ticket's repo).
 
 ### Stacking on an unmerged blocker
 
@@ -23,17 +23,17 @@ GH_CONFIG_DIR="<gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo name> --s
 ```
 
 Keep only a PR whose title holds `ORB-<blocker n>` (not a longer number) or whose branch holds `orb-<blocker n>-`. Then the base for this ticket (`<base>` below and in phase two and three) is:
-- **No unmerged blocker:** `main`.
-- **Unmerged blockers, none with an open PR:** `main`. Say so; there is nothing to stack on, and the work may need to wait.
+- **No unmerged blocker:** `<default>`.
+- **Unmerged blockers, none with an open PR:** `<default>`. Say so; there is nothing to stack on, and the work may need to wait.
 - **Every unmerged blocker's PR in one chain** (usually a single PR; with several, each PR's `baseRefName` is the next one's `headRefName`): print the facts for the top PR of the chain and ask, with no default answer:
 
   ```
   Blocked by ORB-103: not merged. Its PR #146 is open:
     branch orb-103-car-rental-search-route · head 1a2b3c4
     review: changes requested · CI: green
-    1. Wait:  stop here; re-run /rahal:start-work <link> after #146 merges. The branch then starts from main.
+    1. Wait:  stop here; re-run /rahal:start-work <link> after #146 merges. The branch then starts from <default>.
     2. Stack: start now from orb-103-car-rental-search-route. This PR targets that branch until #146 merges;
-              GitHub then moves it to main, and you merge origin/main in once.
+              GitHub then moves it to <default>, and you merge origin/<default> in once.
   Wait or stack?
   ```
 
@@ -57,19 +57,19 @@ Report each in the brief's "Shares files with" line, beside the Linear siblings:
 
 ## 3. Check the ticket against the code
 
-Everything on `origin/<base>` (step 2: `main`, or the blocker's branch when stacked), never the local checkout:
+Everything on `origin/<base>` (step 2: `<default>`, or the blocker's branch when stacked), never the local checkout:
 
 ```bash
 git -C <repo> fetch origin --quiet
-git -C <repo> rev-list --left-right --count main...origin/main          # local lag, for the brief
+git -C <repo> rev-list --left-right --count <default>...origin/<default>   # local lag, for the brief
 git -C <repo> log --oneline <ticket base sha>..origin/<base> -- <files the ticket names>   # drift since the ticket was written
 MSYS_NO_PATHCONV=1 git -C <repo> cat-file -e origin/<base>:<path> && echo ok || echo missing   # every cited path
 MSYS_NO_PATHCONV=1 git -C <repo> show origin/<base>:<path>             # each file the ticket says to copy
 ```
 
-- The ticket's base commit is usually written as "On `main` (`<sha>`)". Paths are the backticked `src/…`, `test/…`, `prisma/…` names.
-- Read the standard on `origin/main`, even when stacked: `AGENTS.md`, `CODEOWNERS` (`.github/CODEOWNERS` or `CODEOWNERS`) and `.github/pull_request_template.md`. Read the tooling on `origin/<base>`, which is what the branch will run: `lefthook.yml`, `eslint.config.js` (`moduleMap`) and the `package.json` scripts.
-- When the build needs the design notes the ticket cites, read them from the docs repo on `origin/docs-main`.
+- The ticket's base commit is usually written as "On `<default>` (`<sha>`)", e.g. "On `corporate` (`4d1c2ba5`)". Paths are the backticked `src/…`, `test/…`, `prisma/…` names.
+- Read the standard on `origin/<default>`, even when stacked: `AGENTS.md`, `CODEOWNERS` (`.github/CODEOWNERS` or `CODEOWNERS`) and `.github/pull_request_template.md`. Read the tooling on `origin/<base>`, which is what the branch will run: `lefthook.yml` or `.husky/` (whichever the repo has), `eslint.config.js` (`moduleMap`) and the `package.json` scripts.
+- When the build needs the design notes the ticket cites, read them from `rahal-orbit-docs` on `origin/docs-main`, when the orbit family is configured: the channel contract a corporate ticket cites lives there too.
 - Flag every drift: a file that moved or vanished, a symbol renamed, a new suite or rule the ticket does not know about.
 - **Stacked:** check what the ticket takes from the blocker against what the blocker built, on `origin/<base>`. Each "From ORB-<blocker n>" item and each Dependencies entry (a symbol, route, table or file) must exist there with the name and shape the ticket expects; a difference is a decision (step 5). When a ticket folder for the blocker exists (`<workspace_root>/<work_folder>/orb-<blocker n>-*/`), also read its `plan.md` Decisions and `ledger.md` Rulings for departures from the blocker's ticket. That folder is optional: the blocker is often someone else's work, and no command depends on another person's folder.
 
@@ -103,7 +103,7 @@ Typical sources:
 - `<workspace_root>/<work_folder>/<slug>/ticket-<date>.md`: the ticket as read in step 2, word for word, never summarised: its id, title, status and `updatedAt`, the full description, and every comment with its author and date. A later review compares the description against it.
 - `<workspace_root>/<work_folder>/<slug>/brief.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/brief.md`.
 - `<workspace_root>/<work_folder>/<slug>/plan.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/plan.md`:
-  - The `**Base:**` line holds the base from step 2: `main`, or the blocker's branch with its PR number and ticket id.
+  - The `**Base:**` line holds the base from step 2: `<default>`, or the blocker's branch with its PR number and ticket id.
   - The `**Instruction:**` line holds the instruction as typed, or `none`, and `**Model:**` the `model=` name, or `ask`; `brief.md` carries the same Instruction line. A conflict's answer goes under Decisions → Decided.
   - Every task carries real code, exact paths, an `Expected:` line for every command, and test-first steps.
   - Commit points follow `choices.commit_size`.

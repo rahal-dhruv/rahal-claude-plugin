@@ -18,7 +18,7 @@ The command applies what fits, records the instruction so a later run still foll
 ```
 Instruction — read as:
   1. keep replies under 3 lines — wording, applied · phase two, step 7
-  2. merge the blocker branch first — team practice (orbit.md → Branch practice), asked below · phase two, step 2
+  2. merge the blocker branch first — team practice (the profile's Branch practice), asked below · phase two, step 2
 ```
 
    With no instruction, print `Instruction — none`. A recorded one names its file: `Instruction — read as (recorded in plan.md):`.
@@ -40,7 +40,7 @@ Three tiers. When unsure which tier a line belongs to, use the stricter one.
 
 **Overridden for this run, after a question:**
 - a saved choice, `choices.*` in `.claude/rahal.local.md`, such as `push: ask`;
-- the profile's practice (`profiles/orbit.md`), such as "a branch behind `main` merges `origin/main`";
+- the profile's practice (`profiles/orbit.md`, `profiles/corporate.md`), such as "a branch behind `main` merges `origin/main`";
 - a decision already under the plan's Decided;
 - what the ticket says: a departure from it, listed in the PR body as every departure is.
 

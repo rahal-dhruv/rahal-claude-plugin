@@ -1,15 +1,10 @@
 # init — the config file
 
-Write exactly this structure to `<workspace>/.claude/rahal.local.md`, filling every `<…>`. Values marked "may be empty" may be left blank.
+Write exactly this structure to `<workspace>/.claude/rahal.local.md`, filling every `<…>`. Values marked "may be empty" may be left blank. Keep one block under `families:` for each family whose repos init found (step 1), and drop the other; at least one stays.
 
 ```markdown
 ---
-profile: orbit
 workspace_root: <absolute workspace path, forward slashes; on Windows the drive form <drive>:/…, never Git Bash's /c/… form, which MSYS_NO_PATHCONV passes to git unconverted>
-repos:
-  backend: rahal-orbit-backend
-  dashboard: rahal-orbit-dashboard
-  docs: rahal-orbit-docs
 work_folder: work
 github:
   account: <github login>
@@ -20,9 +15,23 @@ linear:
   tools: <tool name prefix ending in __; may be empty only while Linear is not connected, which step 0 reports>
 toolchain:
   bash_node_path: <Git Bash form of the Node folder; may be empty>
-  e2e_node_options: <--require "<shim path>"; may be empty>
-  docker_ports: { postgres: <port>, redis: <port> }
-  dev_database_url_port: <port>
+families:
+  orbit:
+    repos:
+      backend: rahal-orbit-backend
+      dashboard: rahal-orbit-dashboard
+      docs: rahal-orbit-docs
+    docker_ports: { postgres: <port>, redis: <port> }
+    dev_database_url_port: <port>
+    e2e_node_options: <--require "<shim path>"; may be empty>
+  corporate:
+    repos:
+      backend: rahal-corporate-backend
+      app: rahal-corporate-app
+      dashboard: rahal-corporate-dashboard
+    docker_ports: { postgres: <port>, redis: <port> }
+    dev_database_url_port: <port>
+    e2e_node_options: <may be empty; the corporate e2e suites need no shim>
 workspace_extras:
   docs_folder: <true | false>
   reflector: <true | false>

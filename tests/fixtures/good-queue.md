@@ -24,6 +24,7 @@ None.
 2. ORB-904 [Backend] Add the nationality filter — can start now · Medium
 3. ORB-902 [Backend] Add visa product activation — after your ORB-901 (step 1)
 4. ORB-903 [Backend] Serve the visa product page — waits on Sam's ORB-905 (Code Review, #12)
+5. GF-940 [Frontend] Show the policy cabin class — can start now · Low
 
 ## Lanes
 

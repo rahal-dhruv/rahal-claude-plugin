@@ -4,7 +4,7 @@ Each step follows `choices` in `.claude/rahal.local.md`. With `ask`, ask before 
 
 `<branch>` below is the `**Branch:**` line of the ticket folder's `plan.md` (step 0 → The ticket folder), e.g. `feat/orb-183-visa-destinations`.
 
-`<base>` is the ticket's base (step 0 → The ticket folder, item 4): `main`, or the blocker's branch while the PR it stacks on is open.
+`<base>` is the ticket's base (step 0 → The ticket folder, item 4): `<default>`, or the blocker's branch while the PR it stacks on is open.
 
 ## 0. Step 0
 
@@ -20,13 +20,13 @@ export PATH="<bash_node_path>:$PATH"; git -C <repo> push -u origin <branch>
 ```
 
 - If the remote branch exists and is not an ancestor of HEAD, stop: someone else pushed. Never force.
-- The pre-push hook runs typecheck, format, knip, `openapi:check` and the unit tests. Report each result.
+- The push runs the repo's hooks (the profile's **hooks** row; Orbit's pre-push runs typecheck, format, knip, `openapi:check` and the unit tests). Report each result. A repo with no pre-push hook runs nothing: say so.
 
 ## 2. Open the PR
 
 ```bash
 GH_CONFIG_DIR="<gh_config_dir>" gh pr create --repo DigitalZoneApp/<repo name> --base <base> \
-  --head <branch> --title "feat(ORB-<n>): <ticket title as a lowercase imperative>" \
+  --head <branch> --title "<the PR title, in the profile's Branch practice>" \
   --body-file "<workspace_root>/<work_folder>/<slug>/pr-body.md" [--draft]
 ```
 

@@ -73,17 +73,19 @@ EOF
     grep -qE '^[[:space:]]*```+[[:space:]]*suggestion' "$file" && fail "reply carries a suggestion block; it says what changed and how it was proved"
     grep -qE '[0-9a-f]{7,40}|Evidence' "$file" || fail "reply names neither a fix commit nor the evidence for a push-back" ;;
   config)   # a complete setup: an empty linear.tools (Linear not connected yet) fails on purpose
-    for k in profile workspace_root work_folder account remote_prefix commit_email tools \
+    for k in workspace_root work_folder account remote_prefix commit_email tools backend dev_database_url_port \
              commit_when commit_size attribution push open_pr pr_state post_comments re_request_review review_model; do key "$k"; done
-    for k in gh_config_dir bash_node_path e2e_node_options docker_ports dev_database_url_port docs_folder reflector superpowers; do keyline "$k"; done ;;
+    for k in gh_config_dir bash_node_path families repos e2e_node_options docker_ports docs_folder reflector superpowers; do keyline "$k"; done
+    # the old single-profile shape (top-level profile: and repos:) is refused: step 0 stops on it
+    grep -qE '^(profile|repos):' "$file" && fail "config uses the old single-profile shape; repos belong under families.<family>" ;;
   queue)
     for h in '**Lanes saved:**' '## At a glance' '## What the order rests on' '## Finish first' '## Pick order' '## Lanes' \
              '## Stack candidates' '## Blocking you' '## Waiting on you' "## Can't order" '## Data gaps'; do need "$h"; done
     instr
     grep -qE '^## Pick order' "$file" || fail "queue lacks a line starting with: ## Pick order"
     # every numbered entry under "## Pick order" names a ticket and gives its reason after " — "
-    bad="$(awk '/^## / { s = (index($0, "## Pick order") == 1) } s && /^[0-9]+\. / && !/^[0-9]+\. ORB-[0-9]+ .+ — .+/' "$file")"
-    [ -z "$bad" ] || fail "queue pick-order entry lacks ORB-<n> or a reason: $bad" ;;
+    bad="$(awk '/^## / { s = (index($0, "## Pick order") == 1) } s && /^[0-9]+\. / && !/^[0-9]+\. [A-Z]+-[0-9]+ .+ — .+/' "$file")"
+    [ -z "$bad" ] || fail "queue pick-order entry lacks a ticket id (ORB-<n>, GF-<n>) or a reason: $bad" ;;
   *)
     echo "unknown kind: $kind"; exit 2 ;;
 esac

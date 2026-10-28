@@ -1,6 +1,6 @@
 # PR #<n> follow-up — <k> comments to handle
 
-<Base: main | stacked on #<n> (<open | merged | closed>, head <sha7>)> · <Branch: N behind <base>; trial merge conflicts: <files | none>> · <Ticket: unchanged since ticket-<date>.md | changed since ticket-<date>.md: <what changed> | no saved copy to compare> · <New rules since the branch on <base>: <commit — rule> | none; when stacked, also on main: <commit — rule> | none>
+<Base: <default> | stacked on #<n> (<open | merged | closed>, head <sha7>)> · <Branch: N behind <base>; trial merge conflicts: <files | none>> · <Ticket: unchanged since ticket-<date>.md | changed since ticket-<date>.md: <what changed> | no saved copy to compare> · <New rules since the branch on <base>: <commit — rule> | none; when stacked, also on main: <commit — rule> | none>
 Instruction: <"the instruction as typed" | none> · Model: <the model= name | ask>
 
 ## Comments at a glance
@@ -27,7 +27,7 @@ Instruction: <"the instruction as typed" | none> · Model: <the model= name | as
 
 ### 0. Branch update
 
-- Merge `origin/<base>`, titled `chore(ORB-<n>): merge <main | orb-<blocker n>> into the <branch words> branch`; regenerate generated files (`pnpm db:generate`, `pnpm openapi`); check that `git diff origin/<base> -- openapi/` shows only this ticket's changes; `pnpm db:migrate` locally; typecheck and lint. A conflict outside generated files stops and asks.
-- <Once the blocker has merged: retarget the PR to `main` before the push (asks every time), and merge `origin/main` instead.>
+- Merge `origin/<base>`, titled `chore(ORB-<n>): merge <default | orb-<blocker n>> into the <branch words> branch`; regenerate generated files (the **regenerate** row); check that `git diff origin/<base> -- <generated files>` shows only this ticket's changes; the **migrate** row locally, when the repo has one; typecheck and lint. A conflict outside generated files stops and asks.
+- <Once the blocker has merged: retarget the PR to `<default>` before the push (asks every time), and merge `origin/<default>` instead.>
 
 Which do you accept? e.g. "0, 1, 2" · "1 only, push back on 2"

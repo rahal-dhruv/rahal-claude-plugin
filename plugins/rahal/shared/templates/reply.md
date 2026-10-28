@@ -12,7 +12,7 @@ Proved by <the test case name>: <the assertion line that proves it, in a code bl
 
 <If the branch was updated: "The branch also merges `<base branch>` in `<merge SHA>`.">
 
-`pnpm check` on `<head SHA>`: <lint, prettier, typecheck, knip; unit <files/tests>; e2e <files/tests>; contract <files/tests>; openapi:check clean>.
+<the **gate** command> on `<head SHA>`: <each count the profile's **gate counts** row names, e.g. lint, typecheck; unit <files/tests>; e2e <files/tests>>.
 
 ## When pushing back
 

@@ -49,3 +49,10 @@ A `suggestion` block only on a line inside the diff|drafted comments state the i
 must be a plain comment with a diff block instead|drafted comments state the issue plus an example only; the author chooses the fix (PD-67)
 plan-tickets takes no arguments|plan-tickets takes an optional instruction in double quotes (PD-88)
 (that run only)|model= is recorded as Model: for the ticket, so a resumed run does not ask again (PD-87)
+`profile` must be `orbit`|the config groups repos by family; step 0 reads families (PD-90)
+supports Orbit (ORB-) tickets only|each family's profile lists its teams; GF tickets route to corporate (PD-91)
+Pick the target repo from the title|step 0 routes the ticket to its repo (The ticket's repo)
+or a number for `rahal-orbit-backend`|a bare PR number names no repo once two families are configured; step 0 asks
+Never ask for `description`|plan-tickets reads each ticket's description, alone, to route it with step 0's rule (PD-95)
+this command never reads descriptions|plan-tickets routes each ticket with step 0's rule on its description (PD-95)
+whose own or blocker's open PR (step 6) is in a corporate repo|plan-tickets routes with step 0's rule, not a PR guess (PD-95)

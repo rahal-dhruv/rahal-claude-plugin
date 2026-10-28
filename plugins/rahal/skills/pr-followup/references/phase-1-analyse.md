@@ -16,7 +16,7 @@ BASE="$(git -C <repo> merge-base origin/<base> origin/pr-<n>)"
 MSYS_NO_PATHCONV=1 git -C <repo> diff "$BASE" origin/<base> -- AGENTS.md .github/pull_request_template.md
 ```
 
-When `<base>` is not `<default>`, the repo's default branch (`main` in the code repos), the PR is stacked on a blocker's branch:
+When `<base>` is not `<default>`, the repo's default branch (`main`; `corporate` in the corporate backend), the PR is stacked on a blocker's branch:
 
 ```bash
 GH_CONFIG_DIR="<gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo name> --head <base> --state all --json number,state,headRefOid --jq '.[0]'
@@ -57,7 +57,7 @@ git -C "$T" diff --name-only --diff-filter=U                                    
 git -C <repo> worktree remove --force "$T"; git -C <repo> worktree prune
 ```
 
-Name which conflicts are generated files (`openapi/*.json`), which are regenerated, never hand-merged.
+Name which conflicts are generated files (the profile's **generated files** row), which are regenerated, never hand-merged.
 
 ## 5. Verify each comment
 
