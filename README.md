@@ -1,6 +1,6 @@
-# rahal — Claude Code plugin for the Orbit team
+# rahal — Claude Code plugin for the Orbit and corporate teams
 
-`rahal` turns a Linear ticket or a GitHub pull request link into the Orbit team's way of working:
+`rahal` turns a Linear ticket or a GitHub pull request link into the team's way of working, in the Orbit repos and the Rahal corporate repos:
 - understand the ticket against the real code, and plan it test-first;
 - execute it with evidence;
 - review it against the ticket and `AGENTS.md`;
@@ -10,7 +10,7 @@
 
 Every command stops at the points where you decide, and nothing reaches GitHub unless your choices allow it.
 
-Commands: `/rahal:init` · `/rahal:start-work <ticket>` · `/rahal:review-pr <PR>` · `/rahal:pr-followup <PR>` · `/rahal:plan-tickets`. Orbit (`ORB-`) tickets only for now.
+Commands: `/rahal:init` · `/rahal:start-work <ticket>` · `/rahal:review-pr <PR>` · `/rahal:pr-followup <PR>` · `/rahal:plan-tickets`. `ORB-` tickets, and `GF-` tickets when the corporate repos are set up. Each ticket goes to the repo it names; the command says which, and why.
 
 ## Install
 
@@ -29,13 +29,13 @@ To try a local copy without installing: `claude --plugin-dir <path to this repo>
 
 ## How /rahal:init works
 
-Run it once in your workspace folder (the folder holding the Orbit repos), and again whenever you want to change an answer.
-1. **Workspace:** finds `rahal-orbit-backend`, `rahal-orbit-dashboard` and `rahal-orbit-docs`, and offers to clone any that are missing.
+Run it once in your workspace folder (the folder holding the Orbit repos, the corporate repos or both), and again whenever you want to change an answer.
+1. **Workspace:** finds the Orbit repos (`rahal-orbit-backend`, `rahal-orbit-dashboard`, `rahal-orbit-docs`) and the corporate repos (`rahal-corporate-backend`, `rahal-corporate-app`, `rahal-corporate-dashboard`), asks which you work on, and offers to clone any that are missing.
 2. **GitHub:** checks `gh` is installed and signed in, which account, and that it can read the repos. If you keep a separate gh config folder for this account, tell it where.
 3. **Linear:** finds the Linear tools your Claude has and reads one ticket to prove they work. If none, it tells you how to connect Linear; Claude cannot sign in for you.
 4. **Toolchain:**
-   - checks Node against the repo's `.nvmrc`, pnpm and Docker;
-   - moves Orbit's Postgres and Redis ports if another project holds them;
+   - checks Node, pnpm (and npm for the corporate backend) and Docker;
+   - records each family's Postgres and Redis ports, moving Orbit's if another project holds them (the corporate backend's are fixed);
    - on Windows, finds the Node folder Git Bash needs and writes the small e2e test shim.
 5. **Extras:** offers to install the superpowers plugin (recommended, not required).
 6. **Your choices.** Two questions, with defaults you can keep:
@@ -51,6 +51,7 @@ The review model is not asked here. Each review suggests one with a reason, and 
 <workspace>/                        not a git repo
   .claude/rahal.local.md            written by /rahal:init
   rahal-orbit-backend/  rahal-orbit-dashboard/  rahal-orbit-docs/
+  rahal-corporate-backend/  rahal-corporate-app/  rahal-corporate-dashboard/
   work/
     orb-183-visa-destinations/      one folder per ticket, yours only
       ticket-2026-10-07.md  brief.md  plan.md  ledger.md  pr-body.md
@@ -195,9 +196,9 @@ The instruction is saved in `plan.md` or the follow-up file, so a resumed run an
 
 ## Adding a profile
 
-Team facts live in `plugins/rahal/shared/profiles/<name>.md`: repos, branches, gates, practices. A second team (for example Rahal corporate, `GF-` tickets) means:
-- a new profile file;
-- a profile choice in `init`;
-- step 0 accepting that team's ticket prefix.
+Team facts live in `plugins/rahal/shared/profiles/<family>.md`, one per repo family (`orbit.md`, `corporate.md`): Linear teams, repos and branches, the Commands table, the standard, branch practice. A third family means:
+- a new profile file with the same sections and Commands rows;
+- its repos in `init`'s workspace check and config template (`families.<family>`);
+- its default branch or repo names in step 0's "The ticket's repo", so tickets route to it.
 
 Nothing personal goes in a profile.

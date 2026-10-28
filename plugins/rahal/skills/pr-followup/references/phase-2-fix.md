@@ -30,13 +30,13 @@ git -C <repo> diff --name-only --diff-filter=U
 ```
 
 `--no-commit` leaves the merge open even when nothing conflicts, so the checks below run before the commit, and the commit gets the team's title instead of Git's default message.
-- A conflict in a generated file only (`openapi/*.json`, `src/generated/`): take either side with `git -C <repo> checkout --ours <file>`; it is regenerated below, never hand-merged.
+- A conflict in a generated file only (the profile's **generated files** row, e.g. `openapi/*.json`): take either side with `git -C <repo> checkout --ours <file>`; it is regenerated below, never hand-merged.
 - Any other conflicting file: stop and ask. `git -C <repo> merge --abort` undoes the merge.
-- Then, in the repo: `pnpm install --frozen-lockfile`, `pnpm db:generate && pnpm openapi`, `git add` what they regenerated, then `pnpm typecheck && pnpm lint`.
-- Then `git -C <repo> diff origin/<base> -- openapi/` must show only this ticket's own changes. A path or schema removed, or one that another ticket adds, means a stale document: stop and say so.
-- The regenerated files stay in this merge commit. The backend's pre-commit hook runs `pnpm openapi && git add openapi/` whenever a merged-in controller or DTO is staged, so a separate commit would need `--no-verify`.
-- Commit: `git -C <repo> commit -m "chore(ORB-<n>): merge <main | orb-<blocker n>> into the <branch words> branch"`: `main`, or for a stacked PR the blocker's ticket id, e.g. `chore(ORB-196): merge orb-194 into the visa provider admin routes branch`.
-- Then `pnpm db:migrate` with the dev database URL.
+- Then, in the repo: the **install** row, the **regenerate** row, `git add` what they regenerated, then the **typecheck** and **lint** rows.
+- Then `git -C <repo> diff origin/<base> -- <generated files>` must show only this ticket's own changes. A path or schema removed, or one that another ticket adds, means a stale document: stop and say so.
+- The regenerated files stay in this merge commit. Orbit's backend pre-commit hook runs `pnpm openapi && git add openapi/` whenever a merged-in controller or DTO is staged, so a separate commit would need `--no-verify`.
+- Commit: `git -C <repo> commit -m "chore(ORB-<n>): merge <default | orb-<blocker n>> into the <branch words> branch"`, the id in the profile's case: the default branch, or for a stacked PR the blocker's ticket id, e.g. `chore(ORB-196): merge orb-194 into the visa provider admin routes branch`.
+- Then the **migrate** row with the dev database URL, when the repo has one.
 - Never rebase, never force push, and never rename the PR's migration folders.
 
 ## 3. Each accepted fix
@@ -48,7 +48,7 @@ git -C <repo> diff --name-only --diff-filter=U
 
 ## 4. Gate
 
-`NODE_OPTIONS='<e2e_node_options>' pnpm check` in the background. Record the counts, and label environmental failures as such.
+The **gate** in the background. Record the counts the **gate counts** row names, and label environmental failures as such.
 
 ## 5. Internal review
 

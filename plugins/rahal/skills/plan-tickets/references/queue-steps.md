@@ -2,7 +2,7 @@
 
 Run these after step 0. Write in the style of `explanation-style.md`.
 
-Every Linear call passes `fields`: a `get_issue` without them returned about 69,000 characters. Never ask for `description`: one ticket's is about 66,000 characters and overflows the call, losing its links with it.
+Every Linear call passes `fields`: a `get_issue` without them returned about 69,000 characters. Only the repo read in step 4 asks for `description`, alone, one ticket per call: one ticket's is about 66,000 characters, and a call that asks for it with other fields overflows and loses them.
 
 ## Statuses
 
@@ -27,9 +27,9 @@ ORB's statuses and how this command reads them. A status not listed here is read
 
 ## 1. Your tickets
 
-`list_issues(team: "ORB", assignee: "me", limit: 250, fields: [id, title, status, statusType, priority, project, assignee, assigneeId])`, following `cursor` while `hasNextPage` is true. This is step 0's Linear proof.
+Once per team the configured families' profiles list (`ORB`, and `GF` when the corporate family is configured): `list_issues(team: "<team>", assignee: "me", limit: 250, fields: [id, title, status, statusType, priority, project, assignee, assigneeId])`, following `cursor` while `hasNextPage` is true. This is step 0's Linear proof.
 - Your `assigneeId` decides every "yours" and "same owner" below. Never match people by name: `assignee` is a name for some people and an email for others.
-- Your open tickets are the rows whose kind is open. None at all: say "You have no open ORB tickets." and stop.
+- Your open tickets are the rows whose kind is open. None at all: say "You have no open <teams> tickets." and stop.
 
 ## 2. Ask which project
 
@@ -47,7 +47,7 @@ An instruction that names a project answers this question (`${CLAUDE_PLUGIN_ROOT
 
 ## 3. The open-ticket table
 
-Four calls, one per open kind: `list_issues(team: "ORB", state: "<kind>", limit: 250, fields: [id, status, statusType, assignee, assigneeId, project])` for `triage`, `backlog`, `unstarted` and `started`, each following `cursor`. Together they hold every open ORB ticket's status, owner and project. Titles come from step 1 and from relation entries.
+Four calls per team, one per open kind: `list_issues(team: "<team>", state: "<kind>", limit: 250, fields: [id, status, statusType, assignee, assigneeId, project])` for `triage`, `backlog`, `unstarted` and `started`, each following `cursor`. Together they hold every open ticket's status, owner and project, in those teams. Titles come from step 1 and from relation entries.
 
 If any of the four calls fails or stops before its last page, stop and say which kind could not be read: without the full table, a missing ticket can't be told apart from a closed one.
 
@@ -57,15 +57,23 @@ For each of your open tickets in the chosen project: `get_issue(id: "ORB-<n>", f
 
 A failed read: mark the ticket "links unknown", order it by its other keys, and name it in Data gaps.
 
+### Your tickets' repos
+
+For each of your open tickets in the chosen project, one ticket per call and never in parallel: `get_issue(id: "ORB-<n>", fields: [id, description])`. A result too big for the call is saved to a file: read that file and check its `id` is this ticket's before using it, because parallel calls overwrite each other's saved file. A different id: read the ticket again.
+
+Then pick the ticket's repo with step 0's rule (`${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` → The ticket's repo), items 2 to 4, on its description and title. It is the same rule `start-work` applies, so both put a ticket in the same repo. Item 5 (ask) becomes "repo unknown" here: this command asks only for the project.
+
+A failed read: route the ticket by items 3 and 4 alone (its team, then its title tag), and name it in Data gaps ("ORB-x: description not read; repo from its team and tag").
+
 ## 5. One step out
 
-For each blocking ticket in step 4's `blockedBy` lists that is not yours (someone else's, unassigned, or in another team), in ticket-number order, at most 25: `get_issue(id, fields: [id, relations])`. A non-ORB id is not in the table, so ask for `fields: [id, title, status, statusType, assignee, assigneeId, relations]`. Name in Data gaps every blocker past the 25th ("ORB-x: links not read") and every failed read.
+For each blocking ticket in step 4's `blockedBy` lists that is not yours (someone else's, unassigned, or in another team), in ticket-number order, at most 25: `get_issue(id, fields: [id, relations])`. An id of another team is not in the table, so ask for `fields: [id, title, status, statusType, assignee, assigneeId, relations]`. Name in Data gaps every blocker past the 25th ("ORB-x: links not read") and every failed read.
 
-A non-ORB blocker that was not read (past the 25th, or a failed read) has an unknown status: count it as blocking, so the tickets it blocks never earn `can start now`.
+A blocker of another team that was not read (past the 25th, or a failed read) has an unknown status: count it as blocking, so the tickets it blocks never earn `can start now`.
 
 ## 6. Open PRs
 
-Once per code repo, `rahal-orbit-backend` and `rahal-orbit-dashboard`:
+Once per code repo of each configured family: orbit `rahal-orbit-backend` and `rahal-orbit-dashboard`; corporate `rahal-corporate-backend`, `rahal-corporate-app` and `rahal-corporate-dashboard`:
 
 ```bash
 GH_CONFIG_DIR="<github.gh_config_dir>" gh pr list --repo DigitalZoneApp/<repo name> --state open --limit 100 --json number,title,headRefName,baseRefName,isDraft,reviewDecision,mergeStateStatus,url
@@ -132,7 +140,7 @@ Show an owner as the `assignee` value, or the part of an email before `@`.
 
 ## 9. Stack candidates
 
-A ticket's repo comes from the tag after the title's emoji: `[Backend]` → `rahal-orbit-backend`; `[Frontend]` or `[Dashboard]` → `rahal-orbit-dashboard`; `[Cross]` → both. No tag: both, each entry saying "if this ticket is <repo> work", and Data gaps names the ticket.
+A ticket's repo is the one step 4 picked. A `[Cross]` ticket, which step 0's rule leaves to its item 5, counts in every code repo of its family. Repo unknown: each code repo of the configured families, each entry saying "if this ticket is <repo> work", and Data gaps names the ticket.
 
 Check each Pick order ticket that has a blocking `blockedBy` ticket, in each repo its tag names. It **can stack** in a repo when both hold:
 - every one of its blocking `blockedBy` tickets has exactly one open PR in that repo;
@@ -145,7 +153,7 @@ Write each candidate like this:
 ```
 - **ORB-217** can stack on #183 (`feat/orb-214-shared-booking-transactions`, ORB-214, Sam's) · not a draft · review required · clean. Stack if you can't wait.
   Run `/rahal:start-work ORB-217` and answer **Stack** when it asks *Wait or stack?*.
-  When #183 changes, merge its branch into yours (never rebase). When #183 merges, GitHub moves your PR to `main`; merge `origin/main` in once.
+  When #183 changes, merge its branch into yours (never rebase). When #183 merges, GitHub moves your PR to the default branch; merge `origin/<default>` in once.
 ```
 
 Write "yours" in place of "Sam's" when the blocker is your own ticket. The recommendation comes from the top PR:

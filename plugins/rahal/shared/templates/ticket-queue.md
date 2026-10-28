@@ -33,7 +33,7 @@ Which files each ticket touches is unknown until `/rahal:start-work` reads the c
 
 - **ORB-<n>** can stack on #<k> (`<branch>`, ORB-<n>, <owner's | yours>) · <draft | not a draft> · <review state> · <merge state>. <Recommendation.>
   Run `/rahal:start-work ORB-<n>` and answer **Stack** when it asks *Wait or stack?*.
-  When #<k> changes, merge its branch into yours (never rebase). When #<k> merges, GitHub moves your PR to `main`; merge `origin/main` in once.
+  When #<k> changes, merge its branch into yours (never rebase). When #<k> merges, GitHub moves your PR to the default branch; merge `origin/<default>` in once.
 - ORB-<n> can't stack: <reason>.
 
 ## Blocking you

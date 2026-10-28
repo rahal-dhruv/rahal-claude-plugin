@@ -8,15 +8,15 @@
 ## 2. Pre-flight and the ledger
 
 - Run the plan's Pre-flight block, adapted to the config:
-  - `ORBIT_POSTGRES_PORT=<docker_ports.postgres> ORBIT_REDIS_PORT=<docker_ports.redis> docker compose up --wait` from the backend folder.
+  - the **services** row, from the backend folder.
   - Prisma dev commands run with the dev database URL (step 0 → How to run commands).
-  - `pnpm db:migrate`.
+  - the **migrate** row.
 - Create `<work>/<slug>/ledger.md` from `${CLAUDE_PLUGIN_ROOT}/shared/templates/ledger.md`. Record every ruling, task completion, environmental problem, review finding and remote step there as it happens. It is what a later session resumes from.
 
 ## 3. Each task
 
-1. Write the test. Run it: `NODE_OPTIONS='<e2e_node_options>' pnpm test:e2e <file>` or `pnpm test <file>`. Confirm it fails for the reason the plan states. A test that passes before the code exists is a finding about the test.
-2. Write the code. Run the test again and confirm it passes. Then `pnpm typecheck` and `pnpm lint`.
+1. Write the test. Run it with the **e2e file** or **unit file** row. Confirm it fails for the reason the plan states. A test that passes before the code exists is a finding about the test.
+2. Write the code. Run the test again and confirm it passes. Then the **typecheck** and **lint** rows.
 3. Commit per `commit_size` and `attribution` with the profile's title format.
    - Every commit must pass typecheck and lint on its own.
    - To split one file's edits across two commits (interactive staging is not available): copy the full file to the scratchpad, `git checkout` it, re-apply the first part, commit, copy the full file back, commit.
@@ -31,7 +31,7 @@ When `workspace_extras.docs_folder` is true, update `docs/<repo>/<feature>.md` a
 
 ## 5. The gate
 
-Run `NODE_OPTIONS='<e2e_node_options>' pnpm check` in the background, and watch it with a monitor if the session has one. Read the result. Label environmental failures as environmental, with no re-run loops. Record lint, format, typecheck, knip, unit, e2e and contract counts, and `openapi:check`.
+Run the **gate** in the background, and watch it with a monitor if the session has one. Read the result. Label environmental failures as environmental, with no re-run loops. Record the counts the profile's **gate counts** row names.
 
 ## 6. Guard checks
 
@@ -55,9 +55,9 @@ run() {
   diff="$(diff -U0 "$SP/orig-$name" "$file" | grep -E '^[-+][^-+]')"
   { echo "## $name"; echo '```diff'; echo "$diff"; echo '```'; } >> "$OUT"
   if [ -z "$diff" ]; then echo "MUTATION NOT APPLIED" >> "$OUT"; else
-    NODE_OPTIONS='<e2e_node_options>' pnpm test:e2e <e2e file> > "$SP/mut-$name.log" 2>&1
+    <e2e run> > "$SP/mut-$name.log" 2>&1
     echo "exit=$?" >> "$OUT"
-    grep -E '^ *(×|FAIL )|^ +(Test Files|Tests|Errors) |[Uu]nhandled' "$SP/mut-$name.log" >> "$OUT"; echo "log: $SP/mut-$name.log" >> "$OUT"
+    grep -E '^ *(×|✕|FAIL )|^ +(Test Files|Tests|Errors) |^(Test Suites|Tests): |[Uu]nhandled' "$SP/mut-$name.log" >> "$OUT"; echo "log: $SP/mut-$name.log" >> "$OUT"
   fi
   cp "$SP/orig-$name" "$file"; echo >> "$OUT"
 }
@@ -66,6 +66,7 @@ if [ "$(git status --porcelain=v1)" = "$BEFORE" ]; then echo "tree: as before" >
   { echo "TREE CHANGED"; git status --porcelain=v1; } >> "$OUT"; fi
 ```
 
+- `<e2e run>` is the **e2e file** row for the e2e file that covers the guards. The record keeps vitest's and jest's failed-case and summary lines.
 - Write each mutation against the file as it is now, after prettier formatted it, never against the plan's code: once prettier wraps a line, a pattern copied from the plan no longer matches, and the record says `MUTATION NOT APPLIED`.
 - Run it in the background and read `mutations.md`. It must end with `tree: as before`. Anything else: restore each file from its `orig-<name>` copy before going on.
 - It never uses `git checkout` or `git stash`, so it is safe whatever the commit choice: uncommitted task changes and new files are restored exactly.
@@ -77,7 +78,7 @@ Re-run the measurements from phase one against the final code, and record the co
 
 ## 8. The PR body
 
-Build `<work>/<slug>/pr-body.md` from `git show origin/main:.github/pull_request_template.md`, keeping its sections. Fill in:
+Build `<work>/<slug>/pr-body.md` from `git show origin/<default>:.github/pull_request_template.md`, keeping its sections; a repo without one uses the sections the profile names. Fill in:
 - a stacked base (the plan's `**Base:**` line names a PR): the notice in `${CLAUDE_PLUGIN_ROOT}/shared/stack-notice.md` at the very top, with the blocker's PR number and branch filled in;
 - the ticket id;
 - **What:** the change; the existing definitions reused, by file and name; departures from the ticket with reasons; additions beyond the ticket's symbols; deployment notes (for example a storage bucket policy that must change);

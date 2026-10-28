@@ -18,7 +18,7 @@ git add -A && $G commit -qm "feat(ORB-103): add search" && git push -q origin or
 cd .. && git clone -q remote.git local 2>/dev/null
 P=src/search/search.service.ts
 awk '/^## 3\. Check the ticket against the code/{s=1} s&&/^```bash$/{p=1;next} p&&/^```$/{exit} p' "$MD" \
-  | sed -e "s#<repo>#\"$T/local\"#g" -e 's#<base>#orb-103-search#g' -e "s#<ticket base sha>#$TICKET_BASE#g" \
+  | sed -e "s#<repo>#\"$T/local\"#g" -e 's#<base>#orb-103-search#g' -e 's#<default>#main#g' -e "s#<ticket base sha>#$TICKET_BASE#g" \
         -e "s#<files the ticket names>#$P#g" -e "s#<path>#$P#g" > "$T/block.sh"
 [ -s "$T/block.sh" ] || { echo "FAIL no code-check block found in ${MD##*/}"; exit 1; }
 out="$(bash "$T/block.sh" 2>&1)"

@@ -1,6 +1,6 @@
 ---
 name: pr-followup
-description: "Handle reviewers' comments on an Orbit pull request in two phases: (1) rebuild the context from GitHub, Linear and the repo, verify each comment, and write a fix plan with the comments at a glance and a detailed fix for each, then stop for you to accept items; (2) update the branch from its base (main, or the blocker's branch for a stacked PR) if accepted, fix test-first, run the gate and an internal review, and draft the replies. An instruction in double quotes after the link adapts the run and carries over to the next round. Usage: /rahal:pr-followup <PR link or number> [model=<name>] [\"<instruction>\"]"
+description: "Handle reviewers' comments on an Orbit or corporate pull request in two phases: (1) rebuild the context from GitHub, Linear and the repo, verify each comment, and write a fix plan with the comments at a glance and a detailed fix for each, then stop for you to accept items; (2) update the branch from its base (the default branch, or the blocker's branch for a stacked PR) if accepted, fix test-first, run the gate and an internal review, and draft the replies. An instruction in double quotes after the link adapts the run and carries over to the next round. Usage: /rahal:pr-followup <PR link or number> [model=<name>] [\"<instruction>\"]"
 argument-hint: '<PR link or number> [model=<name>] ["<instruction>"]'
 disable-model-invocation: true
 ---
@@ -17,7 +17,7 @@ Always read:
 - `${CLAUDE_PLUGIN_ROOT}/shared/approval-gates.md`
 - `${CLAUDE_PLUGIN_ROOT}/shared/instructions.md`
 - `${CLAUDE_PLUGIN_ROOT}/shared/evidence.md`
-- `${CLAUDE_PLUGIN_ROOT}/shared/profiles/orbit.md`
+- the profile of the family step 0 routed to: `${CLAUDE_PLUGIN_ROOT}/shared/profiles/orbit.md` or `${CLAUDE_PLUGIN_ROOT}/shared/profiles/corporate.md`
 
 No local file is assumed. The ticket folder (`${CLAUDE_PLUGIN_ROOT}/shared/step-0-checks.md` → The ticket folder) receives the outputs; read it for extra context if it already exists.
 

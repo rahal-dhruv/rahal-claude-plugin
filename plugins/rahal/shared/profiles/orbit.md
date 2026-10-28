@@ -4,7 +4,8 @@ The same for every Orbit engineer. Personal values live in `.claude/rahal.local.
 
 ## Linear
 
-- Workspace `digitalzone`, team key `ORB`. Ticket links look like `https://linear.app/digitalzone/issue/ORB-<n>/<slug>`.
+- Workspace `digitalzone`. Ticket links look like `https://linear.app/digitalzone/issue/ORB-<n>/<slug>`.
+- Teams: `ORB`.
 
 ## GitHub and repos
 
@@ -24,6 +25,27 @@ The same for every Orbit engineer. Personal values live in `.claude/rahal.local.
 - A stacked branch and its blocker's branch share one dev database (port `<dev_database_url_port>`). Once the stacked branch has applied its own migration, `pnpm db:migrate:dev` on the blocker's branch finds that migration missing from its folder and offers to reset the database: answer no. A reset deletes every table and row in it, the stacked branch's included.
 - The e2e suite starts its own containers (testcontainers). Its global setup spawns `pnpm`, which needs a shim on Windows (`toolchain.e2e_node_options`).
 - In e2e tests, build each supertest request when it is sent, through a factory such as `() => request(server).post(…)`, never as an array of requests built up front: supertest opens a listener per request on demand and closes it when the first one finishes, so the others fail with `ECONNREFUSED`. A `Promise.all` of requests started in the same instant is fine.
+
+## Commands
+
+The rows every command names in bold (step 0 → How to run commands). Run each inside its repo.
+
+| Row | backend | dashboard |
+| --- | --- | --- |
+| install | `pnpm install --frozen-lockfile` | `pnpm install --frozen-lockfile` |
+| generate | `pnpm db:generate` | — |
+| services | `ORBIT_POSTGRES_PORT=<docker_ports.postgres> ORBIT_REDIS_PORT=<docker_ports.redis> docker compose up --wait` | — |
+| migrate | `pnpm db:migrate` | — |
+| new migration | `pnpm db:migrate:dev --name <verb>_<object>` | — |
+| unit file | `pnpm test <file>` | `pnpm test <file>` |
+| e2e file | `NODE_OPTIONS='<e2e_node_options>' pnpm test:e2e <file>` | `pnpm test:e2e <file>` |
+| typecheck | `pnpm typecheck` | `pnpm typecheck` |
+| lint | `pnpm lint` | `pnpm lint` |
+| gate | `NODE_OPTIONS='<e2e_node_options>' pnpm check` | `pnpm check` |
+| gate counts | lint, format, typecheck, knip, unit, e2e, contract, `openapi:check` | as `pnpm check` prints them |
+| regenerate | `pnpm db:generate && pnpm openapi` | — |
+| generated files | `openapi/*.json`, `src/generated/` | — |
+| hooks | lefthook, below | lefthook |
 
 ## The standard
 

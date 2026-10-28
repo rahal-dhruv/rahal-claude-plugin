@@ -9,6 +9,7 @@ plugins/rahal/shared/approval-gates.md
 plugins/rahal/shared/evidence.md
 plugins/rahal/shared/review-model.md
 plugins/rahal/shared/profiles/orbit.md
+plugins/rahal/shared/profiles/corporate.md
 plugins/rahal/shared/templates/brief.md
 plugins/rahal/shared/templates/plan.md
 plugins/rahal/shared/templates/ledger.md
@@ -64,3 +65,4 @@ plugins/rahal/skills/plan-tickets/SKILL.md
 plugins/rahal/skills/plan-tickets/references/queue-steps.md
 tests/probes/pr-list.sh
 plugins/rahal/shared/instructions.md
+tests/probes/init-repos.sh

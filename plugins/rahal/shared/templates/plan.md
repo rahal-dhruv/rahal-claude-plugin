@@ -4,7 +4,7 @@
 **Approach:** <2–3 sentences>
 **Tech stack:** <from the profile and the ticket>
 **Ticket:** <link> · **Brief:** `work/<slug>/brief.md` · **Branch:** `feat/<slug>`
-**Base:** `<main, or the blocker's branch>` · <stacked only: stacked on #<blocker PR> (ORB-<blocker n>)>
+**Base:** `<the default branch, or the blocker's branch>` · <stacked only: stacked on #<blocker PR> (ORB-<blocker n>)>
 **Instruction:** <"the instruction as typed" | none> · **Model:** <the model= name | ask>
 
 ## Tasks at a glance
@@ -34,8 +34,8 @@
 ```bash
 git -C <repo> fetch origin
 git -C <repo> switch -c feat/<slug> --no-track origin/<base>
-pnpm install --frozen-lockfile && pnpm db:generate
-<docker compose up --wait with the configured ports; pnpm db:migrate with the dev database port>
+<the profile's **install** and **generate** rows>
+<the **services** row with the family's ports; the **migrate** row with the dev database port>
 ```
 
 ### Task 1: <name>

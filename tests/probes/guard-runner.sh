@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Runs the guard-check runner from phase-2-execute.md §6 against a repo whose task change is
 # uncommitted and partly untracked. Passes when every file is restored exactly, every mutation
-# was seen, the runner reports the tree as before, and each run's record keeps vitest's failed-file
+# was seen, the runner reports the tree as before, and each run's record keeps vitest's and jest's failed-file
 # and Errors lines (a hook error can fail a file while every test passes) and names its full log.
 set -u
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -13,11 +13,11 @@ printf 'export const isLive = (row) => {\n  return true;\n};\n' > src/svc.ts
 git add -A && git -c commit.gpgsign=false commit -qm base
 printf 'export const isLive = (row) => {\n  return row.deletedAt === null;\n};\n' > src/svc.ts
 printf 'export const live = (r) => r.deletedAt === null;\n' > src/new-helper.ts
-fake_e2e() { echo '   × keeps deleted rows out'; echo ' FAIL  test/svc.e2e-spec.ts > afterAll'; echo ' Test Files  1 failed (1)'; echo '      Tests  1 failed'; echo '     Errors  1 error'; return 1; }
+fake_e2e() { echo '   × keeps deleted rows out'; echo ' FAIL  test/svc.e2e-spec.ts > afterAll'; echo ' Test Files  1 failed (1)'; echo '      Tests  1 failed'; echo '     Errors  1 error'; echo '  ✕ keeps deleted rows out (jest)'; echo 'Test Suites: 1 failed, 1 total'; echo 'Tests:       1 failed, 1 total'; return 1; }
 export -f fake_e2e
 awk '/^## 6\. Guard checks/{s=1} s&&/^```bash$/{p=1;next} p&&/^```$/{exit} p' "$MD" \
   | sed -e "s#\"<repo>\"#<repo>#g" -e "s#<repo>#\"$T/repo\"#g" -e "s#<scratchpad>#$T/scratch#g" \
-        -e 's#NODE_OPTIONS=[^ ]* pnpm test:e2e <e2e file>#fake_e2e#' > "$T/runner.sh"
+        -e 's#<e2e run>#fake_e2e#' > "$T/runner.sh"
 mut() { printf "sed 's/%s/true/' %s > \"$T/tmp\" && cp \"$T/tmp\" %s\n" "$2" "$1" "$1"; }
 { echo 'snap guard1 src/svc.ts'; mut src/svc.ts 'row.deletedAt === null'; echo 'run guard1 src/svc.ts'
   echo 'snap guard2 src/new-helper.ts'; mut src/new-helper.ts 'r.deletedAt === null'; echo 'run guard2 src/new-helper.ts'; } > "$T/blocks"
@@ -31,5 +31,7 @@ grep -q 'MUTATION NOT APPLIED' "$T/scratch/mutations.md" 2>/dev/null && { echo "
 grep -q '^tree: as before$' "$T/scratch/mutations.md" 2>/dev/null || { echo "FAIL the runner did not report the tree as before"; FAILS=$((FAILS + 1)); }
 grep -q '^ *Errors  1 error$' "$T/scratch/mutations.md" 2>/dev/null || { echo "FAIL the runner dropped vitest's Errors line"; FAILS=$((FAILS + 1)); }
 grep -q '^ *Test Files  1 failed' "$T/scratch/mutations.md" 2>/dev/null || { echo "FAIL the runner dropped the failed test file count"; FAILS=$((FAILS + 1)); }
+grep -q '^Test Suites: 1 failed' "$T/scratch/mutations.md" 2>/dev/null || { echo "FAIL the runner dropped jest's Test Suites line"; FAILS=$((FAILS + 1)); }
+grep -q '✕ keeps deleted rows out (jest)' "$T/scratch/mutations.md" 2>/dev/null || { echo "FAIL the runner dropped jest's failed case"; FAILS=$((FAILS + 1)); }
 [ "$(grep -c '^log: ' "$T/scratch/mutations.md" 2>/dev/null)" = 2 ] || { echo "FAIL each run must name its full log"; FAILS=$((FAILS + 1)); }
 if [ "$FAILS" -eq 0 ]; then echo "guard-runner: all clear"; else echo "guard-runner: $FAILS problem(s)"; exit 1; fi
