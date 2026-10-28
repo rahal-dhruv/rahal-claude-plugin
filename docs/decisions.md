@@ -595,3 +595,45 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** each teammate needs an invite and a git login with access; the maintainer's install now depends on a push before a change reaches their sessions.
 - **Where:** `README.md`, `docs/testing-and-release.md`
 - **Date:** 2026-10-15
+
+### PD-90 — One config, repos grouped by family
+- **Decision:** `.claude/rahal.local.md` has no `profile:` key. It lists one block per repo family under `families:` (`orbit`, `corporate`), each with its `repos`, `docker_ports`, `dev_database_url_port` and `e2e_node_options`; `toolchain.bash_node_path`, `github`, `linear` and `choices` stay shared. Step 0 reads the routed family's values; a bare `<dev_database_url_port>` means that family's. An old single-profile file stops at step 0 with "run `/rahal:init` here", rather than being read as Orbit.
+- **Why:** the maintainer combined the Orbit and corporate workspaces into one, worked by one Claude, so one config must hold six repos and two sets of ports (Orbit's move off the corporate ones, which are fixed). Grouping by family keeps each port and shim beside the repos it belongs to; reading the old shape as well would leave step 0 carrying two shapes indefinitely.
+- **Cost if wrong:** every placeholder carries one more level; an Orbit-only workspace must re-run init once after updating the plugin.
+- **Where:** `plugins/rahal/skills/init/references/config-template.md`, `plugins/rahal/shared/step-0-checks.md`, `scripts/check-output.sh`
+- **Date:** 2026-10-28
+
+### PD-91 — GF tickets go through the plugin, always corporate
+- **Decision:** each profile lists its Linear teams (`orbit.md`: ORB; `corporate.md`: ORB and GF). Step 0 accepts a ticket whose team a configured family lists; a `GF-` ticket always routes to a corporate repo. `ORB-<n>` throughout the plugin stands for the ticket's id, whatever its team, and `orb-<n>` for its lower-case form, so a GF ticket's folder is `gf-<n>-…`.
+- **Why:** the maintainer chose to run the old corporate work (open GF pull requests, new GF bugs) through the same commands; no GF ticket targets an Orbit repo, so its family is fixed.
+- **Cost if wrong:** plan-tickets reads GF statuses by their kind only (the status table is ORB's).
+- **Where:** `plugins/rahal/shared/profiles/corporate.md`, `plugins/rahal/shared/step-0-checks.md`, `plugins/rahal/skills/plan-tickets/references/queue-steps.md`
+- **Date:** 2026-10-28
+
+### PD-92 — Each command reads the routed family's profile and its Commands table
+- **Decision:** both profiles carry the same Commands table (install, generate, services, migrate, new migration, unit file, e2e file, typecheck, lint, gate, gate counts, regenerate, generated files, hooks), one column per repo. The skills name a row in bold (the **gate**) instead of a hard-coded `pnpm` command, and every `SKILL.md` loads the profile of the family step 0 routed to.
+- **Why:** the corporate backend runs npm and Jest, its gate includes the e2e suite, the app regenerates a different file, and the corporate dashboard has no gate at all; a shared table keeps each command in one place per family instead of branching in every step.
+- **Cost if wrong:** a step that names a row the profile leaves as `—` must say so; the guard runner's record now keeps jest's lines beside vitest's.
+- **Where:** `plugins/rahal/shared/profiles/orbit.md`, `plugins/rahal/shared/profiles/corporate.md`, `plugins/rahal/skills/start-work/references/phase-2-execute.md`, `plugins/rahal/skills/pr-followup/references/phase-2-fix.md`
+- **Date:** 2026-10-28
+
+### PD-93 — Step 0 picks the repo from the ticket; with none named, an ORB ticket is Orbit's
+- **Decision:** step 0's "The ticket's repo" takes the first rule that answers: the PR link; a repo the ticket names in Context, Done When or Sources (folder, link, or a default branch only one repo has, such as `corporate`); the team when only one family lists it (`GF-` → corporate), else orbit; the title tag within the family; ask. It prints a `Route` line saying why, and the brief repeats it. A bare PR number asks the repo when two families are configured.
+- **Why:** ORB tickets serve both families (the Corporate Airport Services project is in team ORB), so the prefix cannot decide; the integration tickets name their repo. The maintainer chose the Orbit default for an ORB ticket naming none, so Orbit's own tickets gain no question; phase one's stop at the brief catches a wrong route before any code runs.
+- **Cost if wrong:** a corporate ORB ticket that names no repo plans against an Orbit repo until the brief's Repo line is read.
+- **Where:** `plugins/rahal/shared/step-0-checks.md`, `plugins/rahal/shared/templates/brief.md`
+- **Date:** 2026-10-28
+
+### PD-94 — Orbit's process wins in corporate repos, except a check the repo runs
+- **Decision:** the corporate profile's branch practice is Orbit's (`feat/<slug>` branches, a titled merge commit to update a branch, never rebase or force push). The commit scope follows each repo's own check: `ORB-<n>` in the backend, which has no commitlint, and `orb-<n>` in the app and the dashboard, whose commitlint has `scope-case: lower-case`.
+- **Why:** the maintainer set Orbit's rules as the base of the combined workspace; a repo's own check binds, and weakening a check is forbidden.
+- **Cost if wrong:** corporate history mixes `ORB-` and `orb-` scopes; the backend `AGENTS.md`'s allowance for a force push with the owner's word is not used.
+- **Where:** `plugins/rahal/shared/profiles/corporate.md`
+- **Date:** 2026-10-28
+
+### PD-95 — plan-tickets reads each description and routes with step 0's rule
+- **Decision:** plan-tickets reads each of your tickets in the chosen project with `get_issue(fields: [id, description])`, one ticket per call and never in parallel, checks the `id` of a result Linear saved to a file, and picks the repo with step 0's "The ticket's repo" items 2 to 4; item 5 (ask) becomes "repo unknown". A failed read falls back to the team and the title tag. The earlier guess from open PRs is gone, and the rule is referenced, never copied.
+- **Why:** the maintainer asked for it before release: without the description, every corporate ORB ticket with no PR yet (ORB-781 to ORB-791 in Corporate Airport Services) was planned under the Orbit repos. A description asked for alone fits the call or is saved to a file; asked for with other fields it overflowed and lost them, which is why the old rule said never to ask for it.
+- **Cost if wrong:** one Linear call per ticket, made in sequence, so a large project takes longer to plan.
+- **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`, `plugins/rahal/shared/step-0-checks.md`
+- **Date:** 2026-10-28
