@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Runs the reviewer's scratch-clone block (rahal-reviewer.md step 1) twice: for a PR on main while the
+# Runs the review clone block (review-model.md step 1) twice: for a PR on main while the
 # user's local main is behind origin/main, and for a PR stacked on another open PR's branch. Passes when
 # each clone's diff holds only that PR's own file, the clone has no remote, and the user's repo is untouched.
 set -u
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-MD="${1:-$ROOT/plugins/rahal/agents/rahal-reviewer.md}"
+MD="${1:-$ROOT/plugins/rahal/shared/review-model.md}"
 export GIT_AUTHOR_NAME=probe GIT_AUTHOR_EMAIL=probe@example.com GIT_COMMITTER_NAME=probe GIT_COMMITTER_EMAIL=probe@example.com
 G="git -c commit.gpgsign=false"
 T="$(mktemp -d)/review clone"; mkdir -p "$T/scratch"; cd "$T" || exit 1
@@ -21,7 +21,7 @@ printf 'export const first = (xs, n) => xs.slice(0, n - 1);\n' > first.js && git
 git push -q origin feat/x:refs/pull/7/head
 git fetch -q origin "+pull/7/head:refs/remotes/origin/pr-7" "+pull/9/head:refs/remotes/origin/pr-9" && git switch -q main
 MAIN_BEFORE="$(git rev-parse main)"; BRANCHES_BEFORE="$(git branch | wc -l)"
-awk '/^1\. \*\*`code-review` first/{s=1} s&&/^   ```bash$/{p=1;next} p&&/^   ```$/{exit} p' "$MD" \
+awk '/^1\. \*\*Build the review clone/{s=1} s&&/^   ```bash$/{p=1;next} p&&/^   ```$/{exit} p' "$MD" \
   | sed -e 's/^   //' -e "s#<scratchpad folder>#$T/scratch#g" -e "s#<repo folder>#$T/local#g" -e 's#<default>#main#g' > "$T/block.tmpl"
 [ -s "$T/block.tmpl" ] || { echo "FAIL no clone block found in ${MD##*/}"; exit 1; }
 FAILS=0

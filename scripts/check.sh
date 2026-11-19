@@ -54,8 +54,16 @@ if [ -f "$agent" ]; then
     && fail "rahal-reviewer.md must not have Edit, Write or NotebookEdit"
   model="$(printf '%s\n' "$front" | grep '^model:')"
   [ -n "$model" ] && [ "$model" != "model: inherit" ] && fail "rahal-reviewer.md must not pin a model"
-  flags="$(grep -nE -- '--fix|--comment' "$agent" | grep -v 'Never add')"
-  [ -n "$flags" ] && fail "rahal-reviewer.md mentions --fix or --comment outside the rule forbidding them: $flags"
+  printf '%s\n' "$tools" | grep -qE '(^|[ ,:])Skill([ ,]|$)' \
+    && fail "rahal-reviewer.md must not have the Skill tool: code-review runs headless (review-model.md)"
+  flags="$(grep -nE -- '--fix|--comment' "$agent")"
+  [ -n "$flags" ] && fail "rahal-reviewer.md mentions --fix or --comment: $flags"
+fi
+# code-review runs headless from review-model.md, never with --fix or --comment
+review_model="$PLUGIN/shared/review-model.md"
+if [ -f "$review_model" ]; then
+  flags="$(grep -nE -- '--fix|--comment' "$review_model" | grep -v 'Never add')"
+  [ -n "$flags" ] && fail "review-model.md mentions --fix or --comment outside the rule forbidding them: $flags"
 fi
 
 # 6. Every ${CLAUDE_PLUGIN_ROOT}/<path> named in the plugin exists
