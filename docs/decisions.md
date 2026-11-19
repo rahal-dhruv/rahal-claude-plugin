@@ -240,7 +240,7 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Where:** `plugins/rahal/shared/step-0-checks.md`
 - **Date:** 2026-10-08
 
-### PD-35 — One review pass, on the chosen model
+### PD-35 — One review pass, on the chosen model (superseded by PD-96)
 - **Decision:** in all three review steps (start-work phase two, review-pr, pr-followup phase two) the main session starts the reviewer agent once with the chosen model; the agent runs `code-review` itself through the Skill tool (`high review-target`, never `--fix` or `--comment`) and then the ticket checks, returning one list. Supersedes PD-08.
 - **Why:** the user asked for one pass; a test showed `code-review` started from an agent runs its helper on that agent's model, so the choice holds.
 - **Cost if wrong:** if a Claude Code update changes how skills run inside agents, `code-review` reports "not run" and the review covers ticket checks only.
@@ -637,3 +637,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** one Linear call per ticket, made in sequence, so a large project takes longer to plan.
 - **Where:** `plugins/rahal/skills/plan-tickets/references/queue-steps.md`, `plugins/rahal/shared/step-0-checks.md`
 - **Date:** 2026-10-28
+
+### PD-96 — code-review runs as a headless `claude -p` from the review clone, started by the main session
+- **Decision:** the main session builds the review clone (PD-36's clone, moved out of the agent), starts `claude -p "/code-review high review-target"` there in the background on the chosen model with `--allowedTools "Bash(git:*)" Read Grep Glob Agent --disallowedTools Edit Write --output-format stream-json`, and at once starts `rahal-reviewer`, which now checks the ticket, `AGENTS.md`, the plan and correctness only and has no Skill tool. A `ReportFindings` call in the stream is the only sign `code-review` ran; its findings are merged into the agent's list. Step 0 check 5 makes one tiny `claude -p` call. Supersedes PD-35.
+- **Why:** a `cd` in a helper agent does not reach the Skill tool, so the skill reviewed the workspace root or a stray worktree in more than 12 runs. A headless run started in the clone reviewed `git diff main...review-target` (measured 2026-11-19: 28 s at `low` on Sonnet; 160 s and 10 findings at `high` on Opus for an 11-file Orbit PR). A plain-text headless run once reported nothing, so `ReportFindings` from stream-json is the signal, and `claude auth status` said signed in with an expired token, so the login check makes a real call.
+- **Cost if wrong:** each person's CLI login must be current (step 0 checks it); a future Claude Code that renames `ReportFindings` makes every review "not run" until the count is updated. On Windows the headless run may use `PowerShell` for `git`, which is outside the allowed tools: read-only `git` calls passed, and a compound `Get-Content` call was refused, so it fell back to `Read`.
+- **Where:** `plugins/rahal/shared/review-model.md`, `plugins/rahal/agents/rahal-reviewer.md`, `plugins/rahal/shared/step-0-checks.md`, `tests/probes/headless-review.sh`, `tests/probes/review-clone.sh`
+- **Date:** 2026-11-19

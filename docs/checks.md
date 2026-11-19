@@ -8,7 +8,7 @@ The gate is `scripts/check.sh`, `scripts/test-check-output.sh` and `scripts/test
 2. **Required files:** every path in `scripts/required-files.txt`.
 3. **Required lines:** every `path|exact line` in `scripts/required-headings.txt` (whole-line, fixed-string match; indentation counts).
 4. **Skill front matter:** `name`, `description`, `argument-hint`, `disable-model-invocation: true`.
-5. **Reviewer agent:** named `rahal-reviewer`; no `Edit`, `Write` or `NotebookEdit`; no pinned model; `--fix` or `--comment` only on the line that forbids them.
+5. **Reviewer agent and headless review:** the agent is named `rahal-reviewer`; no `Edit`, `Write`, `NotebookEdit` or `Skill` tool; no pinned model; no `--fix` or `--comment` anywhere in it. `shared/review-model.md`, which starts `code-review` headless, names `--fix` or `--comment` only on the line that forbids them.
 6. **References:** every `${CLAUDE_PLUGIN_ROOT}/<path>` resolves.
 7. **Personal data:** scans every file git would commit (`git ls-files --cached --others --exclude-standard`, so ignored files are skipped) for absolute local paths (Windows, macOS, Linux and the Git Bash `/c/…` form), email addresses other than `example.com` and `git@` remotes, a personal email domain, the maintainer's two remapped ports and a filled-in gh config folder setting; the maintainer's account name only in `README.md`.
 8. **Forbidden text:** no line of `scripts/forbidden-text.txt` (`text|why`) appears in the plugin.
@@ -55,7 +55,8 @@ Each probe works in throwaway git repos under a folder whose name has a space, a
 | `stacked-rules` | for a PR stacked on a blocker's branch, the follow-up's second rules diff shows a rule added to `AGENTS.md` on `main` that the blocker never merged |
 | `pr-checkout` | the follow-up checkout reaches the PR head even when the branch tracks its blocker's branch, and when the switch fails it leaves the other branch in place and prints a `STOP` line naming both |
 | `pr-list` | plan-tickets' `gh pr list` line reaches a stand-in `gh` with the config folder whole (its path has a space), `--repo`, `--state open`, `--limit 100` and every JSON field the steps use |
-| `review-clone` | the reviewer's scratch clone reviews only the PR's files when the local `main` is stale and when the PR is stacked on another PR's branch, and leaves the user's repo untouched |
+| `review-clone` | `review-model.md`'s scratch clone reviews only the PR's files when the local `main` is stale and when the PR is stacked on another PR's branch, and leaves the user's repo untouched |
+| `headless-review` | `review-model.md`'s headless `claude -p` block (with a stand-in `claude`) starts in the review clone and asks for exactly `/code-review high review-target`, never `--fix` or `--comment`; the `ReportFindings` count is 1 for a stream with that call and 0 for one without |
 | `reflector-hook` | the hook spawns once per new context file, never for a reflector run, with hooks off |
 | `version-bump` | `check.sh` section 13 fails on an edited or a new plugin file without a version bump, and passes once the version changes |
 
