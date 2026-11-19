@@ -90,7 +90,7 @@ When a blocker isn't merged but has an open PR, phase one first shows that PR (b
   - the full `pnpm check`;
   - breaking each key guard once to prove a test catches it;
   - the PR body from the repo's template;
-  - one review pass: the `rahal-reviewer` agent, on the model you pick, runs Claude Code's `code-review` and checks the change against the ticket.
+  - one review pass, on the model you pick: Claude Code's `code-review` runs headless in a scratch clone while the `rahal-reviewer` agent checks the change against the ticket.
 - **Then it stops** with the findings at a glance and in detail, and you choose which to fix.
 
 **Phase three — ship.** Push, open the PR and read CI once, each per your choices.

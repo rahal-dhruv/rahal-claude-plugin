@@ -1,6 +1,6 @@
 ---
 name: start-work
-description: "Work a Rahal Linear ticket (ORB- or GF-, in an Orbit or corporate repo) end to end in three phases with stops: (1) understand the ticket against the code and write a brief and a test-first plan, then stop for decisions; (2) execute the plan with a ledger, the gate, guard checks and one review pass (the rahal reviewer, on the model you choose, runs code-review and checks the ticket), then stop with the findings; (3) ship under your commit and GitHub choices. Re-run it with the same link to resume; an instruction in double quotes after the link adapts the run and is kept for the ticket. Usage: /rahal:start-work <ticket link> [model=<name>] [\"<instruction>\"]"
+description: "Work a Rahal Linear ticket (ORB- or GF-, in an Orbit or corporate repo) end to end in three phases with stops: (1) understand the ticket against the code and write a brief and a test-first plan, then stop for decisions; (2) execute the plan with a ledger, the gate, guard checks and one review pass (the rahal reviewer, on the model you choose, checks the ticket while code-review runs headless), then stop with the findings; (3) ship under your commit and GitHub choices. Re-run it with the same link to resume; an instruction in double quotes after the link adapts the run and is kept for the ticket. Usage: /rahal:start-work <ticket link> [model=<name>] [\"<instruction>\"]"
 argument-hint: '<ticket link> [model=<name>] ["<instruction>"]'
 disable-model-invocation: true
 ---

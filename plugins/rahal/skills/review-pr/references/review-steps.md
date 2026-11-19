@@ -50,7 +50,7 @@ These go in section 5 of the report and are not repeated as new issues.
 
 Follow `${CLAUDE_PLUGIN_ROOT}/shared/review-model.md`:
 1. Ask the model (unless `model=<name>` or a standing choice).
-2. Run the reviewer agent once, with the ticket, base `$BASE`, head `origin/pr-<n>`'s SHA, the repo folder, its default branch name and the PR's base branch (`baseRefName`), the scratchpad folder, `AGENTS.md`, and the existing comments. It runs `code-review` itself; there is no separate `code-review` run.
+2. Run the review with the ticket, base `$BASE`, head `origin/pr-<n>`'s SHA, the repo folder, its default branch name and the PR's base branch (`baseRefName`), the scratchpad folder, `AGENTS.md`, and the existing comments. The main session runs `code-review` headless in the review clone while the reviewer agent checks the ticket.
 
 ## 6. Verify and write the report
 

@@ -94,7 +94,7 @@ Only for phases that run code.
 2. `docker info --format '{{.ServerVersion}}'` must work.
 3. `docker ps --format '{{.Names}} {{.Ports}}'`: a container outside the routed family's compose project holding `families.<family>.docker_ports.postgres` or `.redis` is a clash. Name the container. Suggest `/rahal:init` to move the family's ports where its profile allows it (Orbit's do), or stopping the other container, which is the user's call.
 4. Windows: the folder in `toolchain.bash_node_path` must contain `node`; when `families.<family>.e2e_node_options` is set, the shim file it names (the path between its double quotes) must exist, and `NODE_OPTIONS='<e2e_node_options>' node -e 1` must exit 0.
-5. Review phases: the `code-review` skill must be in this session's skill list, because the reviewer agent runs it. Missing: say so; the review then counts as ticket checks only, never as clean.
+5. Review phases: `claude -p "Reply ok" --model haiku --no-session-persistence` must print a reply, because the review runs `code-review` in a separate `claude` process that uses the CLI's own login. `claude auth status` is not enough: it reports signed in with an expired token. Failure: `✗ Review  claude CLI is not signed in`. Say: "Run `claude` in a terminal and type `/login`." The review then counts as ticket checks only, never as clean.
 
 ## When a check fails
 

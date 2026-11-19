@@ -38,11 +38,13 @@ A check passes only when its output was seen passing; a test run's `Test Files` 
 ## The review (`review-model.md`, `agents/rahal-reviewer.md`)
 
 - **The model:** skipped when `model=<name>` was given now or is recorded as `Model:` in `plan.md` or the latest `followup-*.md`, or `choices.review_model` holds one; otherwise suggested from the change's size and risk and asked. "Always <model>" saves it.
-- **One pass:** the main session starts `rahal:rahal-reviewer` once with the chosen `model`. The agent:
-  1. builds a scratch clone of the repo with `git clone --shared --no-checkout`, checks out the head as `review-target`, sets the default branch to the fetched `origin/<base>` (the PR's `baseRefName` or the plan's `**Base:**` branch), and removes the remote, because `code-review` compares against the local default branch: a stale local `main` makes it report other people's merged files, and a stacked change's blocker commits would be reviewed too;
-  2. runs `code-review` there through the Skill tool with exactly `high review-target` (never `--fix` or `--comment`); `code-review` starts its own helper agent, which runs on the same model;
-  3. checks the ticket, `AGENTS.md`, correctness beyond `code-review`, test strength, Review Focus, the instruction's focus and extra checks, and the PR body;
-  4. returns one merged list, first line `code-review: ran at high on <sha>` or `code-review: not run — <reason>`.
+- **One pass, two parts in parallel** (`review-model.md` → How to run the review):
+  1. the main session builds a scratch clone of the repo with `git clone --shared --no-checkout`, checks out the head as `review-target`, sets the default branch to the fetched `origin/<base>` (the PR's `baseRefName` or the plan's `**Base:**` branch), and removes the remote, because `code-review` compares against the local default branch: a stale local `main` makes it report other people's merged files, and a stacked change's blocker commits would be reviewed too;
+  2. it starts `code-review` headless there, in the background: `bash -c 'cd "$1" && claude -p "/code-review high review-target" …'` on the chosen model, with only `Bash(git:*)`, `Read`, `Grep`, `Glob` and `Agent` allowed, `Edit` and `Write` refused, and `--output-format stream-json` (never `--fix` or `--comment`). A separate process is needed because a `cd` inside a helper agent does not carry into its next tool call, so the Skill tool reviewed the wrong folder;
+  3. at once it starts `rahal:rahal-reviewer` with the chosen `model`, which checks the ticket, `AGENTS.md`, correctness, test strength, Review Focus, the instruction's focus and extra checks, and the PR body, and returns its own list (it has no Skill tool and never runs `code-review`);
+  4. when both finish, it counts `"name":"ReportFindings"` in the stream: 0, or a non-zero exit, means `code-review: not run — <reason>` in the report header; otherwise the call's `input.findings` are merged into the agent's list, and the header says `code-review: ran at high on <sha>`. The final text is never read: a plain-text run once said it returned no output;
+  5. it re-opens every citation, then removes the clone.
+- **Login:** the headless run uses the `claude` CLI's own login, so step 0 check 5 makes one tiny `claude -p` call; `claude auth status` reports signed in with an expired token.
 - **Not run** means the report covers ticket checks only, never "clean".
 
 ## Stack notice (`stack-notice.md`)
