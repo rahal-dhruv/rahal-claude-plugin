@@ -81,6 +81,8 @@ plugins/rahal/shared/review-model.md|   git -C "$W" branch --force <default> "$(
 plugins/rahal/shared/review-model.md|   git -C "$W" remote remove origin
 plugins/rahal/shared/review-model.md|   bash -c 'cd "$1" && claude -p "/code-review high review-target" --model "$2" \
 plugins/rahal/shared/review-model.md|     --allowedTools "Bash(git:*)" Read Grep Glob Agent --disallowedTools Edit Write \
+plugins/rahal/shared/review-model.md|     --settings "$3" --no-session-persistence --output-format stream-json --verbose' \
+plugins/rahal/shared/review-model.md|     _ "$W" "<model>" '{"disableAllHooks":true}' > "<scratchpad folder>/code-review-<head SHA>.jsonl"
 plugins/rahal/shared/review-model.md|   Never add `--fix` or `--comment`: `--fix` edits files and `--comment` posts to GitHub. With `Edit`, `Write` and `gh` outside the allowed tools, a stray flag still cannot change files or post.
 plugins/rahal/shared/review-model.md|   grep -c '"name":"ReportFindings"' "<scratchpad folder>/code-review-<head SHA>.jsonl"
 plugins/rahal/shared/review-model.md|   - It prints 0, or the process exited non-zero: write `code-review: not run — <reason, from the stream's last result event>` in the report header. The review then covers the ticket checks only: never call the result clean. Never read the run's final text instead: a plain-text run once said it returned no output.

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Runs the headless code-review block (review-model.md step 2) with a stand-in `claude` that records the
 # folder it was started in and its arguments, then runs step 4's ReportFindings count on two streams.
-# Passes when the run starts in the review clone, asks for `high review-target` without --fix or --comment,
+# Passes when the run starts in the review clone, asks for `high review-target` without --fix or --comment, turns hooks off,
 # and the count is 1 for a stream with a ReportFindings call and 0 for one without.
 set -u
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -33,6 +33,8 @@ PATH="$T/bin:$PATH" bash "$T/run.sh" > /dev/null 2>&1
 grep -qx '/code-review high review-target' "$T/args" 2>/dev/null \
   || { echo "FAIL the headless run does not ask for exactly /code-review high review-target"; FAILS=$((FAILS + 1)); }
 grep -qE -- '--fix|--comment' "$T/args" 2>/dev/null && { echo "FAIL the headless run passes --fix or --comment"; FAILS=$((FAILS + 1)); }
+grep -A1 -x -- '--settings' "$T/args" 2>/dev/null | grep -qx '{"disableAllHooks":true}' \
+  || { echo "FAIL the headless run does not turn hooks off with --settings"; FAILS=$((FAILS + 1)); }
 [ "$(bash "$T/count.sh" 2>/dev/null)" = 1 ] || { echo "FAIL the count is not 1 for a stream with ReportFindings"; FAILS=$((FAILS + 1)); }
 printf '%s\n' '{"type":"system","subtype":"init"}' '{"type":"result","result":"the skill returned no output"}' > "$T/scratch/code-review-abc123.jsonl"
 [ "$(bash "$T/count.sh" 2>/dev/null)" = 0 ] || { echo "FAIL the count is not 0 for a stream without ReportFindings"; FAILS=$((FAILS + 1)); }
