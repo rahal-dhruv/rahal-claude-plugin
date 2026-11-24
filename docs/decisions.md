@@ -644,3 +644,10 @@ Every decision behind the plugin, newest last. Ids are `PD-nn` ("plugin decision
 - **Cost if wrong:** each person's CLI login must be current (step 0 checks it); a future Claude Code that renames `ReportFindings` makes every review "not run" until the count is updated. On Windows the headless run may use `PowerShell` for `git`, which is outside the allowed tools: read-only `git` calls passed, and a compound `Get-Content` call was refused, so it fell back to `Read`.
 - **Where:** `plugins/rahal/shared/review-model.md`, `plugins/rahal/agents/rahal-reviewer.md`, `plugins/rahal/shared/step-0-checks.md`, `tests/probes/headless-review.sh`, `tests/probes/review-clone.sh`
 - **Date:** 2026-11-19
+
+### PD-97 — Headless `claude -p` calls run with hooks off; the login check also runs tool-less from the scratchpad
+- **Decision:** step 0 check 5 runs `claude -p "Reply ok"` from the session's scratchpad folder with `--tools ""`, `--strict-mcp-config` and `--settings '{"disableAllHooks":true}'`. The headless `code-review` run (PD-96) also passes `--settings '{"disableAllHooks":true}'`; it already starts in the review clone, outside the workspace.
+- **Why:** on 2026-11-24 the login check ran from the workspace root with hooks on. It loaded the workspace `CLAUDE.md`, asked to write a reflector-context file, and the user's permission hook handed the request to another app, which held it as a prompt for a session that did not exist in the desktop app. Measured: from a scratch folder with these flags the call printed `ok`, its init event listed `"tools":[]`, and asked to write a file it wrote nothing. `code-review`'s findings come from the `ReportFindings` call in the stream, never from a hook.
+- **Cost if wrong:** a user who relies on a hook to log or meter every `claude` run does not see these two runs. `--bare` would also skip hooks but never reads the OAuth login, so it cannot check the login.
+- **Where:** `plugins/rahal/shared/step-0-checks.md`, `plugins/rahal/shared/review-model.md`, `tests/probes/login-check.sh`, `tests/probes/headless-review.sh`
+- **Date:** 2026-11-24

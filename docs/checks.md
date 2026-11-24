@@ -56,7 +56,8 @@ Each probe works in throwaway git repos under a folder whose name has a space, a
 | `pr-checkout` | the follow-up checkout reaches the PR head even when the branch tracks its blocker's branch, and when the switch fails it leaves the other branch in place and prints a `STOP` line naming both |
 | `pr-list` | plan-tickets' `gh pr list` line reaches a stand-in `gh` with the config folder whole (its path has a space), `--repo`, `--state open`, `--limit 100` and every JSON field the steps use |
 | `review-clone` | `review-model.md`'s scratch clone reviews only the PR's files when the local `main` is stale and when the PR is stacked on another PR's branch, and leaves the user's repo untouched |
-| `headless-review` | `review-model.md`'s headless `claude -p` block (with a stand-in `claude`) starts in the review clone and asks for exactly `/code-review high review-target`, never `--fix` or `--comment`; the `ReportFindings` count is 1 for a stream with that call and 0 for one without |
+| `headless-review` | `review-model.md`'s headless `claude -p` block (with a stand-in `claude`) starts in the review clone, asks for exactly `/code-review high review-target`, never `--fix` or `--comment`, and turns hooks off with `--settings '{"disableAllHooks":true}'`; the `ReportFindings` count is 1 for a stream with that call and 0 for one without |
+| `login-check` | step 0 check 5's `claude -p "Reply ok"` block (with a stand-in `claude`) starts in the scratchpad folder, not the workspace, turns every tool off (`--tools ""`, `--strict-mcp-config`) and every hook off (`disableAllHooks`), and prints the reply |
 | `reflector-hook` | the hook spawns once per new context file, never for a reflector run, with hooks off |
 | `version-bump` | `check.sh` section 13 fails on an edited or a new plugin file without a version bump, and passes once the version changes |
 
