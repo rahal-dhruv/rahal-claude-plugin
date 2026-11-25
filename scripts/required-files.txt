@@ -67,3 +67,4 @@ plugins/rahal/skills/plan-tickets/references/queue-steps.md
 tests/probes/pr-list.sh
 plugins/rahal/shared/instructions.md
 tests/probes/init-repos.sh
+tests/probes/login-check.sh

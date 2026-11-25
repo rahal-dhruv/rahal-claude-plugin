@@ -41,8 +41,11 @@ The user decides. "Always <model>" writes `choices.review_model: <model>` into `
    ```bash
    bash -c 'cd "$1" && claude -p "/code-review high review-target" --model "$2" \
      --allowedTools "Bash(git:*)" Read Grep Glob Agent --disallowedTools Edit Write \
-     --no-session-persistence --output-format stream-json --verbose' _ "$W" "<model>" > "<scratchpad folder>/code-review-<head SHA>.jsonl"
+     --settings "$3" --no-session-persistence --output-format stream-json --verbose' \
+     _ "$W" "<model>" '{"disableAllHooks":true}' > "<scratchpad folder>/code-review-<head SHA>.jsonl"
    ```
+
+   Hooks are off (`disableAllHooks`) because the findings come from the stream, not from any hook, and a user's hook could otherwise hand a refused tool's permission request to another app that holds it.
 
    Never add `--fix` or `--comment`: `--fix` edits files and `--comment` posts to GitHub. With `Edit`, `Write` and `gh` outside the allowed tools, a stray flag still cannot change files or post.
    - It takes about 3 minutes (160 s on Opus for an 11-file change). The status line says so and gives the expected finish time.

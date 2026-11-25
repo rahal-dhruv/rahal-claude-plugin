@@ -72,12 +72,17 @@ plugins/rahal/agents/rahal-reviewer.md|tools: Read, Grep, Glob, Bash
 plugins/rahal/agents/rahal-reviewer.md|- Never start agents yourself, and never run `code-review`: the main session runs it headless in the review clone, alongside you (`shared/review-model.md`).
 plugins/rahal/shared/review-model.md|3. At once, so both run in parallel, start the reviewer agent: the Agent tool with `subagent_type: "rahal:rahal-reviewer"` and `model: <chosen model>`. It checks the change against the ticket, `AGENTS.md`, the plan and correctness; it does not run `code-review`. Its prompt holds:
 plugins/rahal/shared/templates/review-report.md|At <head SHA> · <open | merged> · CI <green | red | running> · by <author> · reviewed with <model>: code-review (high) plus ticket checks
-plugins/rahal/shared/step-0-checks.md|5. Review phases: `claude -p "Reply ok" --model haiku --no-session-persistence` must print a reply, because the review runs `code-review` in a separate `claude` process that uses the CLI's own login. `claude auth status` is not enough: it reports signed in with an expired token. Failure: `✗ Review  claude CLI is not signed in`. Say: "Run `claude` in a terminal and type `/login`." The review then counts as ticket checks only, never as clean.
+plugins/rahal/shared/step-0-checks.md|5. Review phases: this call must print a reply, because the review runs `code-review` in a separate `claude` process that uses the CLI's own login. `claude auth status` is not enough: it reports signed in with an expired token. Run it from this session's scratchpad folder, so no project `CLAUDE.md` loads, with every tool and hook off, so it cannot ask for a permission that a hook would hand to another app and hold there:
+plugins/rahal/shared/step-0-checks.md|   (cd "<scratchpad folder>" && claude -p "Reply ok" --model haiku --no-session-persistence \
+plugins/rahal/shared/step-0-checks.md|     --tools "" --strict-mcp-config --settings '{"disableAllHooks":true}')
+plugins/rahal/shared/step-0-checks.md|   Failure: `✗ Review  claude CLI is not signed in`. Say: "Run `claude` in a terminal and type `/login`." The review then counts as ticket checks only, never as clean.
 plugins/rahal/shared/review-model.md|   git clone --quiet --shared --no-checkout "<repo folder>" "$W"
 plugins/rahal/shared/review-model.md|   git -C "$W" branch --force <default> "$(git -C "<repo folder>" rev-parse origin/<base>)"
 plugins/rahal/shared/review-model.md|   git -C "$W" remote remove origin
 plugins/rahal/shared/review-model.md|   bash -c 'cd "$1" && claude -p "/code-review high review-target" --model "$2" \
 plugins/rahal/shared/review-model.md|     --allowedTools "Bash(git:*)" Read Grep Glob Agent --disallowedTools Edit Write \
+plugins/rahal/shared/review-model.md|     --settings "$3" --no-session-persistence --output-format stream-json --verbose' \
+plugins/rahal/shared/review-model.md|     _ "$W" "<model>" '{"disableAllHooks":true}' > "<scratchpad folder>/code-review-<head SHA>.jsonl"
 plugins/rahal/shared/review-model.md|   Never add `--fix` or `--comment`: `--fix` edits files and `--comment` posts to GitHub. With `Edit`, `Write` and `gh` outside the allowed tools, a stray flag still cannot change files or post.
 plugins/rahal/shared/review-model.md|   grep -c '"name":"ReportFindings"' "<scratchpad folder>/code-review-<head SHA>.jsonl"
 plugins/rahal/shared/review-model.md|   - It prints 0, or the process exited non-zero: write `code-review: not run — <reason, from the stream's last result event>` in the report header. The review then covers the ticket checks only: never call the result clean. Never read the run's final text instead: a plain-text run once said it returned no output.
